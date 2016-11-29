@@ -182,7 +182,7 @@ return [
          * Quark Service Provider
          */
 
-        SDSLabs\Quark\QuarkServiceProvider::class,
+        SDSLabs\Quark\App\Providers\QuarkServiceProvider::class,
     ],
 
     /*

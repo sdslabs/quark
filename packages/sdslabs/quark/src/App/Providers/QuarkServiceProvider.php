@@ -1,6 +1,6 @@
 <?php
 
-namespace SDSLabs\Quark;
+namespace SDSLabs\Quark\App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
@@ -16,14 +16,16 @@ class QuarkServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->setupRoutes($this->app->router);
-        $this->loadMigrationsFrom(__DIR__.'/database/migrations/');
+        $this->loadMigrationsFrom(__DIR__.'/../../database/migrations/');
+
+        
     }
 
     public function setupRoutes(Router $router)
     {
         $router->group(['namespace' => 'SDSLabs\Quark\App\Http\Controllers'], function($router)
         {
-            require __DIR__.'/App/Http/routes.php';
+            require __DIR__.'/../Http/routes.php';
         });
     }
 
