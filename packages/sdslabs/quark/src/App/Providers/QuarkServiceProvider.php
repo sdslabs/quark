@@ -2,9 +2,12 @@
 
 namespace SDSLabs\Quark\App\Providers;
 
+use SDSLabs\Quark\App\Auth\FalconGuard;
+use SDSLabs\Quark\App\Http\Middleware\Authenticate;
+
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
-
+use Illuminate\Support\Facades\Auth;
 
 class QuarkServiceProvider extends ServiceProvider
 {
@@ -13,12 +16,18 @@ class QuarkServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(Router $router)
     {
-        $this->setupRoutes($this->app->router);
+        $this->setupRoutes($router);
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations/');
 
-        
+        Auth::extend('falcon', function($app, $name, array $config) {
+            return new FalconGuard;
+        });
+
+        $this->app['auth']->setDefaultDriver('falcon');
+
+        $router->middleWare('auth', Authenticate::class);
     }
 
     public function setupRoutes(Router $router)
