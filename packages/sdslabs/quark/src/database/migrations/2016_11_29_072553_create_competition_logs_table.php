@@ -22,7 +22,7 @@ class CreateCompetitionLogsTable extends Migration
             $table->softDeletes();
 
             /* Foreign Keys */
-            // $table->foreign('team_id')->references('id')->on('team');
+            // $table->foreign('team_id')->references('id')->on('teams');
             // $table->foreign('problem_id')->references('id')->on('problems');
 
         });
