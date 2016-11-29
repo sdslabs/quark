@@ -19,7 +19,6 @@ class CreateCompetitionsTable extends Migration
             $table->string('title', 100);
             $table->text('description');
             $table->text('rules');
-            $table->string('cover_pic', 256);
             $table->integer('team_limit');
             $table->integer('start_at');
             $table->integer('end_at');
