@@ -20,8 +20,8 @@ class CreateCompetitionsTable extends Migration
             $table->text('description');
             $table->text('rules');
             $table->integer('team_limit');
-            $table->integer('start_at');
-            $table->integer('end_at');
+            $table->dateTime('start_at');
+            $table->dateTime('end_at');
             $table->timestamps();
             $table->softDeletes();
         });
