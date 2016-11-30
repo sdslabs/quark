@@ -4,6 +4,7 @@ namespace SDSLabs\Quark\App\Providers;
 
 use SDSLabs\Quark\App\Auth\FalconGuard;
 use SDSLabs\Quark\App\Http\Middleware\Authenticate;
+use SDSLabs\Quark\App\Http\Middleware\Developer;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
@@ -25,9 +26,8 @@ class QuarkServiceProvider extends ServiceProvider
             return new FalconGuard;
         });
 
-        $this->app['auth']->setDefaultDriver('falcon');
-
         $router->middleWare('auth', Authenticate::class);
+        $router->middleWare('developer', Developer::class);
     }
 
     public function setupRoutes(Router $router)

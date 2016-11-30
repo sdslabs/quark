@@ -104,4 +104,5 @@ return [
         ],
     ],
 
+    'developer_only' => env('DEVELOPER_ONLY', false)
 ];

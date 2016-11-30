@@ -1,4 +1,9 @@
 <?php
 
 
-Route::get('home', ["middleware" => "auth", 'HomeController@index']);
+Route::group(['middleware' => ['developer']], function() {
+
+	Route::get('home', ["middleware" => "auth", 'HomeController@index']);
+
+});
+
