@@ -10,6 +10,7 @@ class Competition extends Model
     
     protected $table = 'competitions';
 	protected $fillable = ['name', 'title', 'description', 'rules', 'team_limit', 'start_at', 'end_at'];
+	protected $appends = ['status'];
 
 	public function problems()
 	{
@@ -26,16 +27,41 @@ class Competition extends Model
 		return $this->hasManyThrough('SDSLabs\Quark\App\Models\CompetitionLog', 'SDSLabs\Quark\App\Models\Team');
 	}
 
-	public function getStartTimeAttribute()
+	public function getStatusAttribute()
 	{
-		$dateTime = Carbon::createFromTimestamp($this->start_at,'Asia/Kolkata');
-		return [$dateTime->format('h:i a'), $dateTime->toFormattedDateString()];
+		$now = time();
+		$status = "";
+		if($this->end_at['timestamp'] < $now)
+			$status = "Finished";
+		else if($this->start_at['timestamp'] > $now)
+			$status = "Future";
+		else
+			$status = "Running";
+
+		return $status;
 	}
 
-	public function getEndTimeAttribute()
+	public function getStartAtAttribute($start_at)
 	{
-		$dateTime = Carbon::createFromTimestamp($this->end_at,'Asia/Kolkata');
-		return [$dateTime->format('h:i a'), $dateTime->toFormattedDateString()];
+		$start_at = strtotime($start_at);
+		$dateTime = Carbon::createFromTimestamp($start_at,'Asia/Kolkata');
+		return [
+			"timestamp" => $start_at,
+			"time" => $dateTime->format('h:i a'),
+			"date" => $dateTime->toFormattedDateString()
+		];
 	}
+
+	public function getEndAtAttribute($end_at)
+	{
+		$end_at = strtotime($end_at);
+		$dateTime = Carbon::createFromTimestamp($end_at,'Asia/Kolkata');
+		return [
+			"timestamp" => $end_at,
+			"time" => $dateTime->format('h:i a'),
+			"date" => $dateTime->toFormattedDateString()
+		];
+	}
+
 
 }

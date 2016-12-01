@@ -19,30 +19,8 @@ class CompetitionController extends Controller
      */
     public function index()
     {
-        $now = time();
-        $future_competitions = array();
-        $running_competitions = array();
-        $finished_competitions = array();
-
-        $all_competitions = Competition::orderBy('created_at', 'DESC')->get();
-
-        foreach($all_competitions as $competition)
-        {
-            if(($competition->start_at <= $now) && ($competition->end_at >= $now))
-                array_push($running_competitions, $competition);
-            else if($competition->end_at < $now)
-                array_push($finished_competitions, $competition);
-            else
-                array_push($future_competitions, $competition);
-        }
-        return [
-            "competitions" => [
-                'all' => $all_competitions,
-                'future' => $future_competitions,
-                'running' => $running_competitions,
-                'finished' => $finished_competitions
-            ]
-        ];
+    	$competitions = Competition::all()->groupBy('status');
+        return $competitions;
     }
 
     /**
