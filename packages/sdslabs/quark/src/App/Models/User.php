@@ -32,11 +32,17 @@ class User extends Model
         ];
     }
 
-    public function invites() {
+    public function invites()
+    {
         $team_invites = $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_invites', 'user_id', 'team_id')->withPivot('status', 'token')->withTimestamps();
         return [
             "sent" => $team_invites->where('status', 2),
             "received" => $team_invites->where('status', 1)
         ];
+    }
+
+    public function isDeveloper()
+    {
+        return !is_null($this->roles()->where("name", "developer")->first());
     }
 }
