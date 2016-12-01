@@ -34,8 +34,8 @@ class Team extends Model
     {
         $user_invites = $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'user_team_invites', 'team_id', 'user_id')->withPivot('status', 'token')->withTimestamps();
         return [
-            "sent" => $user_invites->where('status', 1);
-            "received" => $user_invites->where('status', 2);
+            "sent" => $user_invites->where('status', 1),
+            "received" => $user_invites->where('status', 2)
         ];
     }
 

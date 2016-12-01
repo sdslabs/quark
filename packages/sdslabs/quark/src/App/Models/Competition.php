@@ -10,7 +10,8 @@ class Competition extends Model
     
     protected $table = 'competitions';
 	protected $fillable = ['name', 'title', 'description', 'rules', 'team_limit', 'start_at', 'end_at'];
-	protected $appends = ['status'];
+	protected $appends = ['status', 'leaderboard'];
+	protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
 	public function problems()
 	{
@@ -21,10 +22,15 @@ class Competition extends Model
 	{
 		return $this->hasMany('SDSLabs\Quark\App\Models\Team');
 	}
-
+	
 	public function submissions()
 	{
 		return $this->hasManyThrough('SDSLabs\Quark\App\Models\CompetitionLog', 'SDSLabs\Quark\App\Models\Team');
+	}
+
+	public function getLeaderboardAttribute()
+	{
+		return route('competition.show', $this->name).'/leaderboard';
 	}
 
 	public function getStatusAttribute()
