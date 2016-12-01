@@ -10,9 +10,9 @@ class User extends Model
 	protected $table = 'users';
 	protected $fillable = ['user_id', 'provider', 'credentials', 'username', 'fullname', 'email', 'image', 'score'];
 
-    public function role()
+    public function roles()
     {
-    	return $this->belongsTo('SDSLabs\Quark\App\Models\Role', 'role_id');
+    	return $this->belongsToMany('SDSLabs\Quark\App\Models\Role', 'user_role_maps', 'user_id', 'role_id');
     }
 
     public function problems()
