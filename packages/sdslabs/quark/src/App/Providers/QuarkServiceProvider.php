@@ -17,25 +17,31 @@ class QuarkServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot(Router $router)
+
+    protected $router;
+
+
+    public function __construct(Router $router) {
+        $this->router = $router;
+    }
+
+    public function boot()
     {
-        $this->setupRoutes($router);
+        $this->setupRoutes();
         $this->loadMigrationsFrom(__DIR__.'/../../database/migrations/');
 
         Auth::extend('falcon', function($app, $name, array $config) {
             return new FalconGuard;
         });
-
-        $router->middleWare('auth', Authenticate::class);
-        $router->middleWare('developer', Developer::class);
     }
 
     public function setupRoutes(Router $router)
     {
-        $router->group(['namespace' => 'SDSLabs\Quark\App\Http\Controllers'], function($router)
-        {
+        $this->router->group([
+            'namespace' => 'SDSLabs\Quark\App\Http\Controllers'
+        ], function($router) {
             require __DIR__.'/../Http/routes.php';
-        });
+        })->middleWare('auth', Authenticate::class)->middleWare('developer', Developer::class);
     }
 
     public function register()
