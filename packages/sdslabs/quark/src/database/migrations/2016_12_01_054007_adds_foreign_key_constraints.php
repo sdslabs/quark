@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddForeignKeysToTables extends Migration
+class AddsForeignKeyConstraints extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,6 @@ class AddForeignKeysToTables extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->foreign('role_id')->references('id')->on('user_roles');
-        });
-
         Schema::table('problems', function (Blueprint $table) {
             $table->foreign('solution_id')->references('id')->on('solutions');
             $table->foreign('competition_id')->references('id')->on('competitions');
@@ -35,7 +31,7 @@ class AddForeignKeysToTables extends Migration
             $table->foreign('owner_id')->references('id')->on('users');
         });
 
-        Schema::table('team_user_maps', function (Blueprint $table) {
+        Schema::table('user_team_maps', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
             $table->foreign('team_id')->references('id')->on('teams');
         });
@@ -55,6 +51,11 @@ class AddForeignKeysToTables extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
+        Schema::table('user_role_maps', function (Blueprint $table) {
+            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('user_id')->references('id')->on('users');
+        });
+
     }
 
     /**
@@ -64,10 +65,6 @@ class AddForeignKeysToTables extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
-        });
-
         Schema::table('problems', function (Blueprint $table) {
             $table->dropForeign(['solution_id']);
             $table->dropForeign(['competition_id']);
@@ -86,7 +83,7 @@ class AddForeignKeysToTables extends Migration
             $table->dropForeign(['owner_id']);
         });
 
-        Schema::table('team_user_maps', function (Blueprint $table) {
+        Schema::table('user_team_maps', function (Blueprint $table) {
             $table->dropForeign(['user_id']);
             $table->dropForeign(['team_id']);
         });
@@ -103,6 +100,11 @@ class AddForeignKeysToTables extends Migration
 
         Schema::table('user_team_invites', function (Blueprint $table) {
             $table->dropForeign(['team_id']);
+            $table->dropForeign(['user_id']);
+        });
+
+        Schema::table('user_role_maps', function (Blueprint $table) {
+            $table->dropForeign(['role_id']);
             $table->dropForeign(['user_id']);
         });
     }

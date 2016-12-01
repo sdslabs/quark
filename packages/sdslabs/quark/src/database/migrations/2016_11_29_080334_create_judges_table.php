@@ -15,7 +15,9 @@ class CreateJudgesTable extends Migration
     {
         Schema::create('judges', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('judge', 50);
+            $table->string('name', 50)->unique();
+            $table->string('title', 50);
+            $table->text('description');
             $table->timestamps();
         });
     }
