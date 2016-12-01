@@ -22,7 +22,6 @@ class CreateUsersTable extends Migration
             $table->string('fullname', 256);
             $table->string('email', 250)->unique();
             $table->string('image', 256);
-            $table->integer('role_id')->unsigned();
             $table->float('score')->default(0)->comment('Score in practice arena.');
             $table->timestamps();
 

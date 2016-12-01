@@ -15,7 +15,9 @@ class CreateProblemTypesTable extends Migration
     {
         Schema::create('problem_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', 50);
+            $table->string('name', 30)->unique();
+            $table->string('title', 50);
+            $table->text('description');
             $table->timestamps();
         });
     }
