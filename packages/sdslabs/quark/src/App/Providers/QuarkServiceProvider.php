@@ -22,6 +22,8 @@ class QuarkServiceProvider extends ServiceProvider
         });
         $router->middleWare('auth', Authenticate::class);
         $router->middleWare('developer', Developer::class);
+
+        $this->loadViewsFrom(__DIR__.'/../../views', 'competitions_index');
     }
     public function setupRoutes(Router $router)
     {
