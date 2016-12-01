@@ -8,15 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class PracticeLog extends Model
 {
     protected $table = 'practice_logs';
+    protected $fillable = ['score'];
 
     public function problem()
     {
     	return $this->belongsTo('SDSLabs\Quark\App\Models\Problem', 'problem_id');
     }
 
-    public function competition()
+    public function user()
     {
-    	return $this->belongsTo('SDSLabs\Quark\App\Models\Competition', 'competition_id');
+    	return $this->belongsTo('SDSLabs\Quark\App\Models\User', 'user_id');
     }
 
     public function getTime()
