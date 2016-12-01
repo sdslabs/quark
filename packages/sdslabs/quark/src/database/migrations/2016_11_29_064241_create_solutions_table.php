@@ -17,8 +17,8 @@ class CreateSolutionsTable extends Migration
             $table->increments('id');
             $table->integer('practice_judge_id')->unsigned();
             $table->integer('competition_judge_id')->unsigned();
-            $table->integer('practice_score')->unsigned();
-            $table->integer('competition_score')->unsigned();
+            $table->float('practice_score')->unsigned();
+            $table->float('competition_score')->unsigned();
             $table->string('solution', 200)->comment("Hash in case of string/integer solution, file path in case of files");
 
             /* Foreign Keys */
