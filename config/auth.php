@@ -14,7 +14,7 @@ return [
     */
 
     'defaults' => [
-        'guard' => 'web',
+        'guard' => 'falcon',
         'passwords' => 'users',
     ],
 
@@ -45,6 +45,11 @@ return [
             'driver' => 'token',
             'provider' => 'users',
         ],
+
+        'falcon' => [
+            'driver' => 'falcon',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -67,7 +72,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => App\User::class,
+            'model' => SDSLabs\Quark\App\User::class,
         ],
 
         // 'users' => [
@@ -99,4 +104,5 @@ return [
         ],
     ],
 
+    'developer_only' => env('DEVELOPER_ONLY', false)
 ];
