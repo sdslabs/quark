@@ -22,6 +22,7 @@ class QuarkServiceProvider extends ServiceProvider
         });
         $router->middleWare('auth', Authenticate::class);
         $router->middleWare('developer', Developer::class);
+        $router->middleWare('developer_check', DeveloperCheck::class);
 
         $this->loadViewsFrom(__DIR__.'/../../views', 'competitions_index');
     }

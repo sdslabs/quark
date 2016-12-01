@@ -5,7 +5,7 @@ namespace SDSLabs\Quark\App\Http\Middleware;
 use Closure;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
-class Developer
+class DeveloperCheck
 {
     /**
      * The authentication guard factory instance.
@@ -36,11 +36,14 @@ class Developer
     public function handle($request, Closure $next, $guard = 'falcon')
     {
 
-        if (!$this->auth->guard($guard)->user())
-            $this->auth->guard($guard)->login();
+        if(config('auth.developer_only'))
+        {
+            if (!$this->auth->guard($guard)->user())
+                $this->auth->guard($guard)->login();
 
-        if (!$this->auth->guard($guard)->user()->isDeveloper())
-            abort(404, 'Developers only');
+            if (!$this->auth->guard($guard)->user()->isDeveloper())
+                abort(404, 'Developers only');
+        }
 
         return $next($request);
 
