@@ -9,7 +9,7 @@ class CompetitionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('developer')->excpet(['index', 'show']);
+        $this->middleware('developer')->except(['index', 'show']);
     }
 
     /**
