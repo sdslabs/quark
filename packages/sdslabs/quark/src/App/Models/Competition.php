@@ -21,8 +21,9 @@ class Competition extends Model
 		return $this->hasMany('SDSLabs\Quark\App\Models\Team');
 	}
 
-	public function addProblem(Problem $problem) {
-		$this->problems()->save($problem);
+	public function submissions()
+	{
+		return $this->hasManyThrough('SDSLabs\Quark\App\Models\CompetitionLog', 'SDSLabs\Quark\App\Models\Team');
 	}
 
 	public function getStartTimeAttribute()
