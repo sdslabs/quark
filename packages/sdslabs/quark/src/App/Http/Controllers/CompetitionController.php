@@ -136,6 +136,7 @@ class CompetitionController extends Controller
     {
         $comp = $this->findByName($name);
         if(is_null($comp)) return;
+        if(!in_array($resource, $comp->resources)) return;
         $query = $comp->$resource();
         $limit = $request->input('limit');
         if(is_null($limit))
