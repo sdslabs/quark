@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Team extends Model
 {
 	protected $table = 'teams';
-	protected $fillable = ['name', 'score'];
+	protected $fillable = ['name'];
     protected $hidden = ['id', 'competition_id', 'owner_id', 'created_at', 'updated_at', 'pivot'];
     protected $appends = ['rank'];
 
@@ -46,9 +46,14 @@ class Team extends Model
         return $this->user_invites()->where('status', 2);
     }
 
-    public function hasMember($user_id)
+    public function hasMember(User $user)
     {
-        return !is_null($this->members()->where('users.user_id', $user_id)->first());
+        return !is_null($this->members()->where('users.id', $user->id)->first());
+    }
+
+    public function addMember(User $user)
+    {
+        return $this->members()->attach($user);
     }
 
     public function getRankAttribute()

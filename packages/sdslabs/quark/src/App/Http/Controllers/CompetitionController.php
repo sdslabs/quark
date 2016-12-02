@@ -78,7 +78,7 @@ class CompetitionController extends Controller
         $user = Auth::user();
         if(!is_null($user))
         {
-            $comp->team = $user->teams()['all']->where('competition_id', $comp->id)->with('members')->first();
+            $comp->team = TeamController::findByCompetition($comp)->with('members')->first();
         }
         return $comp;
     }

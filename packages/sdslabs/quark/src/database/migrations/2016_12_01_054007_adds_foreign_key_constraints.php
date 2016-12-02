@@ -15,7 +15,7 @@ class AddsForeignKeyConstraints extends Migration
     {
         Schema::table('problems', function (Blueprint $table) {
             $table->foreign('solution_id')->references('id')->on('solutions');
-            $table->foreign('competition_id')->references('id')->on('competitions');
+            $table->foreign('competition_id')->references('id')->on('competitions')->onDelete('set null');
             $table->foreign('creator_id')->references('id')->on('users');
             $table->foreign('uploader_id')->references('id')->on('users');
             $table->foreign('problem_type_id')->references('id')->on('problem_types');
@@ -27,18 +27,18 @@ class AddsForeignKeyConstraints extends Migration
         });
 
         Schema::table('teams', function (Blueprint $table) {
-            $table->foreign('competition_id')->references('id')->on('competitions');
+            $table->foreign('competition_id')->references('id')->on('competitions')->onDelete('cascade');
             $table->foreign('owner_id')->references('id')->on('users');
         });
 
         Schema::table('user_team_maps', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('team_id')->references('id')->on('teams');
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
         });
 
         Schema::table('practice_logs', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('problem_id')->references('id')->on('problems');
+            $table->foreign('problem_id')->references('id')->on('problems')->onDelete('cascade');
         });
 
         Schema::table('competition_logs', function (Blueprint $table) {
@@ -47,12 +47,12 @@ class AddsForeignKeyConstraints extends Migration
         });
 
         Schema::table('user_team_invites', function (Blueprint $table) {
-            $table->foreign('team_id')->references('id')->on('teams');
+            $table->foreign('team_id')->references('id')->on('teams')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
         });
 
         Schema::table('user_role_maps', function (Blueprint $table) {
-            $table->foreign('role_id')->references('id')->on('roles');
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users');
         });
 

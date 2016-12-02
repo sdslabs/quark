@@ -93,5 +93,10 @@ class Competition extends Model
 		];
 	}
 
+	public function addTeam(Team $team)
+	{
+		return $this->teams()->save($team);
+	}
+
 
 }

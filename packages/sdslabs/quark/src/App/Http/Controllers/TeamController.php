@@ -9,9 +9,21 @@ use SDSLabs\Quark\App\Models\Team;
 
 class TeamController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     public static function findByName($name)
     {
         return Team::where("name", $name);
+    }
+
+    public static function findByCompetition($comp)
+    {
+        $user = Auth::user();
+        return $user->teams()['all']->where('competition_id', $comp->id);
     }
 
     /**
@@ -33,7 +45,12 @@ class TeamController extends Controller
      */
     public function create($comp_name)
     {
-        //
+        $form = "
+                <form method='POST' action='".route('competitions.teams.store', $comp_name)."'>
+                    <input type='text' name='name'></input>
+                </form>
+                ";
+        return $form;
     }
 
     /**
@@ -44,7 +61,24 @@ class TeamController extends Controller
      */
     public function store(Request $request, $comp_name)
     {
-        //
+        $comp = CompetitionController::findByName($comp_name)->first();
+        if($comp->status === 'Finished')
+            return "Competition has already ended.";
+        
+        $user = Auth::user();
+
+        $user_team = TeamController::findByCompetition($comp)->first();
+        if(!is_null($user_team))
+            return "You have already joined the team \"{$user_team->name}\" for this competition";
+        
+        $team = new Team($request->name());
+        $team->owner()->associate($user);
+        $saved = $comp->addTeam($team);
+        
+        if($saved)
+            $team->addMember($user);
+        
+        return;
     }
 
     /**
@@ -59,11 +93,11 @@ class TeamController extends Controller
         $team = TeamController::findByName($team_name)->where('competition_id', $comp->id);
         if(is_null($team->first())) return;
 
-        $user = Auth::user();
         $team = $team->with('competition_logs.problem');
-        if(!is_null($user) && $team->first()->hasMember($user->id))
+        $user = Auth::user();
+        if(!is_null($user) && $team->first()->hasMember($user))
         {
-            $team->with('owner', 'invites_sent', 'invites_received');
+            $team = $team->with('owner', 'invites_sent', 'invites_received', 'members');
         }
 
         return $team->first();
@@ -89,7 +123,19 @@ class TeamController extends Controller
      */
     public function update(Request $request, $comp_name, $team_name)
     {
-        //
+        $comp = CompetitionController::findByName($comp_name)->first();
+        if($comp->status === 'Finished')
+            return "Competition has already ended.";
+        
+        $team = TeamController::findByName($team_name)->where('competition_id', $comp->id)->first();
+        if(is_null($team)) return;
+
+        if($team->owner->id !== Auth::user()->id)
+            return "Only owner can update the team details";
+
+        $team->update($request->all());
+
+        return;
     }
 
     /**
@@ -100,6 +146,16 @@ class TeamController extends Controller
      */
     public function destroy($comp_name, $team_name)
     {
-        //
+        $comp = CompetitionController::findByName($comp_name)->first();
+        if($comp->status === 'Running' || $comp->status === 'Finished')
+            return "The competition is either over or running";
+
+        $team = TeamController::findByName($team_name)->where('competition_id', $comp->id)->first();
+        if(is_null($team)) return;
+
+        if($team->owner->id !== Auth::user()->id)
+            return "Only owner can delete tht team";
+
+        $team->delete();
     }
 }
