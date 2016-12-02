@@ -12,7 +12,7 @@ class CompetitionController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('developer')->only(['create', 'store', 'edit', 'destroy']);
+        // $this->middleware('developer')->only(['create', 'store', 'edit', 'destroy']);
     }
 
     public function findByName($name)
@@ -49,7 +49,9 @@ class CompetitionController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $comp = new Competition($request->all());
+        $saved = $comp->save();
+        return;
     }
 
     /**
@@ -61,10 +63,10 @@ class CompetitionController extends Controller
     public function show($name)
     {
         $comp = $this->findByName($name);
+        if(is_null($comp)) return;
         $user = Auth::user();
         if(!is_null($user))
         {
-            $comp->user = $user;
             $comp->team = $user->teams()['all']->where('competition_id', $comp->id)->with('members')->first();
         }
         return $comp;
@@ -90,7 +92,10 @@ class CompetitionController extends Controller
      */
     public function update(Request $request, $name)
     {
-        //
+        $comp = $this->findByName($name);
+        if(is_null($comp)) return;
+        $comp->update($request->all());
+        return;
     }
 
     /**
@@ -101,7 +106,10 @@ class CompetitionController extends Controller
      */
     public function destroy($name)
     {
-        //
+        $comp = $this->findByName($name);
+        if(is_null($comp)) return;
+        $comp->delete();
+        return;
     }
 
     public function showLeaderboard($name, Request $request)
