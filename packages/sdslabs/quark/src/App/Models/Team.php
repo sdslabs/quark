@@ -9,6 +9,7 @@ class Team extends Model
 {
 	protected $table = 'teams';
 	protected $fillable = ['name', 'score'];
+    protected $hidden = ['id', 'competition_id', 'owner_id', 'created_at', 'updated_at', 'pivot'];
 
     public function competition()
     {

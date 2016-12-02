@@ -9,7 +9,7 @@ class User extends Model
 {
     protected $table = 'users';
     protected $fillable = ['user_id', 'provider', 'credentials', 'username', 'fullname', 'email', 'image', 'score'];
-    protected $hidden = ['id', 'user_id', 'provider', 'credentials', 'created_at', 'updated_at'];
+    protected $hidden = ['id', 'user_id', 'provider', 'credentials', 'created_at', 'updated_at', 'pivot'];
 
     public function roles()
     {
@@ -29,7 +29,7 @@ class User extends Model
     {
         return [
             "owned" => $this->hasMany('SDSLabs\Quark\App\Models\Team', 'owner_id'),
-            "member" => $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_maps', 'user_id', 'team_id')
+            "all" => $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_maps', 'user_id', 'team_id')
         ];
     }
 

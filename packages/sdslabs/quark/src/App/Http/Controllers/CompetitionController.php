@@ -65,15 +65,7 @@ class CompetitionController extends Controller
         if(!is_null($user))
         {
             $comp->user = $user;
-            $teams = $comp->teams();
-            foreach ($teams as $team)
-            {
-                if(!is_null($team->members()->find($user->id)))
-                {
-                    $comp->team = $team;
-                    break;
-                }
-            }
+            $comp->team = $user->teams()['all']->where('competition_id', $comp->id)->with('members')->first();
         }
         return $comp;
     }
