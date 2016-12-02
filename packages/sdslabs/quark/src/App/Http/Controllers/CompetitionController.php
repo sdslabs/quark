@@ -6,14 +6,25 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SDSLabs\Quark\App\Models\Competition;
-use SDSLabs\Quark\App\Helpers\Leaderboard;
 
 class CompetitionController extends Controller
 {
+
+    /**
+     * Applied developer Middleware to all routes which require developer access
+     * 
+     */
+
     public function __construct()
     {
-        // $this->middleware('developer')->only(['create', 'store', 'edit', 'destroy']);
+        $this->middleware('developer')->only(['create', 'store', 'edit', 'destroy']);
     }
+    /**
+     * Find a competition by given name.
+     * 
+     * @param string $name
+     * @return SDSLabs\Quark\App\Models\Competition
+     */
 
     public function findByName($name)
     {
@@ -57,7 +68,7 @@ class CompetitionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $name
      * @return \Illuminate\Http\Response
      */
     public function show($name)
@@ -75,7 +86,7 @@ class CompetitionController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $name
      * @return \Illuminate\Http\Response
      */
     public function edit($name)
@@ -87,7 +98,7 @@ class CompetitionController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $name
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $name)
@@ -101,7 +112,7 @@ class CompetitionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $name
      * @return \Illuminate\Http\Response
      */
     public function destroy($name)
@@ -112,13 +123,24 @@ class CompetitionController extends Controller
         return;
     }
 
-    public function showLeaderboard($name, Request $request)
+    /**
+     * Returns a specified resources of a given competition
+     * 
+     * @param \Illuminate\Http\Request  $request
+     * @param string $name
+     * @param string $resource (leaderboard, problems, teams, submissions)
+     * @return \Illuminate\Http\Response
+     */
+
+    public function showResource(Request $request, $name, $resource)
     {
         $comp = $this->findByName($name);
+        if(is_null($comp)) return;
+        $query = $comp->$resource();
         $limit = $request->input('limit');
-        $limit = is_null($limit) ? 50 : $limit;
-        $leaderboard = Leaderboard::competitionLeaderboard($comp, $limit);
-        $leaderboard->setPath($comp->leaderboard.'?limit='.$limit);
-        return $leaderboard;
+        if(is_null($limit))
+            return $query->get();
+        else
+            return $query->paginate($limit)->setPath($comp[$resource.'Url'].'?limit='.$limit);
     }
 }

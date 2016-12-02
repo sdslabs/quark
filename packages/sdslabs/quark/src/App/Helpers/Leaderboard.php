@@ -7,9 +7,9 @@ use SDSLabs\Quark\App\Models\Comeptition;
 
 class Leaderboard
 {
-	public static function competitionLeaderboard(\SDSLabs\Quark\App\Models\Competition $competition, $limit = 50)
+	public static function competitionLeaderboard(\SDSLabs\Quark\App\Models\Competition $competition)
 	{
-		$teams = $competition->teams()->orderBy('score', 'desc')->paginate($limit, ['name', 'score']);
+		$teams = $competition->teams()->orderBy('score', 'desc');
 		return $teams;
 	}
 }

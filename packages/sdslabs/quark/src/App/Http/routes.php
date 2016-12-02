@@ -1,5 +1,5 @@
 <?php
 
 Route::get('home', 'HomeController@index');
-Route::get('competition/{name}/leaderboard', 'CompetitionController@showLeaderboard');
+Route::get('competition/{name}/{resource}', 'CompetitionController@showResource');
 Route::resource('competition', 'CompetitionController');

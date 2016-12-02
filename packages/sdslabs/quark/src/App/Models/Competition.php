@@ -4,13 +4,14 @@ namespace SDSLabs\Quark\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use SDSLabs\Quark\App\Helpers\Leaderboard;
 
 class Competition extends Model
 {
     
     protected $table = 'competitions';
 	protected $fillable = ['name', 'title', 'description', 'rules', 'team_limit', 'start_at', 'end_at'];
-	protected $appends = ['status', 'leaderboard'];
+	protected $appends = ['status', 'leaderboard_url', 'teams_url', 'problems_url', 'submissions_url'];
 	protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
 	public function problems()
@@ -28,9 +29,30 @@ class Competition extends Model
 		return $this->hasManyThrough('SDSLabs\Quark\App\Models\CompetitionLog', 'SDSLabs\Quark\App\Models\Team');
 	}
 
-	public function getLeaderboardAttribute()
+	public function leaderboard()
+	{
+        $leaderboard = Leaderboard::competitionLeaderboard($this);
+		return $leaderboard;
+	}
+
+	public function getLeaderboardUrlAttribute()
 	{
 		return route('competition.show', $this->name).'/leaderboard';
+	}
+
+	public function getTeamsUrlAttribute()
+	{
+		return route('competition.show', $this->name).'/teams';
+	}
+
+	public function getProblemsUrlAttribute()
+	{
+		return route('competition.show', $this->name).'/problems';
+	}
+
+	public function getSubmissionsUrlAttribute()
+	{
+		return route('competition.show', $this->name).'/submissions';
 	}
 
 	public function getStatusAttribute()
