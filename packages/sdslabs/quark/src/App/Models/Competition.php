@@ -39,22 +39,22 @@ class Competition extends Model
 
 	public function getLeaderboardUrlAttribute()
 	{
-		return route('competition.show', $this->name).'/leaderboard';
+		return route('competitions.show', $this->name).'/leaderboard';
 	}
 
 	public function getTeamsUrlAttribute()
 	{
-		return route('competition.show', $this->name).'/teams';
+		return route('competitions.show', $this->name).'/teams';
 	}
 
 	public function getProblemsUrlAttribute()
 	{
-		return route('competition.show', $this->name).'/problems';
+		return route('competitions.show', $this->name).'/problems';
 	}
 
 	public function getSubmissionsUrlAttribute()
 	{
-		return route('competition.show', $this->name).'/submissions';
+		return route('competitions.show', $this->name).'/submissions';
 	}
 
 	public function getStatusAttribute()
