@@ -9,6 +9,7 @@ class CompetitionLog extends Model
 {
     protected $table = 'competition_logs';
     protected $fillable = ['score'];
+    protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'team_id', 'problem_id'];
 
     public function problem()
     {

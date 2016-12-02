@@ -14,7 +14,7 @@ class Competition extends Model
 	protected $appends = ['status', 'leaderboard_url', 'teams_url', 'problems_url', 'submissions_url'];
 	protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
-	public $resources = ['problems', 'teams', 'submissions', 'leaderboard'];
+	public $resources = ['problems', 'submissions', 'leaderboard'];
 
 	public function problems()
 	{

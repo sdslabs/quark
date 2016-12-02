@@ -10,6 +10,7 @@ class ProblemType extends Model
 
 	protected $table = 'problem_types';
 	protected $fillable = ['name', 'title', 'description'];
+	protected $hidden = ['id', 'created_at', 'updated_at'];
 
 	public function problems()
 	{

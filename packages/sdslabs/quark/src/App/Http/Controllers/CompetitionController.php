@@ -26,9 +26,9 @@ class CompetitionController extends Controller
      * @return SDSLabs\Quark\App\Models\Competition
      */
 
-    public function findByName($name)
+    public static function findByName($name)
     {
-        return Competition::where("name", $name)->first();
+        return Competition::where("name", $name);
     }
 
     /**
@@ -73,7 +73,7 @@ class CompetitionController extends Controller
      */
     public function show($name)
     {
-        $comp = $this->findByName($name);
+        $comp = $this->findByName($name)->first();
         if(is_null($comp)) return;
         $user = Auth::user();
         if(!is_null($user))
@@ -103,7 +103,7 @@ class CompetitionController extends Controller
      */
     public function update(Request $request, $name)
     {
-        $comp = $this->findByName($name);
+        $comp = $this->findByName($name)->first();
         if(is_null($comp)) return;
         $comp->update($request->all());
         return;
@@ -117,7 +117,7 @@ class CompetitionController extends Controller
      */
     public function destroy($name)
     {
-        $comp = $this->findByName($name);
+        $comp = $this->findByName($name)->first();
         if(is_null($comp)) return;
         $comp->delete();
         return;
@@ -134,7 +134,7 @@ class CompetitionController extends Controller
 
     public function showResource(Request $request, $name, $resource)
     {
-        $comp = $this->findByName($name);
+        $comp = $this->findByName($name)->first();
         if(is_null($comp)) return;
         if(!in_array($resource, $comp->resources)) return;
         $query = $comp->$resource();

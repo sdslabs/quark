@@ -9,7 +9,7 @@ class User extends Model
 {
     protected $table = 'users';
     protected $fillable = ['user_id', 'provider', 'credentials', 'username', 'fullname', 'email', 'image', 'score'];
-    protected $hidden = ['id', 'user_id', 'provider', 'credentials', 'created_at', 'updated_at', 'pivot'];
+    protected $hidden = ['id', 'user_id', 'provider', 'email', 'credentials', 'created_at', 'updated_at', 'pivot'];
 
     public function roles()
     {

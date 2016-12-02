@@ -10,6 +10,7 @@ class Judge extends Model
 
 	protected $table = 'judges';
 	protected $fillable = ['name', 'title', 'description'];
+	protected $hidden = ['id', 'created_at', 'updated_at'];
 
 	public function solutions()
 	{
