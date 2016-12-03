@@ -20,9 +20,9 @@ class CreateProblemsTable extends Migration
             $table->text('description');
             $table->integer('solution_id')->unsigned();
             $table->integer('competition_id')->unsigned()->nullable();
-            $table->integer('creator_id')->unsigned();
+            $table->integer('creator_id')->unsigned()->nullable();
             $table->integer('uploader_id')->unsigned();
-            $table->boolean('practice')->comment('If the problem is to be displayed in practice arena');
+            $table->boolean('practice')->default(0)->comment('If the problem is to be displayed in practice arena');
             $table->integer('problem_type_id')->unsigned();
             $table->timestamps();
             $table->softDeletes();

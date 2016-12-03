@@ -7,10 +7,11 @@ use Illuminate\Database\Eloquent\Model;
 
 class Solution extends Model
 {
-	protected $table = 'solutions';
-	protected $fillable = ['practice_score', 'competition_score', 'solution'];
+    protected $table = 'solutions';
+    protected $fillable = ['practice_score', 'competition_score', 'solution'];
     protected $hidden = ['id', 'practice_judge_id', 'competition_judge_id', 'practice_score', 'competition_score', 'solution'];
     protected $appends = ['score', 'judge'];
+    public $timestamps = false;
 
     public function problem()
     {
@@ -29,7 +30,7 @@ class Solution extends Model
 
     public function getJudgeAttribute()
     {
-    	if($this->problem()->first()->practice)
+        if($this->problem()->first()->practice)
             return $this->practice_judge()->first();
         else
             return $this->competition_judge()->first();

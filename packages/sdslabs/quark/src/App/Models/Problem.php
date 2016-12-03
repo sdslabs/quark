@@ -15,7 +15,7 @@ class Problem extends Model
 
 	public function competition()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\Competitions', 'competition_id');
+		return $this->belongsTo('SDSLabs\Quark\App\Models\Competition', 'competition_id');
 	}
 
 	public function solution()
@@ -40,10 +40,10 @@ class Problem extends Model
 
 	public function solved_by()
 	{
-		return [
-			"users" => $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'practice_logs', 'problem_id', 'user_id'),
-			"teams" => $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'competition_logs', 'problem_id', 'team_id'),
-		];
+		if(is_null($this->competition) || $this->competition->status === 'Finished')
+			return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'practice_logs', 'problem_id', 'user_id');
+		else 
+			return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'competition_logs', 'problem_id', 'team_id');
 	}
 
 	public function getSolutionAttribute()

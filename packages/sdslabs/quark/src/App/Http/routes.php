@@ -6,3 +6,5 @@ Route::get('competitions/{name}/{resource}', 'CompetitionController@showResource
 Route::resource('competitions', 'CompetitionController');
 Route::resource('problems', 'ProblemController');
 Route::resource('user', 'UserController');
+Route::resource('problemTypes', 'ProblemTypeController');
+Route::resource('judges', 'JudgeController');
