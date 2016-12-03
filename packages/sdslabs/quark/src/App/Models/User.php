@@ -46,4 +46,10 @@ class User extends Model
     {
         return !is_null($this->roles()->where("name", "developer")->first());
     }
+
+    public function getRank()
+    {
+        return $this->newQuery()->where('score', '>', $this->score)->count()+1;
+    }
+
 }
