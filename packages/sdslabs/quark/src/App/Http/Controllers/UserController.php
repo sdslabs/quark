@@ -10,12 +10,12 @@ use SDSLabs\Quark\App\Models\User;
 class UserController extends Controller
 {
 
-	public function __construct()
+    public function __construct()
     {
-        $this->middleware('developer')->only(['destroy']);
+        $this->middleware('auth')->except(['index', 'show']);
     }
 
-	public static function findByName($name)
+    public static function findByName($name)
     {
         return User::where("username", $name);
     }
@@ -28,7 +28,7 @@ class UserController extends Controller
      */
     public function index()
     {
-    	$users = User::paginate(50);
+        $users = User::paginate(50);
         return $users;
     }
 
@@ -62,15 +62,15 @@ class UserController extends Controller
      */
     public function show($name)
     {
-        $user = $this->findByName($name)->with('all_teams', 'submissions', 'problems_created', 'owned_teams', 'invites_sent', 'invites_received')->first();
-        if(is_null($user)) return;
-
-        if(!is_null(Auth::user()) && Auth::user()->id == $user->id)
-            $user->makeVisible('email');
-        else
-            $user->makeHidden('owned_teams', 'invites_received', 'invites_sent');
-
-        return $user;
+        $user = UserController::findByName($name)->with('all_teams', 'submissions', 'problems_created');
+        if(!is_null(Auth::user()))
+        {
+            if ($name === Auth::user()->name)
+                $user->with('owned_teams', 'invites_sent', 'invites_received', 'email');
+            if(Auth::user()->isDeveloper())
+                $user->with('roles');
+        }
+        return $user->first();
     }
 
     /**
@@ -93,20 +93,18 @@ class UserController extends Controller
      */
     public function update(Request $request, $name)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  string $name
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($name)
-    {
-        $user = $this->findByName($name)->first();
-        if(is_null($user)) return;
-        $user->delete();
-        return;
+        if($name === Auth::user()->username)
+        {
+            Auth::user()->update($request->all());
+        }
+        elseif(Auth::user()->isDeveloper())
+        {
+            $user = UserController::findByName($name)->first();
+            $user->update($request->all());
+        }
+        else
+        {
+            return "You don't have the permission to update this user.";
+        }
     }
 }
