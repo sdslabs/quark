@@ -23,7 +23,7 @@ class TeamController extends Controller
     public static function findByCompetition($comp)
     {
         $user = Auth::user();
-        return $user->teams()['all']->where('competition_id', $comp->id);
+        return $user->all_teams()->where('competition_id', $comp->id);
     }
 
     /**

@@ -13,4 +13,4 @@ Route::resource('problemTypes', 'ProblemTypeController');
 
 Route::resource('judges', 'JudgeController');
 
-Route::resource('user', 'UserController');
+Route::resource('users', 'UserController');

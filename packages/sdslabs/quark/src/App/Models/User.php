@@ -16,30 +16,44 @@ class User extends Model
     	return $this->belongsToMany('SDSLabs\Quark\App\Models\Role', 'user_role_maps', 'user_id', 'role_id');
     }
 
-    public function problems()
+    public function submissions()
     {
-        return [
-            "solved" => $this->belongsToMany('SDSLabs\Quark\App\Models\Problem', 'practice_logs', 'user_id', 'problem_id'),
-            "created" => $this->hasMany('SDSLabs\Quark\App\Models\Problem', 'creator_id'),
-            "uploaded" => $this->hasMany('SDSLabs\Quark\App\Models\Problem', 'uploader_id')
-        ];
+        return $this->belongsToMany('SDSLabs\Quark\App\Models\Problem', 'practice_logs', 'user_id', 'problem_id');
     }
 
-    public function teams()
+    public function problems_created()
     {
-        return [
-            "owned" => $this->hasMany('SDSLabs\Quark\App\Models\Team', 'owner_id'),
-            "all" => $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_maps', 'user_id', 'team_id')
-        ];
+        return $this->hasMany('SDSLabs\Quark\App\Models\Problem', 'creator_id');
     }
 
-    public function invites()
+    public function problems_uploaded()
     {
-        $team_invites = $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_invites', 'user_id', 'team_id')->withPivot('status', 'token')->withTimestamps();
-        return [
-            "sent" => $team_invites->where('status', 2),
-            "received" => $team_invites->where('status', 1)
-        ];
+        return $this->hasMany('SDSLabs\Quark\App\Models\Problem', 'uploader_id');
+    }
+
+    public function all_teams()
+    {
+        return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_maps', 'user_id', 'team_id');
+    }
+
+    public function owned_teams()
+    {
+        return $this->hasMany('SDSLabs\Quark\App\Models\Team', 'owner_id');
+    }
+
+    public function team_invites()
+    {
+        return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_invites', 'user_id', 'team_id')->withPivot('status', 'token')->withTimestamps();
+    }
+
+    public function invites_received()
+    {
+        return $this->team_invites()->where('status', 1);
+    }
+
+    public function invites_sent()
+    {
+        return $this->team_invites()->where('status', 2);
     }
 
     public function isDeveloper()

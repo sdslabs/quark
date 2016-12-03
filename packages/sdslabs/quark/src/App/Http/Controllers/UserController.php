@@ -28,7 +28,8 @@ class UserController extends Controller
      */
     public function index()
     {
-    	//
+    	$users = User::paginate(50);
+        return $users;
     }
 
     /**
@@ -61,9 +62,14 @@ class UserController extends Controller
      */
     public function show($name)
     {
-        $user = $this->findByName($name)->first();
+        $user = $this->findByName($name)->with('all_teams', 'submissions', 'problems_created', 'owned_teams', 'invites_sent', 'invites_received')->first();
         if(is_null($user)) return;
-        $user->rank = $user->getRank();
+
+        if(!is_null(Auth::user()) && Auth::user()->id == $user->id)
+            $user->makeVisible('email');
+        else
+            $user->makeHidden('owned_teams', 'invites_received', 'invites_sent');
+
         return $user;
     }
 
