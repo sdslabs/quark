@@ -54,10 +54,10 @@ class ProblemController extends Controller
             "title" => $request->title,
             "description" => $request->description
         ]);
-        if(!is_null($request->practice) && $request->practice === 1)
+        if($request->has('practice') && $request->practice === 1)
                 $prob->practice = 1;
 
-        if(!is_null($request->problem_type))
+        if($request->has('problem_type'))
         {
             $prob_type = ProblemTypeController::findByName($request->problem_type)->first();
             if(is_null($prob_type))
@@ -69,7 +69,7 @@ class ProblemController extends Controller
             return "Problem type is required!!";
         }
 
-        if(!is_null($request->competition))
+        if($request->has('competition'))
         {
             $comp = CompetitionController::findByName($request->competition)->first();
             if(is_null($comp))
@@ -79,7 +79,7 @@ class ProblemController extends Controller
             $prob->competition()->associate($comp);
         }
 
-        if(!is_null($request->creator))
+        if($request->has('creator'))
         {
             $creator = UserController::findByName($request->creator)->first();
             if(is_null($creator))
@@ -128,7 +128,47 @@ class ProblemController extends Controller
      */
     public function update(Request $request, $name)
     {
-        // 
+        $prob = ProblemController::findByName($name)->first();
+        if (is_null($prob))
+            return;
+        if ($request->has('name'))
+            $prob->name = $request->name;
+        if ($request->has('title'))
+            $prob->title = $request->title;
+        if ($request->has('description'))
+            $prob->description = $request->description;
+        if ($request->has('practice') &&
+           ($request->practice === 0 || $request->practice === 1))
+            $prob->practice = $request->practice;
+
+        if($request->has('competition'))
+        {
+            $comp = CompetitionController::findByName($request->competition)->first();
+            if(is_null($comp))
+                return "Invalid competition name!";
+            if($comp->status === 'Finished')
+                return "The competition has already ended!";
+            $prob->competition()->associate($comp);
+        }
+
+        if($request->has('problem_type'))
+        {
+            return "Problem Type can't be updated";
+        }
+
+        if($request->has('creator'))
+        {
+            $creator = UserController::findByName($request->creator)->first();
+            if(is_null($creator))
+                return "Invalid Creator Name";
+            $prob->creator()->associate($creator);
+        }
+
+        $solution_controller = new SolutionController;
+        $solution = $solution_controller->update($request, $prob);
+        $prob->solution()->associate($solution);
+        $prob->save();
+        return;
     }
 
     /**
@@ -139,6 +179,11 @@ class ProblemController extends Controller
      */
     public function destroy($name)
     {
-        // 
+        $prob = ProblemController::findByName($name)->first();
+        if($prob->hasSubmissions())
+            return "The problem has some submissions";
+        $prob->delete();
+        $prob->solution->delete();
+        return;
     }
 }

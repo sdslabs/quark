@@ -38,12 +38,37 @@ class Problem extends Model
 		return $this->belongsTo('SDSLabs\Quark\App\Models\ProblemType', 'problem_type_id');
 	}
 
+	public function practice_logs()
+	{
+		return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'practice_logs', 'problem_id', 'user_id');
+	}
+
+	public function competition_logs()
+	{
+		return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'competition_logs', 'problem_id', 'team_id');
+	}
+
 	public function solved_by()
 	{
 		if(is_null($this->competition) || $this->competition->status === 'Finished')
-			return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'practice_logs', 'problem_id', 'user_id');
-		else 
-			return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'competition_logs', 'problem_id', 'team_id');
+			return $this->practice_logs();
+		else
+			return $this->competition_logs();
+	}
+
+	public function hasPracticeLogs()
+	{
+		return $this->practice_logs()->count() > 0 ;
+	}
+
+	public function hasCompetitionLogs()
+	{
+		return $this->competition_logs()->count() > 0 ;
+	}
+
+	public function hasSubmissions()
+	{
+		return $this->hasPracticeLogs() || $this->hasCompetitionLogs();
 	}
 
 	public function getSolutionAttribute()
