@@ -66,7 +66,10 @@ class ProblemTypeController extends Controller
      */
     public function show($name)
     {
-    	//
+    	$prob_type = ProblemTypeController::findByName($name)->first();
+    	if(is_null($prob_type))
+    		return;
+    	return $prob_type;
     }
 
     /**

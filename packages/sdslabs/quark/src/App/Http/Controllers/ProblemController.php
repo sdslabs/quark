@@ -151,8 +151,8 @@ class ProblemController extends Controller
 
         	if(is_null($sol->practice_judge) || is_null($sol->practice_score))
         		$this->validate($request, [
-        			'practice_judge': 'required',
-        			'practice_score': 'required'
+        			'practice_judge'=> 'required',
+        			'practice_score'=> 'required'
         		]);
 
             $prob->practice = $request->practice;
@@ -164,15 +164,15 @@ class ProblemController extends Controller
 
         	if(is_null($sol->practice_judge) || is_null($sol->competition_score))
         		$this->validate($request, [
-        			'competition_judge': 'required',
-        			'competition_score': 'required'
+        			'competition_judge'=> 'required',
+        			'competition_score'=> 'required'
         		]);
 
         	$comp = CompetitionController::findByName($competition)->first();
             $prob->competition()->associate($comp);
         }
 
-        if ($problem->hasPracticeLogs() > 0)
+        if ($prob->hasPracticeLogs() > 0)
         	// TODO: Return error message as these parameters can not be updated because of practice logs.
         	$this->validate($request, [
         		'practice_judge' => '',
@@ -180,7 +180,7 @@ class ProblemController extends Controller
         		'solution' => ''
         	]);
 
-        if ($problem->hasCompetitionLogs() > 0)
+        if ($prob->hasCompetitionLogs() > 0)
         	// TODO: Return error message as these parameters can not be updated because of competition logs.
         	$this->validate($request, [
         		'competition_judge' => '',
@@ -206,7 +206,6 @@ class ProblemController extends Controller
             $creator = UserController::findByName($request->creator)->first();
             $prob->creator()->associate($creator);
         }
-
 
         $solution_controller = new SolutionController;
         $solution = $solution_controller->update($request, $prob);

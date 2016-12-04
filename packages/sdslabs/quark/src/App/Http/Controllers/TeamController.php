@@ -77,7 +77,7 @@ class TeamController extends Controller
 
         $team = TeamController::findByName($request->name)->first();
         if(!is_null($team))
-        	return "Team name is already taken."
+        	return "Team name is already taken.";
 
         $team = new Team($request->name());
         $team->owner()->associate($user);
