@@ -13,4 +13,4 @@ Route::resource('problemTypes', 'ProblemTypeController');
 
 Route::resource('judges', 'JudgeController');
 
-Route::resource('users', 'UserController', ['except' => ['destroy']]);
+Route::resource('users', 'UserController', ['except' => ['destroy', 'create', 'store']]);

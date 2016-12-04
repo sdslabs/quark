@@ -11,7 +11,7 @@ class JudgeController extends Controller
 
     /**
      * Applied developer Middleware to all routes which require developer access
-     * 
+     *
      */
     public function __construct()
     {
@@ -22,7 +22,7 @@ class JudgeController extends Controller
     {
         return Judge::where('name', $name);
     }
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -52,6 +52,11 @@ class JudgeController extends Controller
      */
     public function store(Request $request)
     {
+    	$this->validate($request, [
+    		'name' => 'bail|required|alpha_dash|unique:judges,name',
+    		'title' => 'required',
+    		'description' => 'required'
+		]);
         $judge = new Judge($request->all());
         $judge->save();
         return;
@@ -94,6 +99,11 @@ class JudgeController extends Controller
         $judge = JudgeController::findByName($name)->first();
         if(is_null($judge))
             return;
+
+    	$this->validate($request, [
+    		'name' => 'bail|alpha_dash|unique:judges,name,'.$judge->id.',id'
+		]);
+
         $judge->update($request->all());
         return;
     }
@@ -115,7 +125,7 @@ class JudgeController extends Controller
 
     /**
      * Returns a specified resources of a given competition
-     * 
+     *
      * @param \Illuminate\Http\Request  $request
      * @param string $name
      * @param string $resource (leaderboard, problems, teams, submissions)

@@ -48,6 +48,11 @@ class ProblemTypeController extends Controller
      */
     public function store(Request $request)
     {
+    	$this->validate($request, [
+    		'name' => 'bail|required|alpha_dash|unique:problem_types,name',
+    		'title' => 'required',
+    		'description' => 'required'
+		]);
     	$prob_type = new ProblemType($request->all());
     	$prob_type->save();
         return;
@@ -61,7 +66,7 @@ class ProblemTypeController extends Controller
      */
     public function show($name)
     {
-    	// 
+    	//
     }
 
     /**
@@ -87,6 +92,11 @@ class ProblemTypeController extends Controller
     	$prob_type = ProblemTypeController::findByName($name)->first();
     	if(is_null($prob_type))
     		return;
+
+    	$this->validate($request, [
+    		'name' => 'bail|alpha_dash|unique:problem_types,name,'.$prob_type->id.',id'
+		]);
+
     	$prob_type->update($request->all());
     }
 

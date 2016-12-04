@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class User extends Model
 {
     protected $table = 'users';
-    protected $fillable = ['username', 'fullname', 'email', 'image'];
+    protected $fillable = ['username', 'fullname'];
     protected $hidden = ['id', 'user_id', 'provider', 'email', 'credentials', 'created_at', 'updated_at', 'pivot'];
 
     public function roles()
