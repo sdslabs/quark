@@ -12,7 +12,7 @@ class CompetitionController extends Controller
 
     /**
      * Applied developer Middleware to all routes which require developer access
-     * 
+     *
      */
 
     public function __construct()
@@ -21,7 +21,7 @@ class CompetitionController extends Controller
     }
     /**
      * Find a competition by given name.
-     * 
+     *
      * @param string $name
      * @return SDSLabs\Quark\App\Models\Competition
      */
@@ -60,7 +60,18 @@ class CompetitionController extends Controller
      */
     public function store(Request $request)
     {
-        $comp = new Competition($request->all());
+    	$this->validate($request, [
+    		'name' => 'bail|required|alpha_dash|unique:competitions,name',
+    		'title' => 'required',
+    		'description' => 'required',
+    		'rules' => 'required',
+    		'team_limit' => 'bail|required|integer',
+    		'start_at' => 'bail|required|date',
+    		'end_at' => 'bail|required|date|after:start_at',
+    		'utc' => 'bail|required|accepted'
+		]);
+
+		$comp = new Competition($request->all());
         $saved = $comp->save();
         return;
     }
@@ -71,9 +82,9 @@ class CompetitionController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function show($name)
+    public function show($name, Request $request)
     {
-        $comp = $this->findByName($name)->first();
+        $comp = CompetitionController::findByName($name)->first();
         if(is_null($comp)) return;
         $user = Auth::user();
         if(!is_null($user))
@@ -105,6 +116,15 @@ class CompetitionController extends Controller
     {
         $comp = $this->findByName($name)->first();
         if(is_null($comp)) return;
+
+    	$this->validate($request, [
+    		'name' => 'bail|alpha_dash|unique:competitions,name,'.$comp->id.',id',
+    		'team_limit' => 'integer',
+    		'start_at' => 'bail|date',
+    		'end_at' => 'bail|date|after:start_at',
+    		'utc' => 'bail|required_with:start_at,end_at|accepted'
+		]);
+
         $comp->update($request->all());
         return;
     }
@@ -125,7 +145,7 @@ class CompetitionController extends Controller
 
     /**
      * Returns a specified resources of a given competition
-     * 
+     *
      * @param \Illuminate\Http\Request  $request
      * @param string $name
      * @param string $resource (leaderboard, problems, teams, submissions)

@@ -13,9 +13,10 @@ Route::resource('problemTypes', 'ProblemTypeController');
 
 Route::resource('judges', 'JudgeController');
 
-Route::resource('users', 'UserController', ['except' => ['destroy']]);
+Route::resource('users', 'UserController', ['except' => ['destroy', 'create', 'store']]);
 
 Route::resource('roles', 'RoleController');
 
 Route::post('roles/revoke/{user_name}/{role_name}', 'RoleController@revoke');
 Route::post('roles/restore/{user_name}/{role_name}', 'RoleController@restore');
+

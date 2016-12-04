@@ -8,7 +8,7 @@ use SDSLabs\Quark\App\Helpers\Leaderboard;
 
 class Competition extends Model
 {
-    
+
     protected $table = 'competitions';
 	protected $fillable = ['name', 'title', 'description', 'rules', 'team_limit', 'start_at', 'end_at'];
 	protected $appends = ['status', 'leaderboard_url', 'teams_url', 'problems_url', 'submissions_url'];
@@ -25,7 +25,7 @@ class Competition extends Model
 	{
 		return $this->hasMany('SDSLabs\Quark\App\Models\Team');
 	}
-	
+
 	public function submissions()
 	{
 		return $this->hasManyThrough('SDSLabs\Quark\App\Models\CompetitionLog', 'SDSLabs\Quark\App\Models\Team');

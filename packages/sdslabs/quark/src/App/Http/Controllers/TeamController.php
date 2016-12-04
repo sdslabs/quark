@@ -61,23 +61,31 @@ class TeamController extends Controller
      */
     public function store(Request $request, $comp_name)
     {
+    	$this->validate($request, [
+    		'name' => 'bail|required|alpha_dash'
+    	]);
+
         $comp = CompetitionController::findByName($comp_name)->first();
         if($comp->status === 'Finished')
             return "Competition has already ended.";
-        
+
         $user = Auth::user();
 
         $user_team = TeamController::findByCompetition($comp)->first();
         if(!is_null($user_team))
             return "You have already joined the team \"{$user_team->name}\" for this competition";
-        
+
+        $team = TeamController::findByName($request->name)->first();
+        if(!is_null($team))
+        	return "Team name is already taken.";
+
         $team = new Team($request->name());
         $team->owner()->associate($user);
         $saved = $comp->addTeam($team);
-        
+
         if($saved)
             $team->addMember($user);
-        
+
         return;
     }
 
@@ -123,15 +131,27 @@ class TeamController extends Controller
      */
     public function update(Request $request, $comp_name, $team_name)
     {
+    	$this->validate($request, [
+    		'name' => 'alpha_dash'
+    	]);
+
         $comp = CompetitionController::findByName($comp_name)->first();
         if($comp->status === 'Finished')
             return "Competition has already ended.";
-        
+
         $team = TeamController::findByName($team_name)->where('competition_id', $comp->id)->first();
         if(is_null($team)) return;
 
         if($team->owner->id !== Auth::user()->id)
             return "Only owner can update the team details";
+
+        if($request->has('name'))
+        {
+        	$existing_team = TeamController::findByName($request->name)->where('competition_id', $comp->id)
+        		->where('id', '<>', $team->id)->count();
+        	if(!is_null($existing_team))
+        		return "A team with given name already exists";
+        }
 
         $team->update($request->all());
 

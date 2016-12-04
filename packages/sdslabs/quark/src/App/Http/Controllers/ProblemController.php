@@ -49,41 +49,42 @@ class ProblemController extends Controller
      */
     public function store(Request $request)
     {
+    	$this->validate($request, [
+    		'name' => 'bail|required|alpha_dash|unique:problems,name',
+    		'title' => 'required',
+    		'description' => 'required',
+    		'problem_type' => 'bail|required|alpha_dash|model_presence:ProblemType,name',
+    		'practice' => 'boolean',
+    		'competition' => 'bail|alpha_dash|not_finished_competition',
+    		'creator' => 'bail|model_presence:User,name',
+    		'solution' => 'required',
+    		'practice_judge' => 'bail|required_if:practice,1|alpha_dash|model_presence:Judge,name',
+    		'practice_score' => 'bail|required_if:practice,1|numeric',
+    		'competition_judge' => 'bail|required_with:competition|alpha_dash|model_presence:Judge,name',
+    		'competition_score' => 'bail|required_with:competition|numeric'
+    	]);
+
         $prob = new Problem([
             "name" => $request->name,
             "title" => $request->title,
             "description" => $request->description
         ]);
-        if($request->has('practice') && $request->practice === 1)
-                $prob->practice = 1;
 
-        if($request->has('problem_type'))
-        {
-            $prob_type = ProblemTypeController::findByName($request->problem_type)->first();
-            if(is_null($prob_type))
-                return "Invalid Problem Type Name";
-            $prob->problem_type()->associate($prob_type);
-        }
-        else
-        {
-            return "Problem type is required!!";
-        }
+        if($request->has('practice') && $request->practice)
+            $prob->practice = 1;
+
+        $prob_type = ProblemTypeController::findByName($request->problem_type)->first();
+        $prob->problem_type()->associate($prob_type);
 
         if($request->has('competition'))
         {
-            $comp = CompetitionController::findByName($request->competition)->first();
-            if(is_null($comp))
-                return "Invalid Competition Name";
-            if($comp->status === 'Finished')
-                return "The competition has already ended";
+        	$comp = CompetitionController::findByName($request->competition)->first();
             $prob->competition()->associate($comp);
         }
 
         if($request->has('creator'))
         {
             $creator = UserController::findByName($request->creator)->first();
-            if(is_null($creator))
-                return "Invalid Creator Name";
             $prob->creator()->associate($creator);
         }
 
@@ -131,36 +132,78 @@ class ProblemController extends Controller
         $prob = ProblemController::findByName($name)->first();
         if (is_null($prob))
             return;
-        if ($request->has('name'))
-            $prob->name = $request->name;
-        if ($request->has('title'))
-            $prob->title = $request->title;
-        if ($request->has('description'))
-            $prob->description = $request->description;
-        if ($request->has('practice') &&
-           ($request->practice === 0 || $request->practice === 1))
+
+    	$this->validate($request, [
+    		'name' => 'bail|alpha_dash|unique:problems,name,'.$prob->id.',id',
+    		'problem_type' => 'bail|alpha_dash|model_presence:ProblemType,name',
+    		'practice' => 'boolean',
+    		'competition' => 'bail|alpha_dash|not_finished_competition',
+    		'creator' => 'bail|model_presence:User,name',
+    		'practice_judge' => 'bail|alpha_dash|model_presence:Judge,name',
+    		'practice_score' => 'numeric',
+    		'competition_judge' => 'bail|alpha_dash|model_presence:Judge,name',
+    		'competition_score' => 'numeric'
+    	]);
+
+        if ($request->has('practice'))
+        {
+        	$sol = $prob->solution()->with('practice_judge')->first();
+
+        	if(is_null($sol->practice_judge) || is_null($sol->practice_score))
+        		$this->validate($request, [
+        			'practice_judge'=> 'required',
+        			'practice_score'=> 'required'
+        		]);
+
             $prob->practice = $request->practice;
+        }
 
         if($request->has('competition'))
         {
-            $comp = CompetitionController::findByName($request->competition)->first();
-            if(is_null($comp))
-                return "Invalid competition name!";
-            if($comp->status === 'Finished')
-                return "The competition has already ended!";
+        	$sol = $prob->solution()->with('competition_judge')->first();
+
+        	if(is_null($sol->practice_judge) || is_null($sol->competition_score))
+        		$this->validate($request, [
+        			'competition_judge'=> 'required',
+        			'competition_score'=> 'required'
+        		]);
+
+        	$comp = CompetitionController::findByName($competition)->first();
             $prob->competition()->associate($comp);
         }
 
+        if ($prob->hasPracticeLogs() > 0)
+        	// TODO: Return error message as these parameters can not be updated because of practice logs.
+        	$this->validate($request, [
+        		'practice_judge' => '',
+        		'practice_score' => '',
+        		'solution' => ''
+        	]);
+
+        if ($prob->hasCompetitionLogs() > 0)
+        	// TODO: Return error message as these parameters can not be updated because of competition logs.
+        	$this->validate($request, [
+        		'competition_judge' => '',
+        		'competition_score' => '',
+        		'solution' => ''
+        	]);
+
         if($request->has('problem_type'))
-        {
+        	// TODO: Handle this!!
             return "Problem Type can't be updated";
-        }
+
+        if ($request->has('name'))
+            $prob->name = $request->name;
+
+        if ($request->has('title'))
+            $prob->title = $request->title;
+
+        if ($request->has('description'))
+            $prob->description = $request->description;
 
         if($request->has('creator'))
         {
             $creator = UserController::findByName($request->creator)->first();
-            if(is_null($creator))
-                return "Invalid Creator Name";
             $prob->creator()->associate($creator);
         }
 
