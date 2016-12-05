@@ -72,4 +72,10 @@ class Team extends Model
         return $rank+1;
     }
 
+    public function invite(User $user)
+    {
+    	// TODO: Send a mail and randomize the token
+    	$this->user_invites()->attach($user, ['token' => '123456', 'status' => 1]);
+    }
+
 }

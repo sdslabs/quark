@@ -19,6 +19,9 @@ Route::resource('roles', 'RoleController');
 
 Route::get('users/{user}/roles/', 'UserController@indexRole');
 Route::get('users/{user}/roles/{role}', 'UserController@showRole');
-Route::post('/users/{user}/roles/{role}', 'UserController@grantRole');
+Route::post('users/{user}/roles/{role}', 'UserController@grantRole');
 Route::delete('users/{user}/roles/{role}', 'UserController@revokeRole');
 
+Route::post('competitions/{competition}/teams/{team}/invite/{user}', 'CompetitionInvitesController@inviteUser');
+Route::post('competitions/{competition}/teams/{team}/join', 'CompetitionInvitesController@joinTeam');
+Route::get('/acceptInvite', 'CompetitionInvitesController@acceptInvite');

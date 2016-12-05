@@ -21,6 +21,8 @@ class CreateUserTeamInvitesTable extends Migration
             $table->string('token', 32);
             $table->timestamps();
 
+            $table->unique(['team_id', 'user_id']);
+
             /* Foreign Keys */
             // $table->foreign('team_id')->references('id')->on('teams');
             // $table->foreign('user_id')->references('id')->on('users');

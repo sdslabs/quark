@@ -46,6 +46,11 @@ class User extends Model
         return $this->hasMany('SDSLabs\Quark\App\Models\Team', 'owner_id');
     }
 
+    public function competitions()
+    {
+    	return $this->all_teams()->with('competition')->get()->pluck('competition');
+    }
+
     public function team_invites()
     {
         return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_invites', 'user_id', 'team_id')->withPivot('status', 'token')->withTimestamps();
@@ -69,6 +74,12 @@ class User extends Model
     public function getRank()
     {
         return $this->newQuery()->where('score', '>', $this->score)->count()+1;
+    }
+
+    public function invite(Team $team)
+    {
+    	// TODO: send mail to team owner and randomize the token
+    	$this->team_invites()->attach($team, ['token' => '654321', 'status'=> 2]);
     }
 
 }
