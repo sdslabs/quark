@@ -96,9 +96,8 @@ class ProblemTypeController extends Controller
     	if(is_null($prob_type))
     		return;
 
-    	$this->validate($request, [
-    		'name' => 'bail|alpha_dash|unique:problem_types,name,'.$prob_type->id.',id'
-		]);
+    	if($request->has('name'))
+    		return "Problem Type name can't be updated";
 
     	$prob_type->update($request->all());
     }
@@ -114,6 +113,10 @@ class ProblemTypeController extends Controller
     	$prob_type = ProblemTypeController::findByName($name)->first();
     	if(is_null($prob_type))
     		return;
+
+    	if($prob_type->problems()->count() > 0)
+    		return "There are problems associated with this type, so it cannot be deleted";
+
     	$prob_type->delete();
     }
 }
