@@ -28,8 +28,8 @@ class RoleController extends Controller
      */
     public function index()
     {
-        $roles = Role::all()->with('id');
-        return $users;
+        $roles = Role::with('users')->get();
+        return $roles;
     }
 
     /**
@@ -50,6 +50,11 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
+    	$this->validate($request, [
+    		'name' => 'bail|required|alpha_dash|unique:roles,name',
+    		'title' => 'required',
+    		'description' => 'required'
+		]);
         $role = new Role($request->all());
     	$role->save();
         return;
@@ -64,8 +69,10 @@ class RoleController extends Controller
      */
     public function show($name)
     {
-        $user = RoleController::findByName($name)->with('id');
-        return $user->first();
+        $role = RoleController::findByName($name)->with('users')->first();
+        if(is_null($role))
+        	return;
+        return $role;
     }
 
     /**
@@ -91,6 +98,11 @@ class RoleController extends Controller
         $role = RoleController::findByName($name)->first();
     	if(is_null($role))
     		return;
+
+    	$this->validate($request, [
+    		'name' => 'bail|alpha_dash|unique:roles,name,'.$role->id.',id'
+		]);
+
     	$role->update($request->all());
         return;
     }
@@ -104,53 +116,11 @@ class RoleController extends Controller
     public function destroy($name)
     {
         $role = $this->findByName($name)->first();
-        if(is_null($role)) return;
+        if(is_null($role))
+        	return;
         $role->users()->detach();
         $role->delete();
         return;
     }
 
-    /**
-     * Revoke specified row in pivot table.
-     *
-     * @param  string  $user_name
-     * @param  string  $role_name
-     * @return \Illuminate\Http\Response
-     */
-    public function revoke($user_name,$role_name)
-    {
-    	$user_id = DB::table('users')->where('username', $user_name)->value('id');
-    	$role_id = DB::table('roles')->where('name', $role_name)->value('id');
-
-    	if(is_null($user_id)) return "Invalid user";
-    	if(is_null($role_id)) return "Invalid role";
-
-    	DB::table('user_role_maps')
-    	->where('user_id', $user_id)
-    	->where('role_id', $role_id)
-    	->update(array('deleted_at' => DB::raw('NOW()')));
-		return; 
-    }
-
-    /**
-     * Restore specified row in pivot table.
-     *
-     * @param  string  $user_name
-     * @param  string  $role_name
-     * @return \Illuminate\Http\Response
-     */
-    public function restore($user_name,$role_name)
-    {
-    	$user_id = DB::table('users')->where('username', $user_name)->value('id');
-    	$role_id = DB::table('roles')->where('name', $role_name)->value('id');
-
-    	if(is_null($user_id)) return "Invalid user";
-    	if(is_null($role_id)) return "Invalid role";
-
-    	DB::table('user_role_maps')
-    	->where('user_id', $user_id)
-    	->where('role_id', $role_id)
-    	->update(array('deleted_at' => NULL));
-		return; 
-    }
 }

@@ -89,4 +89,49 @@ class UserController extends Controller
             return "You don't have the permission to update this user.";
         }
     }
+
+    public function indexRole($user_name)
+    {
+    	$user = UserController::findByName($user_name)->first();
+    	if(is_null($user))
+    		return;
+
+    	return $user->roles;
+    }
+
+    public function showRole($user_name, $role_name)
+    {
+    	$user = UserController::findByName($user_name)->first();
+    	if(is_null($user))
+    		return;
+
+    	return $user->roles()->where('name', $role_name)->first();
+    }
+
+    public function grantRole($user_name, $role_name)
+    {
+    	$user = UserController::findByName($user_name)->first();
+    	$role = RoleController::findByName($role_name)->first();
+
+    	if(is_null($user)) return "Invalid user";
+    	if(is_null($role)) return "Invalid role";
+
+    	if($user->roles()->where('name', $role_name)->count() > 0)
+    		return "{$user_name} is already a {$role_name}";
+
+    	$user->roles()->attach($role);
+		return;
+    }
+
+    public function revokeRole($user_name, $role_name)
+    {
+    	$user = UserController::findByName($user_name)->first();
+    	$role = RoleController::findByName($role_name)->first();
+
+    	if(is_null($user)) return "Invalid user";
+    	if(is_null($role)) return "Invalid role";
+
+    	$user->roles()->detach($role);
+		return;
+    }
 }

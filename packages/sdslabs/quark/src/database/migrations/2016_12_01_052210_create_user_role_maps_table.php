@@ -18,7 +18,8 @@ class CreateUserRoleMapsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('role_id')->unsigned();
             $table->timestamps();
-            $table->softDeletes()->comment('Revoke role from user');
+
+            $table->unique(['user_id', 'role_id']);
 
             /* Foreign Keys */
             // $table->foreign('role_id')->references('id')->on('roles');

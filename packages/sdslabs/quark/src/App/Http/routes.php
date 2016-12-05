@@ -17,6 +17,8 @@ Route::resource('users', 'UserController', ['except' => ['destroy', 'create', 's
 
 Route::resource('roles', 'RoleController');
 
-Route::post('roles/revoke/{user_name}/{role_name}', 'RoleController@revoke');
-Route::post('roles/restore/{user_name}/{role_name}', 'RoleController@restore');
+Route::get('users/{user}/roles/', 'UserController@indexRole');
+Route::get('users/{user}/roles/{role}', 'UserController@showRole');
+Route::post('/users/{user}/roles/{role}', 'UserController@grantRole');
+Route::delete('users/{user}/roles/{role}', 'UserController@revokeRole');
 
