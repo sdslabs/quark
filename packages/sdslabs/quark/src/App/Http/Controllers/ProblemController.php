@@ -53,14 +53,14 @@ class ProblemController extends Controller
     		'name' => 'bail|required|alpha_dash|unique:problems,name',
     		'title' => 'required',
     		'description' => 'required',
-    		'problem_type' => 'bail|required|alpha_dash|model_presence:ProblemType,name',
+    		'problem_type' => 'bail|required|alpha_dash|exists:ProblemType,name',
     		'practice' => 'boolean',
     		'competition' => 'bail|alpha_dash|not_finished_competition',
-    		'creator' => 'bail|model_presence:User,name',
+    		'creator' => 'bail|exists:User,name',
     		'solution' => 'required',
-    		'practice_judge' => 'bail|required_if:practice,1|alpha_dash|model_presence:Judge,name',
+    		'practice_judge' => 'bail|required_if:practice,1|alpha_dash|exists:Judge,name',
     		'practice_score' => 'bail|required_if:practice,1|numeric',
-    		'competition_judge' => 'bail|required_with:competition|alpha_dash|model_presence:Judge,name',
+    		'competition_judge' => 'bail|required_with:competition|alpha_dash|exists:Judge,name',
     		'competition_score' => 'bail|required_with:competition|numeric'
     	]);
 
@@ -132,13 +132,13 @@ class ProblemController extends Controller
 
     	$this->validate($request, [
     		'name' => 'bail|alpha_dash|unique:problems,name,'.$prob->id.',id',
-    		'problem_type' => 'bail|alpha_dash|model_presence:ProblemType,name',
+    		'problem_type' => 'bail|alpha_dash|exists:ProblemType,name',
     		'practice' => 'boolean',
     		'competition' => 'bail|alpha_dash|not_finished_competition',
-    		'creator' => 'bail|model_presence:User,name',
-    		'practice_judge' => 'bail|alpha_dash|model_presence:Judge,name',
+    		'creator' => 'bail|exists:User,name',
+    		'practice_judge' => 'bail|alpha_dash|exists:Judge,name',
     		'practice_score' => 'numeric',
-    		'competition_judge' => 'bail|alpha_dash|model_presence:Judge,name',
+    		'competition_judge' => 'bail|alpha_dash|exists:Judge,name',
     		'competition_score' => 'numeric'
     	]);
 

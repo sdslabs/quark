@@ -19,13 +19,13 @@ class CompetitionController extends Controller
     {
         $this->middleware('developer')->only(['create', 'store', 'edit', 'destroy']);
     }
+
     /**
      * Find a competition by given name.
      *
      * @param string $name
      * @return SDSLabs\Quark\App\Models\Competition
      */
-
     public static function findByName($name)
     {
         return Competition::where("name", $name);
