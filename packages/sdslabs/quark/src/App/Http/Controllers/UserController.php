@@ -14,6 +14,7 @@ class UserController extends Controller
     public function __construct()
     {
         $this->middleware('auth')->except(['index', 'show']);
+        $this->middleware('developer')->only(['indexRole', 'showRole', 'grantRole', 'revokeRole']);
     }
 
     public static function findByName($name)
@@ -39,19 +40,22 @@ class UserController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function show($name)
+    public function show(User $user)
     {
-        $user = UserController::findByName($name)->with('all_teams', 'submissions', 'problems_created');
+        $user->load('all_teams', 'submissions', 'problems_created');
         if(!is_null(Auth::user()))
         {
-            if ($name === Auth::user()->username)
+        	$attributes = [];
+        	$visible = [];
+            if ($user->username === Auth::user()->username || Auth::user()->isDeveloper())
             {
-                $user->with('owned_teams', 'invites_sent', 'invites_received');
+                array_push($attributes, 'owned_teams', 'invites_sent', 'invites_received');
+                $user->makeVisible('email');
             }
-            if(Auth::user()->isDeveloper())
-                $user->with('roles');
+            if (Auth::user()->isDeveloper())
+                array_push($attributes, 'roles');
         }
-        return $user->first();
+        return $user->load($attributes);
     }
 
     /**
@@ -78,18 +82,13 @@ class UserController extends Controller
     		'username' => 'bail|alpha_dash|unique:users,username,'.$user->id.',id',
     		'fullname' => 'alpha'
     	]);
+
         if($user->username === Auth::user()->username)
-        {
             Auth::user()->update($request->all());
-        }
         elseif(Auth::user()->isDeveloper())
-        {
             $user->update($request->all());
-        }
         else
-        {
             return "You don't have the permission to update this user.";
-        }
     }
 
     public function indexRole(User $user)
@@ -105,7 +104,7 @@ class UserController extends Controller
     public function grantRole(User $user, Role $role)
     {
     	if($user->roles()->where('name', $role->name)->count() > 0)
-    		return "{$user->name} is already a {$role->name}";
+    		return "{$user->username} is already a {$role->name}";
 
     	$user->roles()->attach($role);
 		return;

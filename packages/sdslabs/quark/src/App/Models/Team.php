@@ -54,7 +54,7 @@ class Team extends Model
 
     public function hasMember(User $user)
     {
-        return !is_null($this->members()->where('users.id', $user->id)->first());
+        return $this->members()->where('users.id', $user->id)->count() > 0 ;
     }
 
     public function addMember(User $user)

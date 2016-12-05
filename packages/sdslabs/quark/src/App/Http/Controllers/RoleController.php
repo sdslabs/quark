@@ -69,6 +69,7 @@ class RoleController extends Controller
      */
     public function show(Role $role)
     {
+    	$role->load('users');
         return $role;
     }
 

@@ -21,10 +21,10 @@ class TeamController extends Controller
         return Team::where("name", $name);
     }
 
-    public static function findByCompetition(Competition $comp)
+    public static function findByCompetition(Competition $competition)
     {
         $user = Auth::user();
-        return $user->all_teams()->where('competition_id', $comp->id);
+        return $user->all_teams()->where('competition_id', $competition->id);
     }
 
     /**
@@ -91,17 +91,14 @@ class TeamController extends Controller
      */
     public function show(Competition $competition, $team_name)
     {
-        $team = TeamController::findByName($team_name)->where('competition_id', $competition->id);
-        if(is_null($team->first())) return;
+        $team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+        $team->load('competition_logs.problem');
 
-        $team = $team->with('competition_logs.problem');
         $user = Auth::user();
-        if(!is_null($user) && $team->first()->hasMember($user))
-        {
-            $team = $team->with('owner', 'invites_sent', 'invites_received', 'members');
-        }
+        if(!is_null($user) && $team->hasMember($user))
+            $team->load('owner', 'invites_sent', 'invites_received', 'members');
 
-        return $team->first();
+        return $team;
     }
 
     /**
@@ -129,20 +126,18 @@ class TeamController extends Controller
     	]);
 
         if($competition->status === 'Finished')
-            return "Competition has already ended.";
+            abort(403, "Competition has already ended.");
 
         $team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
         if($team->owner->id !== Auth::user()->id)
-            return "Only owner can update the team details";
+            abort(403, "Only owner can update the team details.");
 
-        if($request->has('name'))
-        {
-        	$existing_team = TeamController::findByName($request->name)->where('competition_id', $competition->id)
-        		->where('id', '<>', $team->id)->count();
-        	if(!is_null($existing_team))
-        		return "A team with given name already exists";
-        }
+        if ($request->has('name') &&
+            TeamController::findByName($request->name)
+            	->where('competition_id', $competition->id)
+        		->where('id', '!=', $team->id)->count() > 0)
+        			abort(403, "A team with given name already exists.");
 
         $team->update($request->all());
 
@@ -157,13 +152,13 @@ class TeamController extends Controller
      */
     public function destroy(Competition $competition, $team_name)
     {
-        if($competition->status === 'Running' || $competition->status === 'Finished')
-            return "The competition is either over or running";
+        if($competition->status !== 'Future')
+            abort(403, "The competition has already started.");
 
         $team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
         if($team->owner->id !== Auth::user()->id)
-            return "Only owner can delete tht team";
+            abort(403, "Only owner can delete tht team.");
 
         $team->delete();
     }
