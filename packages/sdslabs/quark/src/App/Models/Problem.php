@@ -13,6 +13,11 @@ class Problem extends Model
 	protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'solution_id', 'creator_id', 'uploader_id', 'competition_id', 'problem_type_id'];
 	protected $appends = ['solution', 'creator', 'problem_type'];
 
+	public function getRouteKeyName()
+	{
+		return 'name';
+	}
+
 	public function competition()
 	{
 		return $this->belongsTo('SDSLabs\Quark\App\Models\Competition', 'competition_id');

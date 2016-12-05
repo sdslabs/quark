@@ -12,6 +12,11 @@ class Judge extends Model
 	protected $fillable = ['name', 'title', 'description'];
 	protected $hidden = ['id', 'created_at', 'updated_at'];
 
+	public function getRouteKeyName()
+	{
+		return 'name';
+	}
+
 	public function solutions()
 	{
 		return [

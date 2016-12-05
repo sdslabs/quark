@@ -9,7 +9,7 @@ Route::resource('competitions', 'CompetitionController');
 
 Route::resource('problems', 'ProblemController');
 
-Route::resource('problemTypes', 'ProblemTypeController');
+Route::resource('problem_types', 'ProblemTypeController');
 
 Route::resource('judges', 'JudgeController');
 

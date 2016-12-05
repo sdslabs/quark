@@ -104,8 +104,7 @@ class ProblemController extends Controller
      */
     public function show($name)
     {
-        $prob = $this->findByName($name)->where('practice', 1)->with('solved_by')->first();
-        if(is_null($prob)) return;
+        $prob = $this->findByName($name)->where('practice', 1)->with('solved_by')->firstOrFail();
         return $prob;
     }
 
@@ -127,11 +126,9 @@ class ProblemController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $name)
+    public function update(Request $request, Problem $problem)
     {
-        $prob = ProblemController::findByName($name)->first();
-        if (is_null($prob))
-            return;
+    	$prob = $problem;
 
     	$this->validate($request, [
     		'name' => 'bail|alpha_dash|unique:problems,name,'.$prob->id.',id',
@@ -220,13 +217,12 @@ class ProblemController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function destroy($name)
+    public function destroy(Problem $problem)
     {
-        $prob = ProblemController::findByName($name)->first();
-        if($prob->hasSubmissions())
+        if($problem->hasSubmissions())
             return "The problem has some submissions";
-        $prob->delete();
-        $prob->solution->delete();
+        $problem->delete();
+        $problem->solution->delete();
         return;
     }
 }

@@ -82,16 +82,14 @@ class CompetitionController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function show($name, Request $request)
+    public function show(Competition $competition, Request $request)
     {
-        $comp = CompetitionController::findByName($name)->first();
-        if(is_null($comp)) return;
         $user = Auth::user();
         if(!is_null($user))
         {
-            $comp->team = TeamController::findByCompetition($comp)->with('members')->first();
+            $competition->team = TeamController::findByCompetition($competition)->with('members')->first();
         }
-        return $comp;
+        return $competition;
     }
 
     /**
@@ -100,7 +98,7 @@ class CompetitionController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function edit($name)
+    public function edit(Competition $competition)
     {
         //
     }
@@ -112,20 +110,17 @@ class CompetitionController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $name)
+    public function update(Request $request, Competition $competition)
     {
-        $comp = $this->findByName($name)->first();
-        if(is_null($comp)) return;
-
     	$this->validate($request, [
-    		'name' => 'bail|alpha_dash|unique:competitions,name,'.$comp->id.',id',
+    		'name' => 'bail|alpha_dash|unique:competitions,name,'.$competition->id.',id',
     		'team_limit' => 'integer',
     		'start_at' => 'bail|date',
     		'end_at' => 'bail|date|after:start_at',
     		'utc' => 'bail|required_with:start_at,end_at|accepted'
 		]);
 
-        $comp->update($request->all());
+        $competition->update($request->all());
         return;
     }
 
@@ -135,11 +130,9 @@ class CompetitionController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function destroy($name)
+    public function destroy(Competition $competition)
     {
-        $comp = $this->findByName($name)->first();
-        if(is_null($comp)) return;
-        $comp->delete();
+        $competition->delete();
         return;
     }
 
@@ -152,16 +145,14 @@ class CompetitionController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function showResource(Request $request, $name, $resource)
+    public function showResource(Request $request, Competition $competition, $resource)
     {
-        $comp = $this->findByName($name)->first();
-        if(is_null($comp)) return;
-        if(!in_array($resource, $comp->resources)) return;
-        $query = $comp->$resource();
+        if(!in_array($resource, $competition->resources)) return;
+        $query = $competition->$resource();
         $limit = $request->input('limit');
         if(is_null($limit))
             return $query->get();
         else
-            return $query->paginate($limit)->setPath($comp[$resource.'Url'].'?limit='.$limit);
+            return $query->paginate($limit)->setPath($competition[$resource.'Url'].'?limit='.$limit);
     }
 }

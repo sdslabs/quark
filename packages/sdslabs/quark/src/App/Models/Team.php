@@ -12,6 +12,11 @@ class Team extends Model
     protected $hidden = ['id', 'competition_id', 'owner_id', 'created_at', 'updated_at', 'pivot'];
     protected $appends = ['rank'];
 
+	public function getRouteKeyName()
+	{
+		return 'name';
+	}
+
     public function competition()
     {
         return $this->belongsTo('SDSLabs\Quark\App\Models\Competition', 'competition_id');

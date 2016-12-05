@@ -64,12 +64,9 @@ class ProblemTypeController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function show($name)
+    public function show(ProblemType $problem_type)
     {
-    	$prob_type = ProblemTypeController::findByName($name)->first();
-    	if(is_null($prob_type))
-    		return;
-    	return $prob_type;
+    	return $problem_type;
     }
 
     /**
@@ -78,7 +75,7 @@ class ProblemTypeController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function edit($name)
+    public function edit(ProblemType $problem_type)
     {
         //
     }
@@ -90,16 +87,12 @@ class ProblemTypeController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $name)
+    public function update(Request $request, ProblemType $problem_type)
     {
-    	$prob_type = ProblemTypeController::findByName($name)->first();
-    	if(is_null($prob_type))
-    		return;
-
     	if($request->has('name'))
     		return "Problem Type name can't be updated";
 
-    	$prob_type->update($request->all());
+    	$problem_type->update($request->all());
     }
 
     /**
@@ -108,15 +101,11 @@ class ProblemTypeController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function destroy($name)
+    public function destroy(ProblemType $problem_type)
     {
-    	$prob_type = ProblemTypeController::findByName($name)->first();
-    	if(is_null($prob_type))
-    		return;
-
-    	if($prob_type->problems()->count() > 0)
+    	if($problem_type->problems()->count() > 0)
     		return "There are problems associated with this type, so it cannot be deleted";
 
-    	$prob_type->delete();
+    	$problem_type->delete();
     }
 }

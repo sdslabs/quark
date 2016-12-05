@@ -11,6 +11,11 @@ class User extends Model
     protected $fillable = ['username', 'fullname'];
     protected $hidden = ['id', 'user_id', 'provider', 'email', 'credentials', 'created_at', 'updated_at', 'pivot'];
 
+	public function getRouteKeyName()
+	{
+		return 'username';
+	}
+
     public function roles()
     {
     	return $this->belongsToMany('SDSLabs\Quark\App\Models\Role', 'user_role_maps', 'user_id', 'role_id');
