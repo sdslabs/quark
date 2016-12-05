@@ -16,6 +16,11 @@ class Competition extends Model
 
 	public $resources = ['problems', 'submissions', 'leaderboard'];
 
+	public function getRouteKeyName()
+	{
+		return 'name';
+	}
+
 	public function problems()
 	{
 		return $this->hasMany('SDSLabs\Quark\App\Models\Problem');

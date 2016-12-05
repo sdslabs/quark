@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SDSLabs\Quark\App\Models\Team;
+use SDSLabs\Quark\App\Models\Competition;
 
 class TeamController extends Controller
 {
@@ -20,7 +21,7 @@ class TeamController extends Controller
         return Team::where("name", $name);
     }
 
-    public static function findByCompetition($comp)
+    public static function findByCompetition(Competition $comp)
     {
         $user = Auth::user();
         return $user->all_teams()->where('competition_id', $comp->id);
@@ -31,11 +32,10 @@ class TeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($comp_name)
+    public function index(Competition $competition)
     {
-        $comp = CompetitionController::findByName($comp_name)->first();
-        $teams = $comp->teams()->with('members');
-        return $teams->get();
+        $teams = $competition->teams()->with('members')->get();
+        return $teams;
     }
 
     /**
@@ -43,14 +43,9 @@ class TeamController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create($comp_name)
+    public function create(Competition $competition)
     {
-        $form = "
-                <form method='POST' action='".route('competitions.teams.store', $comp_name)."'>
-                    <input type='text' name='name'></input>
-                </form>
-                ";
-        return $form;
+    	//
     }
 
     /**
@@ -59,29 +54,28 @@ class TeamController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $comp_name)
+    public function store(Request $request, Competition $competition)
     {
     	$this->validate($request, [
     		'name' => 'bail|required|alpha_dash'
     	]);
 
-        $comp = CompetitionController::findByName($comp_name)->first();
-        if($comp->status === 'Finished')
+        if($competition->status === 'Finished')
             return "Competition has already ended.";
 
         $user = Auth::user();
 
-        $user_team = TeamController::findByCompetition($comp)->first();
+        $user_team = TeamController::findByCompetition($competition)->first();
         if(!is_null($user_team))
             return "You have already joined the team \"{$user_team->name}\" for this competition";
 
-        $team = TeamController::findByName($request->name)->first();
+        $team = TeamController::findByName($request->name)->where('competition_id', $competition->id)->first();
         if(!is_null($team))
         	return "Team name is already taken.";
 
         $team = new Team($request->name());
         $team->owner()->associate($user);
-        $saved = $comp->addTeam($team);
+        $saved = $competition->addTeam($team);
 
         if($saved)
             $team->addMember($user);
@@ -95,10 +89,9 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($comp_name, $team_name)
+    public function show(Competition $competition, $team_name)
     {
-        $comp = CompetitionController::findByName($comp_name)->first();
-        $team = TeamController::findByName($team_name)->where('competition_id', $comp->id);
+        $team = TeamController::findByName($team_name)->where('competition_id', $competition->id);
         if(is_null($team->first())) return;
 
         $team = $team->with('competition_logs.problem');
@@ -117,7 +110,7 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($comp_name, $team_name)
+    public function edit(Competition $competition, Team $team)
     {
         //
     }
@@ -129,25 +122,23 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $comp_name, $team_name)
+    public function update(Request $request, Competition $competition, $team_name)
     {
     	$this->validate($request, [
     		'name' => 'alpha_dash'
     	]);
 
-        $comp = CompetitionController::findByName($comp_name)->first();
-        if($comp->status === 'Finished')
+        if($competition->status === 'Finished')
             return "Competition has already ended.";
 
-        $team = TeamController::findByName($team_name)->where('competition_id', $comp->id)->first();
-        if(is_null($team)) return;
+        $team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
         if($team->owner->id !== Auth::user()->id)
             return "Only owner can update the team details";
 
         if($request->has('name'))
         {
-        	$existing_team = TeamController::findByName($request->name)->where('competition_id', $comp->id)
+        	$existing_team = TeamController::findByName($request->name)->where('competition_id', $competition->id)
         		->where('id', '<>', $team->id)->count();
         	if(!is_null($existing_team))
         		return "A team with given name already exists";
@@ -164,14 +155,12 @@ class TeamController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($comp_name, $team_name)
+    public function destroy(Competition $competition, $team_name)
     {
-        $comp = CompetitionController::findByName($comp_name)->first();
-        if($comp->status === 'Running' || $comp->status === 'Finished')
+        if($competition->status === 'Running' || $competition->status === 'Finished')
             return "The competition is either over or running";
 
-        $team = TeamController::findByName($team_name)->where('competition_id', $comp->id)->first();
-        if(is_null($team)) return;
+        $team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
         if($team->owner->id !== Auth::user()->id)
             return "Only owner can delete tht team";

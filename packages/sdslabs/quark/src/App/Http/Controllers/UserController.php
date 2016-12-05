@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use SDSLabs\Quark\App\Models\User;
+use SDSLabs\Quark\App\Models\Role;
 
 class UserController extends Controller
 {
@@ -43,8 +44,10 @@ class UserController extends Controller
         $user = UserController::findByName($name)->with('all_teams', 'submissions', 'problems_created');
         if(!is_null(Auth::user()))
         {
-            if ($name === Auth::user()->name)
-                $user->with('owned_teams', 'invites_sent', 'invites_received', 'email');
+            if ($name === Auth::user()->username)
+            {
+                $user->with('owned_teams', 'invites_sent', 'invites_received');
+            }
             if(Auth::user()->isDeveloper())
                 $user->with('roles');
         }
@@ -69,19 +72,18 @@ class UserController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $name)
+    public function update(Request $request, User $user)
     {
     	$this->validate($request, [
-    		'username' => 'bail|alpha_dash|unique:users,username',
+    		'username' => 'bail|alpha_dash|unique:users,username,'.$user->id.',id',
     		'fullname' => 'alpha'
     	]);
-        if($name === Auth::user()->username)
+        if($user->username === Auth::user()->username)
         {
             Auth::user()->update($request->all());
         }
         elseif(Auth::user()->isDeveloper())
         {
-            $user = UserController::findByName($name)->first();
             $user->update($request->all());
         }
         else
@@ -90,47 +92,27 @@ class UserController extends Controller
         }
     }
 
-    public function indexRole($user_name)
+    public function indexRole(User $user)
     {
-    	$user = UserController::findByName($user_name)->first();
-    	if(is_null($user))
-    		return;
-
     	return $user->roles;
     }
 
-    public function showRole($user_name, $role_name)
+    public function showRole(User $user, Role $role)
     {
-    	$user = UserController::findByName($user_name)->first();
-    	if(is_null($user))
-    		return;
-
-    	return $user->roles()->where('name', $role_name)->first();
+    	return $user->roles()->where('name', $role->name)->first();
     }
 
-    public function grantRole($user_name, $role_name)
+    public function grantRole(User $user, Role $role)
     {
-    	$user = UserController::findByName($user_name)->first();
-    	$role = RoleController::findByName($role_name)->first();
-
-    	if(is_null($user)) return "Invalid user";
-    	if(is_null($role)) return "Invalid role";
-
-    	if($user->roles()->where('name', $role_name)->count() > 0)
-    		return "{$user_name} is already a {$role_name}";
+    	if($user->roles()->where('name', $role->name)->count() > 0)
+    		return "{$user->name} is already a {$role->name}";
 
     	$user->roles()->attach($role);
 		return;
     }
 
-    public function revokeRole($user_name, $role_name)
+    public function revokeRole(User $user, Role $role)
     {
-    	$user = UserController::findByName($user_name)->first();
-    	$role = RoleController::findByName($role_name)->first();
-
-    	if(is_null($user)) return "Invalid user";
-    	if(is_null($role)) return "Invalid role";
-
     	$user->roles()->detach($role);
 		return;
     }

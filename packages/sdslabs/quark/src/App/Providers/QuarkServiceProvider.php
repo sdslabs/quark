@@ -34,8 +34,10 @@ class QuarkServiceProvider extends ServiceProvider
 
     public function setupRoutes(Router $router)
     {
-        $router->group(['namespace' => 'SDSLabs\Quark\App\Http\Controllers'], function($router)
-        {
+        $router->group([
+        	'namespace' => 'SDSLabs\Quark\App\Http\Controllers',
+        	'middleware' => 'web'
+        ], function($router) {
             require __DIR__.'/../Http/routes.php';
         });
     }

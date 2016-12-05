@@ -67,11 +67,8 @@ class RoleController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function show($name)
+    public function show(Role $role)
     {
-        $role = RoleController::findByName($name)->with('users')->first();
-        if(is_null($role))
-        	return;
         return $role;
     }
 
@@ -81,7 +78,7 @@ class RoleController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function edit($name)
+    public function edit(Role $role)
     {
         //
     }
@@ -93,12 +90,8 @@ class RoleController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $name)
+    public function update(Request $request, Role $role)
     {
-        $role = RoleController::findByName($name)->first();
-    	if(is_null($role))
-    		return;
-
     	$this->validate($request, [
     		'name' => 'bail|alpha_dash|unique:roles,name,'.$role->id.',id'
 		]);
@@ -113,11 +106,8 @@ class RoleController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function destroy($name)
+    public function destroy(Role $role)
     {
-        $role = $this->findByName($name)->first();
-        if(is_null($role))
-        	return;
         $role->users()->detach();
         $role->delete();
         return;

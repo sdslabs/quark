@@ -68,11 +68,8 @@ class JudgeController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function show($name)
+    public function show(Judge $judge)
     {
-        $judge = JudgeController::findByName($name)->first();
-        if(is_null($judge))
-            return;
         return $judge;
     }
 
@@ -82,7 +79,7 @@ class JudgeController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function edit($name)
+    public function edit(Judge $judge)
     {
         //
     }
@@ -94,12 +91,8 @@ class JudgeController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $name)
+    public function update(Request $request, Judge $judge)
     {
-        $judge = JudgeController::findByName($name)->first();
-        if(is_null($judge))
-            return;
-
     	$this->validate($request, [
     		'name' => 'bail|alpha_dash|unique:judges,name,'.$judge->id.',id'
 		]);
@@ -114,11 +107,8 @@ class JudgeController extends Controller
      * @param  string  $name
      * @return \Illuminate\Http\Response
      */
-    public function destroy($name)
+    public function destroy(Judge $judge)
     {
-        $judge = JudgeController::findByName($name)->first();
-        if(is_null($judge))
-            return;
         $judge->delete();
         return;
     }
