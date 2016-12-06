@@ -9,73 +9,67 @@ class Team extends Model
 {
 	protected $table = 'teams';
 	protected $fillable = ['name'];
-    protected $hidden = ['id', 'competition_id', 'owner_id', 'created_at', 'updated_at', 'pivot'];
-    protected $appends = ['rank'];
+	protected $hidden = ['id', 'competition_id', 'owner_id', 'created_at', 'updated_at', 'pivot'];
 
 	public function getRouteKeyName()
 	{
 		return 'name';
 	}
 
-    public function competition()
-    {
-        return $this->belongsTo('SDSLabs\Quark\App\Models\Competition', 'competition_id');
-    }
+	public function competition()
+	{
+		return $this->belongsTo('SDSLabs\Quark\App\Models\Competition', 'competition_id');
+	}
 
-    public function owner()
-    {
-        return $this->belongsTo('SDSLabs\Quark\App\Models\User', 'owner_id');
-    }
+	public function owner()
+	{
+		return $this->belongsTo('SDSLabs\Quark\App\Models\User', 'owner_id');
+	}
 
-    public function members()
-    {
-        return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'user_team_maps', 'team_id', 'user_id');
-    }
+	public function members()
+	{
+		return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'user_team_maps', 'team_id', 'user_id');
+	}
 
-    public function competition_logs()
-    {
-        return $this->hasMany('SDSLabs\Quark\App\Models\CompetitionLog');
-    }
+	public function competition_submissions()
+	{
+		return $this->hasMany('SDSLabs\Quark\App\Models\CompetitionLog');
+	}
 
-    public function user_invites()
-    {
-        return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'user_team_invites', 'team_id', 'user_id')->withPivot('status', 'token')->withTimestamps();
-    }
+	public function user_invites()
+	{
+		return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'user_team_invites', 'team_id', 'user_id')->withPivot('status', 'token')->withTimestamps();
+	}
 
-    public function invites_sent()
-    {
-        return $this->user_invites()->where('status', 1);
-    }
+	public function invites_sent()
+	{
+		return $this->user_invites()->where('status', 1);
+	}
 
-    public function invites_received()
-    {
-        return $this->user_invites()->where('status', 2);
-    }
+	public function invites_received()
+	{
+		return $this->user_invites()->where('status', 2);
+	}
 
-    public function hasMember(User $user)
-    {
-        return $this->members()->where('users.id', $user->id)->count() > 0 ;
-    }
+	public function hasMember(User $user)
+	{
+		return $this->members()->where('users.id', $user->id)->count() > 0 ;
+	}
 
-    public function addMember(User $user)
-    {
-        return $this->members()->attach($user);
-    }
+	public function addMember(User $user)
+	{
+		return $this->members()->attach($user);
+	}
 
-    public function getRankAttribute()
-    {
-        // To be fixed!!!
+	public function getRankAttribute()
+	{
+		// To be fixed!!!
+		return 1;
+	}
 
-        $rank = 0;
-        $comp = $this->competition()->first();
-        $rank += $comp->teams()->where('score', '>=', $this->score)->count();
-        return $rank+1;
-    }
-
-    public function invite(User $user)
-    {
-    	// TODO: Send a mail and randomize the token
-    	$this->user_invites()->attach($user, ['token' => '123456', 'status' => 1]);
-    }
+	public function invite(User $user)
+	{
+		return $this->user_invites()->attach($user, ['token' => $token, 'status' => 1]);
+	}
 
 }

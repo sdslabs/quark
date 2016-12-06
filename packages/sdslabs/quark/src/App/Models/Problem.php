@@ -10,8 +10,8 @@ class Problem extends Model
 
 	protected $table = 'problems';
 	protected $fillable = ['name', 'title', 'description', 'practice'];
-	protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'solution_id', 'creator_id', 'uploader_id', 'competition_id', 'problem_type_id'];
-	protected $appends = ['solution', 'creator', 'problem_type'];
+	protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'creator_id', 'uploader_id', 'competition_id'];
+	protected $appends = ['solution'];
 
 	public function getRouteKeyName()
 	{
@@ -25,7 +25,7 @@ class Problem extends Model
 
 	public function solution()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\Solution', 'solution_id');
+		return $this->hasOne('SDSLabs\Quark\App\Models\Solution');
 	}
 
 	public function creator()
@@ -38,42 +38,29 @@ class Problem extends Model
 		return $this->belongsTo('SDSLabs\Quark\App\Models\User', 'uploader_id');
 	}
 
-	public function problem_type()
+	public function practice_submissions()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\ProblemType', 'problem_type_id');
+		return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'practice_submissions', 'problem_id', 'user_id');
 	}
 
-	public function practice_logs()
+	public function competition_submissions()
 	{
-		return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'practice_logs', 'problem_id', 'user_id');
+		return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'competition_submissions', 'problem_id', 'team_id');
 	}
 
-	public function competition_logs()
+	public function hasPracticeSubmissions()
 	{
-		return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'competition_logs', 'problem_id', 'team_id');
-	}
-
-	public function solved_by()
-	{
-		if(is_null($this->competition) || $this->competition->status === 'Finished')
-			return $this->practice_logs();
-		else
-			return $this->competition_logs();
-	}
-
-	public function hasPracticeLogs()
-	{
-		return $this->practice_logs()->count() > 0 ;
+		return $this->practice_submissions()->count() > 0 ;
 	}
 
 	public function hasCompetitionLogs()
 	{
-		return $this->competition_logs()->count() > 0 ;
+		return $this->competition_submissions()->count() > 0 ;
 	}
 
 	public function hasSubmissions()
 	{
-		return $this->hasPracticeLogs() || $this->hasCompetitionLogs();
+		return $this->hasPracticeSubmissions() || $this->hasCompetitionSubmissions();
 	}
 
 	public function getSolutionAttribute()
@@ -81,13 +68,4 @@ class Problem extends Model
 		return $this->solution()->first();
 	}
 
-	public function getCreatorAttribute()
-	{
-		return $this->creator()->first();
-	}
-
-	public function getProblemTypeAttribute()
-	{
-		return $this->problem_type()->first();
-	}
 }

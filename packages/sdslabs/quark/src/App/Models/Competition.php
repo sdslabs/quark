@@ -6,15 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use SDSLabs\Quark\App\Helpers\Leaderboard;
 
+
 class Competition extends Model
 {
 
-    protected $table = 'competitions';
+	protected $table = 'competitions';
 	protected $fillable = ['name', 'title', 'description', 'rules', 'team_limit', 'start_at', 'end_at'];
-	protected $appends = ['status', 'leaderboard_url', 'teams_url', 'problems_url', 'submissions_url'];
+	protected $appends = ['status'];
 	protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
-
-	public $resources = ['problems', 'submissions', 'leaderboard'];
 
 	public function getRouteKeyName()
 	{
@@ -33,33 +32,13 @@ class Competition extends Model
 
 	public function submissions()
 	{
-		return $this->hasManyThrough('SDSLabs\Quark\App\Models\CompetitionLog', 'SDSLabs\Quark\App\Models\Team');
+		return $this->hasManyThrough('SDSLabs\Quark\App\Models\CompetitionSubmission', 'SDSLabs\Quark\App\Models\Team');
 	}
 
 	public function leaderboard()
 	{
-        $leaderboard = Leaderboard::competitionLeaderboard($this);
+		$leaderboard = Leaderboard::competitionLeaderboard($this);
 		return $leaderboard;
-	}
-
-	public function getLeaderboardUrlAttribute()
-	{
-		return route('competitions.show', $this->name).'/leaderboard';
-	}
-
-	public function getTeamsUrlAttribute()
-	{
-		return route('competitions.show', $this->name).'/teams';
-	}
-
-	public function getProblemsUrlAttribute()
-	{
-		return route('competitions.show', $this->name).'/problems';
-	}
-
-	public function getSubmissionsUrlAttribute()
-	{
-		return route('competitions.show', $this->name).'/submissions';
 	}
 
 	public function getStatusAttribute()
