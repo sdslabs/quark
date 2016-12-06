@@ -25,3 +25,4 @@ Route::delete('users/{user}/roles/{role}', 'UserController@revokeRole');
 Route::post('competitions/{competition}/teams/{team}/invite/{user}', 'CompetitionInvitesController@inviteUser');
 Route::post('competitions/{competition}/teams/{team}/join', 'CompetitionInvitesController@joinTeam');
 Route::get('/acceptInvite', 'CompetitionInvitesController@acceptInvite');
+Route::get('/cancelInvite', 'CompetitionInvitesController@cancelInvite');

@@ -26,9 +26,6 @@ class CompetitionInvitesController extends Controller
 	{
 		$team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
-		if($team->competition_id !== $competition->id)
-			abort(403, "The team doesn't belong to this competition.");
-
 		if($competition->status === 'Finished')
 			abort(403, "The competition has already ended.");
 
@@ -57,9 +54,6 @@ class CompetitionInvitesController extends Controller
 	{
 		$team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
-		if($team->competition_id !== $competition->id)
-			abort(403, "The team doesn't belong to this competition.");
-
 		if($competition->status === 'Finished')
 			abort(403, "The competition has already ended");
 
@@ -86,7 +80,6 @@ class CompetitionInvitesController extends Controller
 			'token' => 'required'
 		]);
 
-		$user = Auth::user();
 		$token = $request->token;
 
 		$team = Team::whereHas('user_invites', function($q) use($token) {
@@ -108,9 +101,18 @@ class CompetitionInvitesController extends Controller
 
 		$invite_status = $user->pivot->status;
 
-		if ($invite_status === 0)
-			abort(202, "Invite has already been accepted.");
-		elseif ($invite_status === 1 &&
+		if($invite_status === 0)
+			abort(404, "The invite has already been accepted!");
+
+		if($user->competitions()->where('id', $competition->id)->count() > 0)
+		{
+			if($invite_status === 1)
+				abort(403, "You are already participating in this competition.");
+			elseif($invite_status === 2)
+				abort(403, "The user is already participating in this competition.");
+		}
+
+		if ($invite_status === 1 &&
 				Auth::user()->id !== $user->id &&
 				!Auth::user()->isDeveloper())
 					abort(403, "The invite was not meant for you!");
@@ -121,6 +123,35 @@ class CompetitionInvitesController extends Controller
 
 		$team->addMember($user);
 		$user->pivot->update(['status' => 0]);
+	}
+
+	public function cancelInvite(Request $request)
+	{
+		$this->validate($request, [
+			'token' => 'required'
+		]);
+
+		$token = $request->token;
+
+		$team = Team::whereHas('user_invites', function($q) use($token) {
+			$q->where('token', $token);
+		})->with('competition')->first();
+
+		if(is_null($team))
+			abort(404, "Invalid token!");
+
+		$competition = $team->competition;
+
+		$user = $team->user_invites()->where('token', $token)->first();
+
+		$invite_status = $user->pivot->status;
+
+		if ($invite_status === 0)
+			abort(403, "Invite has been accepted and cannot be cancelled.");
+
+		elseif (($invite_status === 1 || $invite_status === 2) &&
+				(Auth::user()->id === $user->id || Auth::user()->id === $team->owner_id || Auth::user()->isDeveloper()))
+			$user->pivot->delete();
 
 	}
 
