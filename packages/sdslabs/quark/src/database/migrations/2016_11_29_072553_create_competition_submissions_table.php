@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePracticeLogsTable extends Migration
+class CreateCompetitionSubmissionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,16 +13,16 @@ class CreatePracticeLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('practice_logs', function (Blueprint $table) {
+        Schema::create('competition_submissions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
+            $table->integer('team_id')->unsigned();
             $table->integer('problem_id')->unsigned();
+            $table->string('submission', 200);
             $table->float('score');
             $table->timestamps();
-            $table->softDeletes();
 
             /* Foreign Keys */
-            // $table->foreign('user_id')->references('id')->on('users');
+            // $table->foreign('team_id')->references('id')->on('teams');
             // $table->foreign('problem_id')->references('id')->on('problems');
 
         });
@@ -35,6 +35,6 @@ class CreatePracticeLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('practice_logs');
+        Schema::dropIfExists('competition_submissions');
     }
 }
