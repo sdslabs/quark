@@ -48,11 +48,6 @@ class AddsForeignKeyConstraints extends Migration
             $table->foreign('user_id')->references('id')->on('users');
         });
 
-        Schema::table('user_role_maps', function (Blueprint $table) {
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('cascade');
-            $table->foreign('user_id')->references('id')->on('users');
-        });
-
     }
 
     /**
@@ -94,11 +89,6 @@ class AddsForeignKeyConstraints extends Migration
 
         Schema::table('user_team_invites', function (Blueprint $table) {
             $table->dropForeign(['team_id']);
-            $table->dropForeign(['user_id']);
-        });
-
-        Schema::table('user_role_maps', function (Blueprint $table) {
-            $table->dropForeign(['role_id']);
             $table->dropForeign(['user_id']);
         });
     }

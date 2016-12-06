@@ -22,11 +22,9 @@ class CreateUsersTable extends Migration
             $table->string('fullname', 256);
             $table->string('email', 250)->unique();
             $table->string('image', 256);
+            $table->string('role', 30);
             $table->float('score')->default(0)->comment('Score in practice arena.');
             $table->timestamps();
-
-            /* Foreign Keys */
-            // $table->foreign('role_id')->references('id')->on('user_roles');
         });
     }
 
