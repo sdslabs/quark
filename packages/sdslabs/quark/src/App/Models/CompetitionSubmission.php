@@ -9,8 +9,8 @@ class CompetitionSubmission extends Model
 {
 
 	protected $table = 'competition_submissions';
-	protected $fillable = ['score', 'submission'];
-	protected $hidden = ['id', 'created_at', 'updated_at', 'team_id', 'problem_id'];
+	protected $fillable = ['score', 'submission', 'status'];
+	protected $hidden = ['id', 'score', 'submission', 'created_at', 'updated_at', 'team_id', 'problem_id', 'competition_id'];
 
 	public function problem()
 	{

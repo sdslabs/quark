@@ -91,28 +91,4 @@ class UserController extends Controller
             return "You don't have the permission to update this user.";
     }
 
-    public function indexRole(User $user)
-    {
-    	return $user->roles;
-    }
-
-    public function showRole(User $user, Role $role)
-    {
-    	return $user->roles()->where('name', $role->name)->first();
-    }
-
-    public function grantRole(User $user, Role $role)
-    {
-    	if($user->roles()->where('name', $role->name)->count() > 0)
-    		return "{$user->username} is already a {$role->name}";
-
-    	$user->roles()->attach($role);
-		return;
-    }
-
-    public function revokeRole(User $user, Role $role)
-    {
-    	$user->roles()->detach($role);
-		return;
-    }
 }

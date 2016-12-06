@@ -69,15 +69,16 @@ class FalconGuard implements Guard
 		if($user === null)
 		{
 			// New user
-			$user = new User([
-				"user_id" => $result['id'],
-				"provider" => 'falcon',
-				"credentials" => $result['password'],
-				"username" => $result['username'],
-				"fullname" => $result['name'],
-				"email" => $result['email'],
-				"image" => $result['image_url']
-			]);
+			$user = new User;
+
+			$user->user_id = $result['id'];
+			$user->provider = 'falcon';
+			$user->credentials = $result['password'];
+			$user->username = $result['username'];
+			$user->fullname = $result['name'];
+			$user->email = $result['email'];
+			$user->image = $result['image_url'];
+
 			$user->save();
 		}
 		else if($user->image != $result['image_url']) {
