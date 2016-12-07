@@ -37,19 +37,9 @@ class Team extends Model
 		return $this->hasMany('SDSLabs\Quark\App\Models\CompetitionSubmission');
 	}
 
-	public function user_invites()
+	public function invites()
 	{
-		return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'user_team_invites', 'team_id', 'user_id')->withPivot('status', 'token')->withTimestamps();
-	}
-
-	public function invites_sent()
-	{
-		return $this->user_invites()->where('status', 1);
-	}
-
-	public function invites_received()
-	{
-		return $this->user_invites()->where('status', 2);
+		return $this->hasMany('SDSLabs\Quark\App\Models\Invite');
 	}
 
 	public function hasMember(User $user)

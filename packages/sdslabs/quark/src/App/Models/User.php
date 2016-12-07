@@ -52,19 +52,9 @@ class User extends Model
 		return $this->teams()->where('competition_id', $competition_id)->count() > 0;
 	}
 
-	public function team_invites()
+	public function invites()
 	{
-		return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_invites', 'user_id', 'team_id')->withPivot('status', 'token')->withTimestamps();
-	}
-
-	public function invites_received()
-	{
-		return $this->team_invites()->where('status', 1);
-	}
-
-	public function invites_sent()
-	{
-		return $this->team_invites()->where('status', 2);
+		return $this->hasMany('SDSLabs\Quark\App\Models\Invite');
 	}
 
 	public function isDeveloper()

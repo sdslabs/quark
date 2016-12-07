@@ -42,33 +42,14 @@ class UserController extends Controller
 	 */
 	public function show(User $user)
 	{
-		$user->load('teams', 'submissions', 'problems_created');
+		$user->load('teams', 'submissions.problems', 'problems_created');
 		if(!is_null(Auth::user()))
 		{
 			if ($user->username === Auth::user()->username || Auth::user()->isDeveloper())
 			{
 				$user->makeVisible('email');
-				$user->load('owned_teams', 'team_invites');
-
-				$user->team_invites->mapWithKeys(function($item) {
-					$item->makeHidden('pivot');
-					$item->status = $item->pivot->status;
-					$item->token = $item->pivot->token;
-					$item->created_at = $item->pivot->created_at;
-					$item->updated_at = $item->pivot->updated_at;
-					return $item;
-				});
-				$user['invites'] = $user->team_invites->groupBy(function($item, $key) {
-					if($item['status'] == 1)
-						return 'received';
-					elseif($item['status'] == 2)
-						return 'sent';
-					else
-						return 'other';
-				});
-				$user['invites']->forget('other');
-				$user->makeHidden('team_invites');
-				// TODO: Find a better way for it and hide status from invites!!
+				$user->load('owned_teams', 'invites.team');
+				// TODO: Group by status and hide the status
 			}
 
 			if (Auth::user()->isDeveloper())

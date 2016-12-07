@@ -90,32 +90,13 @@ class TeamController extends Controller
 	public function show(Competition $competition, $team_name)
 	{
 		$team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
-		$team->load('submissions.problem');
+		$team->load('submissions.problem', 'member');
 
 		$user = Auth::user();
 		if (!is_null($user) && $team->hasMember($user))
 		{
-			$team->load('owner', 'user_invites', 'members');
-
-			$team->user_invites->mapWithKeys(function($item) {
-				$item->makeHidden('pivot');
-				$item->status = $item->pivot->status;
-				$item->token = $item->pivot->token;
-				$item->created_at = $item->pivot->created_at;
-				$item->updated_at = $item->pivot->updated_at;
-				return $item;
-			});
-			$team['invites'] = $team->user_invites->groupBy(function($item, $key) {
-				if($item['status'] == 1)
-					return 'sent';
-				elseif($item['status'] == 2)
-					return 'received';
-				else
-					return 'other';
-			});
-			$team['invites']->forget('other');
-			$team->makeHidden('user_invites');
-			// TODO: Find an elegant way to do that and remove status from invites.
+			$team->load('owner', 'invites.user');
+			// TODO: Group by status and hide the status
 		}
 
 		return $team;
