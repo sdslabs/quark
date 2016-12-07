@@ -40,12 +40,12 @@ class Problem extends Model
 
 	public function practice_submissions()
 	{
-		return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'practice_submissions', 'problem_id', 'user_id');
+		return $this->hasMany('SDSLabs\Quark\App\Models\PracticeSubmission');
 	}
 
 	public function competition_submissions()
 	{
-		return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'competition_submissions', 'problem_id', 'team_id');
+		return $this->hasMany('SDSLabs\Quark\App\Models\CompetitionSubmission');
 	}
 
 	public function hasPracticeSubmissions()
@@ -53,7 +53,7 @@ class Problem extends Model
 		return $this->practice_submissions()->count() > 0 ;
 	}
 
-	public function hasCompetitionLogs()
+	public function hasCompetitionSubmissions()
 	{
 		return $this->competition_submissions()->count() > 0 ;
 	}

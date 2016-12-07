@@ -9,220 +9,144 @@ use SDSLabs\Quark\App\Models\Problem;
 
 class ProblemController extends Controller
 {
-    public function __construct()
-    {
-        $this->middleware('developer')->except(['index', 'show']);
-    }
 
+	public static function findByName($name)
+	{
+		return Problem::where("name", $name);
+	}
 
-    public static function findByName($name)
-    {
-        return Problem::where("name", $name);
-    }
+	/**
+	 * Show the form for creating a new resource.
+	 *
+	 * @return \Illuminate\Http\Response
+	 */
+	public function create()
+	{
+		//
+	}
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $problems = Problem::where('practice', 1)->get();
-        return $problems;
-    }
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		$this->validate($request, [
+			'name' => 'bail|required|alpha_dash|unique:problems,name',
+			'title' => 'required',
+			'description' => 'required',
+			'practice' => 'bail|required|boolean',
+			'competition' => 'bail|alpha_dash|exists:competitions,name',
+			'creator' => 'bail|exists:users,username',
+			'score' => 'bail|required|numeric',
+			'answer' => 'required',
+		]);
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
+		$problem = new Problem([
+			"name" => $request->name,
+			"title" => $request->title,
+			"description" => $request->description
+		]);
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-    	$this->validate($request, [
-    		'name' => 'bail|required|alpha_dash|unique:problems,name',
-    		'title' => 'required',
-    		'description' => 'required',
-    		'problem_type' => 'bail|required|alpha_dash|exists:ProblemType,name',
-    		'practice' => 'boolean',
-    		'competition' => 'bail|alpha_dash|not_finished_competition',
-    		'creator' => 'bail|exists:User,name',
-    		'solution' => 'required',
-    		'practice_judge' => 'bail|required_if:practice,1|alpha_dash|exists:Judge,name',
-    		'practice_score' => 'bail|required_if:practice,1|numeric',
-    		'competition_judge' => 'bail|required_with:competition|alpha_dash|exists:Judge,name',
-    		'competition_score' => 'bail|required_with:competition|numeric'
-    	]);
+		if($request->has('practice') && $request->practice)
+			$problem->practice = 1;
 
-        $prob = new Problem([
-            "name" => $request->name,
-            "title" => $request->title,
-            "description" => $request->description
-        ]);
+		if($request->has('competition'))
+		{
+			$competition = CompetitionController::findByName($request->competition)->first();
+			$problem->competition()->associate($competition);
+		}
 
-        if($request->has('practice') && $request->practice)
-            $prob->practice = 1;
+		if($request->has('creator'))
+		{
+			$creator = UserController::findByName($request->creator)->first();
+			$problem->creator()->associate($creator);
+		}
 
-        $prob_type = ProblemTypeController::findByName($request->problem_type)->first();
-        $prob->problem_type()->associate($prob_type);
+		$problem->uploader()->associate(Auth::user());
+		$problem->save();
 
-        if($request->has('competition'))
-        {
-        	$comp = CompetitionController::findByName($request->competition)->first();
-            $prob->competition()->associate($comp);
-        }
+		$solution_controller = new SolutionController;
+		$solution = $solution_controller->store($request, $problem);
 
-        if($request->has('creator'))
-        {
-            $creator = UserController::findByName($request->creator)->first();
-            $prob->creator()->associate($creator);
-        }
+		return $problem;
+	}
 
-        $solution_controller = new SolutionController;
-        $solution = $solution_controller->store($request, $prob);
-        $prob->solution()->associate($solution);
-        $prob->uploader()->associate(Auth::user());
-        $prob->save();
-        return;
-    }
+	/**
+	 * Show the form for editing the specified resource.
+	 *
+	 * @param  string  $name
+	 * @return \Illuminate\Http\Response
+	 */
+	public function edit($name)
+	{
+		//
+	}
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  string  $name
-     * @return \Illuminate\Http\Response
-     */
-    public function show($name)
-    {
-        $prob = $this->findByName($name)->where('practice', 1)->with('solved_by')->firstOrFail();
-        return $prob;
-    }
+	/**
+	 * Update the specified resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  string  $name
+	 * @return \Illuminate\Http\Response
+	 */
+	public function update(Request $request, Problem $problem)
+	{
+		$this->validate($request, [
+			'name' => 'bail|alpha_dash|unique:problems,name,'.$problem->id.',id',
+			'practice' => 'boolean',
+			'competition' => 'bail|alpha_dash|exists:competitions,name',
+			'creator' => 'bail|exists:users,username',
+			'score' => 'numeric'
+		]);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  string  $name
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($name)
-    {
-        //
-    }
+		if (($request->has('score') || $request->has('answer')) && $problem->hasSubmissions())
+			abort(422, "Problem has some submissions, so the score/answer can't be changed.");
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $name
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Problem $problem)
-    {
-    	$prob = $problem;
+		if($request->exists('competition'))
+		{
+			if($request->competition === "")
+				$problem->competition_id = null;
+			else
+			{
+				$competition = CompetitionController::findByName($request->competition)->first();
+				$problem->competition()->associate($competition);
+			}
+		}
 
-    	$this->validate($request, [
-    		'name' => 'bail|alpha_dash|unique:problems,name,'.$prob->id.',id',
-    		'problem_type' => 'bail|alpha_dash|exists:ProblemType,name',
-    		'practice' => 'boolean',
-    		'competition' => 'bail|alpha_dash|not_finished_competition',
-    		'creator' => 'bail|exists:User,name',
-    		'practice_judge' => 'bail|alpha_dash|exists:Judge,name',
-    		'practice_score' => 'numeric',
-    		'competition_judge' => 'bail|alpha_dash|exists:Judge,name',
-    		'competition_score' => 'numeric'
-    	]);
+		if($request->has('creator'))
+		{
+			$creator = UserController::findByName($request->creator)->firstOrFail();
+			$problem->creator()->associate($creator);
+		}
 
-        if ($request->has('practice'))
-        {
-        	$sol = $prob->solution()->with('practice_judge')->first();
+		$problem->uploader()->associate(Auth::user());
+		$problem->save();
 
-        	if(is_null($sol->practice_judge) || is_null($sol->practice_score))
-        		$this->validate($request, [
-        			'practice_judge'=> 'required',
-        			'practice_score'=> 'required'
-        		]);
+		$solution_controller = new SolutionController;
+		$solution = $solution_controller->update($request, $problem);
 
-            $prob->practice = $request->practice;
-        }
+		return $problem;
+	}
 
-        if($request->has('competition'))
-        {
-        	$sol = $prob->solution()->with('competition_judge')->first();
+	/**
+	 * Remove the specified resource from storage.
+	 *
+	 * @param  string  $name
+	 * @return \Illuminate\Http\Response
+	 */
+	public function destroy(Problem $problem)
+	{
+		if($problem->hasSubmissions())
+			abort(422, "The problem has some submissions, so it can't be deleted.");
 
-        	if(is_null($sol->practice_judge) || is_null($sol->competition_score))
-        		$this->validate($request, [
-        			'competition_judge'=> 'required',
-        			'competition_score'=> 'required'
-        		]);
+		$solution_controller = new SolutionController;
+		$solution = $solution_controller->delete($request, $problem);
 
-        	$comp = CompetitionController::findByName($competition)->first();
-            $prob->competition()->associate($comp);
-        }
+		$problem->delete();
 
-        if ($prob->hasPracticeLogs() > 0)
-        	// TODO: Return error message as these parameters can not be updated because of practice logs.
-        	$this->validate($request, [
-        		'practice_judge' => '',
-        		'practice_score' => '',
-        		'solution' => ''
-        	]);
-
-        if ($prob->hasCompetitionLogs() > 0)
-        	// TODO: Return error message as these parameters can not be updated because of competition logs.
-        	$this->validate($request, [
-        		'competition_judge' => '',
-        		'competition_score' => '',
-        		'solution' => ''
-        	]);
-
-        if($request->has('problem_type'))
-        	// TODO: Handle this!!
-            return "Problem Type can't be updated";
-
-        if ($request->has('name'))
-            $prob->name = $request->name;
-
-        if ($request->has('title'))
-            $prob->title = $request->title;
-
-        if ($request->has('description'))
-            $prob->description = $request->description;
-
-        if($request->has('creator'))
-        {
-            $creator = UserController::findByName($request->creator)->first();
-            $prob->creator()->associate($creator);
-        }
-
-        $solution_controller = new SolutionController;
-        $solution = $solution_controller->update($request, $prob);
-        $prob->solution()->associate($solution);
-        $prob->save();
-        return;
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  string  $name
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Problem $problem)
-    {
-        if($problem->hasSubmissions())
-            return "The problem has some submissions";
-        $problem->delete();
-        $problem->solution->delete();
-        return;
-    }
+		return;
+	}
 }
