@@ -10,6 +10,7 @@ class User extends Model
 	protected $table = 'users';
 	protected $fillable = ['username', 'fullname'];
 	protected $hidden = ['id', 'user_id', 'provider', 'email', 'role', 'credentials', 'created_at', 'updated_at', 'pivot'];
+	protected $appends = ['rank'];
 
 	public function getRouteKeyName()
 	{
