@@ -68,7 +68,7 @@ class Team extends Model
 		return 1;
 	}
 
-	public function invite(User $user)
+	public function invite(User $user, $token)
 	{
 		return $this->user_invites()->attach($user, ['token' => $token, 'status' => 1]);
 	}
