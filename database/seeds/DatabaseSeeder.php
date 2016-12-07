@@ -14,11 +14,8 @@ class DatabaseSeeder extends Seeder
         $this->competitionSeeder();
         $this->userSeeder();
         $this->teamSeeder();
-        $this->roleSeeder();
-        $this->problemTypeSeeder();
-        $this->judgeSeeder();
-        $this->solutionSeeder();
         $this->problemSeeder();
+        $this->solutionSeeder();
     }
 
     public function competitionSeeder()
@@ -63,7 +60,9 @@ class DatabaseSeeder extends Seeder
             'username' => 'user1',
             'fullname' => 'User One',
             'email' => 'user1@email.com',
-            'image' => 'image1'
+            'image' => 'image1',
+            'score' => 100,
+            'score_updated_at' => '2016-12-07 00:00:01'
         ]);
         DB::table('users')->insert([
             'user_id' => '10002',
@@ -72,7 +71,9 @@ class DatabaseSeeder extends Seeder
             'username' => 'user2',
             'fullname' => 'User Two',
             'email' => 'user2@email.com',
-            'image' => 'image2'
+            'image' => 'image2',
+            'score' => 0,
+            'score_updated_at' => '2016-12-07 00:00:02'
         ]);
         DB::table('users')->insert([
             'user_id' => '10003',
@@ -81,7 +82,9 @@ class DatabaseSeeder extends Seeder
             'username' => 'user3',
             'fullname' => 'User Three',
             'email' => 'user3@email.com',
-            'image' => 'image3'
+            'image' => 'image3',
+            'score' => 100,
+            'score_updated_at' => '2016-12-07 00:00:03'
         ]);
         DB::table('users')->insert([
             'user_id' => '10004',
@@ -90,7 +93,9 @@ class DatabaseSeeder extends Seeder
             'username' => 'user4',
             'fullname' => 'User Four',
             'email' => 'user4@email.com',
-            'image' => 'image4'
+            'image' => 'image4',
+            'score' => 1000,
+            'score_updated_at' => '2016-12-07 00:00:04'
         ]);
         DB::table('users')->insert([
             'user_id' => '10005',
@@ -99,7 +104,9 @@ class DatabaseSeeder extends Seeder
             'username' => 'user5',
             'fullname' => 'User Five',
             'email' => 'user5@email.com',
-            'image' => 'image5'
+            'image' => 'image5',
+            'score' => 0,
+            'score_updated_at' => '2016-12-07 00:00:05'
         ]);
         DB::table('users')->insert([
             'user_id' => '10006',
@@ -108,7 +115,9 @@ class DatabaseSeeder extends Seeder
             'username' => 'user6',
             'fullname' => 'User Six',
             'email' => 'user6@email.com',
-            'image' => 'image6'
+            'image' => 'image6',
+            'score' => 10,
+            'score_updated_at' => '2016-12-07 00:00:06'
         ]);
     }
 
@@ -157,128 +166,33 @@ class DatabaseSeeder extends Seeder
         ]);
     }
 
-    public function roleSeeder()
-    {
-    	DB::statement('alter table roles AUTO_INCREMENT = 1');
-        DB::table('roles')->insert([
-            'name' => 'role1',
-            'title' => 'role1',
-            'description' => 'description1'
-        ]);
-        DB::table('roles')->insert([
-            'name' => 'role2',
-            'title' => 'role2',
-            'description' => 'description2'
-        ]);
-        DB::table('roles')->insert([
-            'name' => 'role3',
-            'title' => 'role3',
-            'description' => 'description3'
-        ]);
-        DB::statement('alter table user_role_maps AUTO_INCREMENT = 1');
-        DB::table('user_role_maps')->insert([
-            'user_id' => 1,
-            'role_id' => 1
-        ]);
-        DB::table('user_role_maps')->insert([
-            'user_id' => 2,
-            'role_id' => 2
-        ]);
-        DB::table('user_role_maps')->insert([
-            'user_id' => 3,
-            'role_id' => 3
-        ]);
-        DB::table('user_role_maps')->insert([
-            'user_id' => 4,
-            'role_id' => 1
-        ]);
-        DB::table('user_role_maps')->insert([
-            'user_id' => 5,
-            'role_id' => 2
-        ]);
-        DB::table('user_role_maps')->insert([
-            'user_id' => 6,
-            'role_id' => 3
-        ]);
-    }
-
-    public function problemTypeSeeder()
-    {
-    	DB::statement('alter table problem_types AUTO_INCREMENT = 1');
-    	DB::table('problem_types')->insert([
-            'name' => 'type1',
-            'title' => 'type1',
-            'description' => 'description1'
-        ]);
-        DB::table('problem_types')->insert([
-            'name' => 'type2',
-            'title' => 'type2',
-            'description' => 'description2'
-        ]);
-        DB::table('problem_types')->insert([
-            'name' => 'type3',
-            'title' => 'type3',
-            'description' => 'description3'
-        ]);
-    }
-
-    public function judgeSeeder()
-    {
-    	DB::statement('alter table judges AUTO_INCREMENT = 1');
-    	DB::table('judges')->insert([
-            'name' => 'judge1',
-            'title' => 'judge1',
-            'description' => 'description1'
-        ]);
-        DB::table('judges')->insert([
-            'name' => 'judge2',
-            'title' => 'judge2',
-            'description' => 'description2'
-        ]);
-        DB::table('judges')->insert([
-            'name' => 'judge3',
-            'title' => 'judge3',
-            'description' => 'description3'
-        ]);
-    }
-
     public function solutionSeeder()
     {
     	DB::statement('alter table solutions AUTO_INCREMENT = 1');
     	DB::table('solutions')->insert([
-            'practice_judge_id' => 1,
-            'competition_judge_id' => 3,
-            'practice_score' => 50,
-            'competition_score' => 100,
-            'solution' => 'solution1'
+            'problem_id' => 1,
+            'score' => 10,
+            'answer' => 'answer1'
         ]);
         DB::table('solutions')->insert([
-            'practice_judge_id' => 1,
-            'competition_judge_id' => 3,
-            'practice_score' => 50,
-            'competition_score' => 100,
-            'solution' => 'solution2'
+            'problem_id' => 2,
+            'score' => 20,
+            'answer' => 'answer2'
         ]);
         DB::table('solutions')->insert([
-            'practice_judge_id' => 1,
-            'competition_judge_id' => 3,
-            'practice_score' => 50,
-            'competition_score' => 100,
-            'solution' => 'solution3'
+            'problem_id' => 3,
+            'score' => 30,
+            'answer' => 'answer3'
         ]);
         DB::table('solutions')->insert([
-            'practice_judge_id' => 2,
-            'competition_judge_id' => 3,
-            'practice_score' => 50,
-            'competition_score' => 100,
-            'solution' => 'solution4'
+            'problem_id' => 4,
+            'score' => 40,
+            'answer' => 'answer4'
         ]);
         DB::table('solutions')->insert([
-            'practice_judge_id' => 2,
-            'competition_judge_id' => 3,
-            'practice_score' => 50,
-            'competition_score' => 100,
-            'solution' => 'solution5'
+            'problem_id' => 5,
+            'score' => 50,
+            'answer' => 'answer5'
         ]);
     }
 
@@ -289,53 +203,43 @@ class DatabaseSeeder extends Seeder
             'name' => 'problem1',
             'title' => 'problem1',
             'description' => 'description1',
-            'solution_id' => 1,
             'competition_id' => 1,
             'creator_id' => 1,
             'uploader_id' => 1,
-            'problem_type_id' => 1,
             'practice' => 1
         ]);
         DB::table('problems')->insert([
             'name' => 'problem2',
             'title' => 'problem2',
             'description' => 'description2',
-            'solution_id' => 2,
             'competition_id' => 1,
             'creator_id' => 2,
             'uploader_id' => 2,
-            'problem_type_id' => 2,
             'practice' => 1
         ]);
         DB::table('problems')->insert([
             'name' => 'problem3',
             'title' => 'problem3',
             'description' => 'description3',
-            'solution_id' => 3,
             'competition_id' => 2,
             'creator_id' => 1,
             'uploader_id' => 1,
-            'problem_type_id' => 2,
         ]);
         DB::table('problems')->insert([
             'name' => 'problem4',
             'title' => 'problem4',
             'description' => 'description4',
-            'solution_id' => 4,
             'competition_id' => 2,
             'creator_id' => 1,
             'uploader_id' => 2,
-            'problem_type_id' => 3,
         ]);
         DB::table('problems')->insert([
             'name' => 'problem5',
             'title' => 'problem5',
             'description' => 'description5',
-            'solution_id' => 5,
             'competition_id' => 3,
             'creator_id' => 1,
             'uploader_id' => 4,
-            'problem_type_id' => 1,
         ]);
     }
 }

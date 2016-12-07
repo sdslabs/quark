@@ -2,6 +2,7 @@
 
 namespace SDSLabs\Quark\App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -9,7 +10,7 @@ class User extends Model
 {
 	protected $table = 'users';
 	protected $fillable = ['username', 'fullname'];
-	protected $hidden = ['id', 'user_id', 'provider', 'email', 'role', 'credentials', 'created_at', 'updated_at', 'pivot'];
+	protected $hidden = ['id', 'user_id', 'provider', 'email', 'role', 'credentials', 'created_at', 'updated_at', 'score_updated_at', 'pivot'];
 	protected $appends = ['rank'];
 
 	public function getRouteKeyName()
@@ -64,8 +65,8 @@ class User extends Model
 
 	public function getRankAttribute()
 	{
-		// TODO: Get from memcache!
-		return 1;
+		$rank = DB::select('select count(*) + 1 as rank from users where score > :score1 or (score = :score2 and score_updated_at < :score_updated_at)', ['score1' => $this->score, 'score2' => $this->score, 'score_updated_at' => $this->score_updated_at])[0]->rank;
+		return $rank;
 	}
 
 	public function invite(Team $team, $token)

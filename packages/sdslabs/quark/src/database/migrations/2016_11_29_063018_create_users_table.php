@@ -24,6 +24,7 @@ class CreateUsersTable extends Migration
             $table->string('image', 256)->nullable();
             $table->string('role', 30)->nullable();
             $table->float('score')->default(0)->comment('Score in practice arena.');
+            $table->timestamp('score_updated_at')->nullable();
             $table->timestamps();
         });
     }
