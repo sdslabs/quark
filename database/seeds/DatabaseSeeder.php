@@ -61,7 +61,8 @@ class DatabaseSeeder extends Seeder
             'fullname' => 'User One',
             'email' => 'user1@email.com',
             'image' => 'image1',
-            'score' => 100
+            'score' => 100,
+            'score_updated_at' => '2016-12-07 00:00:01'
         ]);
         DB::table('users')->insert([
             'user_id' => '10002',
@@ -71,7 +72,8 @@ class DatabaseSeeder extends Seeder
             'fullname' => 'User Two',
             'email' => 'user2@email.com',
             'image' => 'image2',
-            'score' => 0
+            'score' => 0,
+            'score_updated_at' => '2016-12-07 00:00:02'
         ]);
         DB::table('users')->insert([
             'user_id' => '10003',
@@ -81,7 +83,8 @@ class DatabaseSeeder extends Seeder
             'fullname' => 'User Three',
             'email' => 'user3@email.com',
             'image' => 'image3',
-            'score' => 100
+            'score' => 100,
+            'score_updated_at' => '2016-12-07 00:00:03'
         ]);
         DB::table('users')->insert([
             'user_id' => '10004',
@@ -91,7 +94,8 @@ class DatabaseSeeder extends Seeder
             'fullname' => 'User Four',
             'email' => 'user4@email.com',
             'image' => 'image4',
-            'score' => 1000
+            'score' => 1000,
+            'score_updated_at' => '2016-12-07 00:00:04'
         ]);
         DB::table('users')->insert([
             'user_id' => '10005',
@@ -101,7 +105,8 @@ class DatabaseSeeder extends Seeder
             'fullname' => 'User Five',
             'email' => 'user5@email.com',
             'image' => 'image5',
-            'score' => 0
+            'score' => 0,
+            'score_updated_at' => '2016-12-07 00:00:05'
         ]);
         DB::table('users')->insert([
             'user_id' => '10006',
@@ -111,7 +116,8 @@ class DatabaseSeeder extends Seeder
             'fullname' => 'User Six',
             'email' => 'user6@email.com',
             'image' => 'image6',
-            'score' => 10
+            'score' => 10,
+            'score_updated_at' => '2016-12-07 00:00:06'
         ]);
     }
 
