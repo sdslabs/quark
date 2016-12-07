@@ -18,7 +18,7 @@ class User extends Model
 
 	public function submissions()
 	{
-		return $this->belongsToMany('SDSLabs\Quark\App\Models\Problem', 'practice_logs', 'user_id', 'problem_id');
+		return $this->hasMany('SDSLabs\Quark\App\Models\PracticeSubmission');
 	}
 
 	public function problems_created()

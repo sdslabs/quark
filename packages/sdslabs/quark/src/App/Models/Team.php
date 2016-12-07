@@ -10,6 +10,7 @@ class Team extends Model
 	protected $table = 'teams';
 	protected $fillable = ['name'];
 	protected $hidden = ['id', 'competition_id', 'owner_id', 'created_at', 'updated_at', 'pivot'];
+	protected $appends = ['rank'];
 
 	public function getRouteKeyName()
 	{
@@ -31,9 +32,9 @@ class Team extends Model
 		return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'user_team_maps', 'team_id', 'user_id');
 	}
 
-	public function competition_submissions()
+	public function submissions()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\CompetitionLog');
+		return $this->hasMany('SDSLabs\Quark\App\Models\CompetitionSubmission');
 	}
 
 	public function user_invites()
