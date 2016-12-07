@@ -30,7 +30,7 @@ class UserController extends Controller
 	public function index()
 	{
 		// Return practice leaderboard
-		$users = User::all();
+		$users = User::where('score', '>', 0)->orderBy('score', 'desc')->paginate(30);
 		return $users;
 	}
 
