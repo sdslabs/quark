@@ -10,6 +10,11 @@ use SDSLabs\Quark\App\Models\Problem;
 class ProblemController extends Controller
 {
 
+	public function __construct()
+	{
+		$this->middleware('developer');
+	}
+
 	public static function findByName($name)
 	{
 		return Problem::where("name", $name);

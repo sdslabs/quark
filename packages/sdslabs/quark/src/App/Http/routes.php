@@ -1,12 +1,14 @@
 <?php
 
+Route::resource('problems', 'ProblemController', ['except' => 'index', 'show']);
+
 Route::get('problems', 'PracticeProblemController@index');
 Route::get('problems/{problem}', 'PracticeProblemController@show');
+Route::post('problems/{problem}/submit', 'SubmissionController@practiceSubmission');
 
 Route::get('competitions/{competition}/problems', 'CompetitionProblemController@index');
 Route::get('competitions/{competition}/problems/{problem}', 'CompetitionProblemController@show');
-
-Route::resource('problems', 'ProblemController', ['except' => 'index', 'show']);
+Route::post('competitions/{competition}/problems/{problem}/submit', 'SubmissionController@competitionSubmission');
 
 Route::resource('competitions.teams', 'TeamController');
 

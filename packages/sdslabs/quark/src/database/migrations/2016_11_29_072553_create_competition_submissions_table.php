@@ -17,7 +17,6 @@ class CreateCompetitionSubmissionsTable extends Migration
             $table->increments('id');
             $table->integer('team_id')->unsigned();
             $table->integer('problem_id')->unsigned();
-            $table->float('score');
             $table->string('status', 30);
             $table->string('submission', 200);
             $table->timestamps();

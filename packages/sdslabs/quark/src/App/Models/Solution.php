@@ -3,6 +3,7 @@
 namespace SDSLabs\Quark\App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Hash;
 
 
 class Solution extends Model
