@@ -16,4 +16,9 @@ class Solution extends Model
 	{
 		return $this->belongsTo('SDSLabs\Quark\App\Models\Problem');
 	}
+
+	public function setAnswerAttribute($answer)
+	{
+		$this->attributes['answer'] = Hash::make($answer);
+	}
 }
