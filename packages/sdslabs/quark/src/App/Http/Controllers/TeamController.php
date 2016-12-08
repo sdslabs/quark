@@ -90,7 +90,7 @@ class TeamController extends Controller
 	public function show(Competition $competition, $team_name)
 	{
 		$team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
-		$team->load('submissions.problem', 'member');
+		$team->load('submissions.problem', 'members');
 
 		$user = Auth::user();
 		if (!is_null($user) && $team->hasMember($user))
