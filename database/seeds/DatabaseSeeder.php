@@ -127,17 +127,23 @@ class DatabaseSeeder extends Seeder
     	DB::table('teams')->insert([
             'name' => 'team1',
             'competition_id' => 1,
-            'owner_id' => 1
+            'owner_id' => 1,
+            'score' => 10,
+            'score_updated_at' => '2016-12-07 00:00:06'
         ]);
     	DB::table('teams')->insert([
             'name' => 'team2',
-            'competition_id' => 2,
-            'owner_id' => 2
+            'competition_id' => 1,
+            'owner_id' => 2,
+            'score' => 20,
+            'score_updated_at' => '2016-12-07 00:00:07'
         ]);
         DB::table('teams')->insert([
             'name' => 'team3',
             'competition_id' => 3,
-            'owner_id' => 4
+            'owner_id' => 4,
+            'score' => 10,
+            'score_updated_at' => '2016-12-07 00:00:08'
         ]);
         DB::statement('alter table user_team_maps AUTO_INCREMENT = 1');
         DB::table('user_team_maps')->insert([

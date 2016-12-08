@@ -2,14 +2,15 @@
 
 namespace SDSLabs\Quark\App\Models;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
 
 class Team extends Model
 {
 	protected $table = 'teams';
-	protected $fillable = ['name'];
-	protected $hidden = ['id', 'competition_id', 'owner_id', 'created_at', 'updated_at', 'pivot'];
+	protected $fillable = ['name', 'score'];
+	protected $hidden = ['id', 'competition_id', 'owner_id', 'created_at', 'updated_at', 'pivot', 'score_updated_at'];
 	protected $appends = ['rank'];
 
 	public function getRouteKeyName()
@@ -54,8 +55,8 @@ class Team extends Model
 
 	public function getRankAttribute()
 	{
-		// To be fixed!!!
-		return 1;
+		$rank = DB::select('select count(*) + 1 as rank from teams where ((score > :score1 or (score = :score2 and score_updated_at < :score_updated_at)) and competition_id = :competition_id)', ['score1' => $this->score, 'score2' => $this->score, 'score_updated_at' => $this->score_updated_at, 'competition_id' => $this->competition_id])[0]->rank;
+		return $rank;
 	}
 
 	public function invite(User $user, $token)

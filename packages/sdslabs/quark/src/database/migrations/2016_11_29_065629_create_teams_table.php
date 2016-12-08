@@ -17,6 +17,7 @@ class CreateTeamsTable extends Migration
             $table->increments('id');
             $table->string('name', 50);
             $table->integer('score')->default(0);
+            $table->timestamp('score_updated_at')->nullable();
             $table->integer('competition_id')->unsigned();
             $table->integer('owner_id')->unsigned();
             $table->timestamps();
