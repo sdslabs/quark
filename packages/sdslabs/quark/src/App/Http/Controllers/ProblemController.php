@@ -2,10 +2,12 @@
 
 namespace SDSLabs\Quark\App\Http\Controllers;
 
+use SDSLabs\Quark\App\Models\Problem;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use SDSLabs\Quark\App\Models\Problem;
+
 
 class ProblemController extends Controller
 {
@@ -13,11 +15,6 @@ class ProblemController extends Controller
 	public function __construct()
 	{
 		$this->middleware('developer');
-	}
-
-	public static function findByName($name)
-	{
-		return Problem::where("name", $name);
 	}
 
 	/**
@@ -60,13 +57,13 @@ class ProblemController extends Controller
 
 		if($request->has('competition'))
 		{
-			$competition = CompetitionController::findByName($request->competition)->first();
+			$competition = Competition::findByName($request->competition)->first();
 			$problem->competition()->associate($competition);
 		}
 
 		if($request->has('creator'))
 		{
-			$creator = UserController::findByName($request->creator)->first();
+			$creator = User::findByUsername($request->creator)->first();
 			$problem->creator()->associate($creator);
 		}
 
@@ -116,14 +113,14 @@ class ProblemController extends Controller
 				$problem->competition_id = null;
 			else
 			{
-				$competition = CompetitionController::findByName($request->competition)->first();
+				$competition = Competition::findByName($request->competition)->first();
 				$problem->competition()->associate($competition);
 			}
 		}
 
 		if($request->has('creator'))
 		{
-			$creator = UserController::findByName($request->creator)->firstOrFail();
+			$creator = User::findByUsername($request->creator)->firstOrFail();
 			$problem->creator()->associate($creator);
 		}
 

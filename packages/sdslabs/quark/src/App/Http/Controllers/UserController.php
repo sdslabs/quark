@@ -2,11 +2,13 @@
 
 namespace SDSLabs\Quark\App\Http\Controllers;
 
+use SDSLabs\Quark\App\Models\User;
+use SDSLabs\Quark\App\Models\Role;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use SDSLabs\Quark\App\Models\User;
-use SDSLabs\Quark\App\Models\Role;
+
 
 class UserController extends Controller
 {
@@ -15,12 +17,6 @@ class UserController extends Controller
 	{
 		$this->middleware('auth')->except(['index', 'show']);
 	}
-
-	public static function findByName($name)
-	{
-		return User::where("username", $name);
-	}
-
 
 	/**
 	 * Display a listing of the resource.

@@ -13,6 +13,11 @@ class User extends Model
 	protected $hidden = ['id', 'user_id', 'provider', 'email', 'role', 'credentials', 'created_at', 'updated_at', 'score_updated_at', 'pivot'];
 	protected $appends = ['rank'];
 
+	public static function findByUsername($name)
+	{
+		return User::where('username', $name);
+	}
+
 	public function getRouteKeyName()
 	{
 		return 'username';

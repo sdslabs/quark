@@ -2,13 +2,15 @@
 
 namespace SDSLabs\Quark\App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use SDSLabs\Quark\App\Models\User;
 use SDSLabs\Quark\App\Models\Team;
 use SDSLabs\Quark\App\Models\Competition;
 use SDSLabs\Quark\App\Models\Invite;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class CompetitionInvitesController extends Controller
 {
@@ -17,14 +19,9 @@ class CompetitionInvitesController extends Controller
 		$this->middleware('auth');
 	}
 
-	public static function findByName($name)
-	{
-		return Role::where("name", $name);
-	}
-
 	public function inviteUser(Competition $competition, $team_name , User $user)
 	{
-		$team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
 		if ($competition->status === 'Finished')
 			abort(422, "The competition has already ended.");
@@ -61,7 +58,7 @@ class CompetitionInvitesController extends Controller
 
 	public function joinTeam(Competition $competition, $team_name)
 	{
-		$team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
 		if ($competition->status === 'Finished')
 			abort(422, "The competition has already ended");
@@ -131,9 +128,9 @@ class CompetitionInvitesController extends Controller
 		}
 
 		if ($invite->status === 1 &&
-				Auth::user()->id !== $user->id &&
-				!Auth::user()->isDeveloper())
-					abort(422, "The invite was not meant for you!");
+			Auth::user()->id !== $user->id &&
+			!Auth::user()->isDeveloper())
+				abort(422, "The invite was not meant for you!");
 		elseif ($invite->status === 2 &&
 				Auth::user()->id !== $team->owner_id &&
 				!Auth::user()->isDeveloper())

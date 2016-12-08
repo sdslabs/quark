@@ -13,6 +13,11 @@ class Team extends Model
 	protected $hidden = ['id', 'competition_id', 'owner_id', 'created_at', 'updated_at', 'pivot', 'score_updated_at'];
 	protected $appends = ['rank'];
 
+	public static function findByName($name)
+	{
+		return Team::where('name', $name);
+	}
+
 	public function getRouteKeyName()
 	{
 		return 'name';

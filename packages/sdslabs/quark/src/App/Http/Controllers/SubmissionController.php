@@ -2,14 +2,16 @@
 
 namespace SDSLabs\Quark\App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use SDSLabs\Quark\App\Models\Problem;
 use SDSLabs\Quark\App\Models\Competition;
 use SDSLabs\Quark\App\Models\PracticeSubmission;
 use SDSLabs\Quark\App\Models\CompetitionSubmission;
 use SDSLabs\Quark\App\Judge\StringComparisonJudge;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class SubmissionController extends Controller
 {
@@ -57,7 +59,7 @@ class SubmissionController extends Controller
 		if ($competition->status !== 'Running')
 			abort(404, "Competition is not running!");
 
-		$problem = ProblemController::findByName($problem_name)->where('competition_id', $competition->id)->firstOrFail();
+		$problem = Problem::findByName($problem_name)->where('competition_id', $competition->id)->firstOrFail();
 
 		$this->validate($request, [
 			'answer' => 'required'

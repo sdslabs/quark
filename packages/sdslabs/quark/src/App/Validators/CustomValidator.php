@@ -4,6 +4,7 @@ namespace SDSLabs\Quark\App\Validators;
 
 use Illuminate\Validation\Validator;
 
+
 class CustomValidator extends Validator
 {
 	private $_custom_messages = [

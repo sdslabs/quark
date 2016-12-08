@@ -2,18 +2,23 @@
 
 namespace SDSLabs\Quark\App\Models;
 
+use SDSLabs\Quark\App\Helpers\Leaderboard;
+
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
-use SDSLabs\Quark\App\Helpers\Leaderboard;
 
 
 class Competition extends Model
 {
-
 	protected $table = 'competitions';
 	protected $fillable = ['name', 'title', 'description', 'rules', 'team_limit', 'start_at', 'end_at'];
 	protected $appends = ['status'];
 	protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at'];
+
+	public static function findByName($name)
+	{
+		return Competition::where('name', $name);
+	}
 
 	public function getRouteKeyName()
 	{

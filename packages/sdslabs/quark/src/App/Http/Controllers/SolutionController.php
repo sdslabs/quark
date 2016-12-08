@@ -2,10 +2,12 @@
 
 namespace SDSLabs\Quark\App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use SDSLabs\Quark\App\Models\Solution;
 use SDSLabs\Quark\App\Models\Problem;
+
+use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+
 
 class SolutionController extends Controller
 {

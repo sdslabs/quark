@@ -2,11 +2,13 @@
 
 namespace SDSLabs\Quark\App\Http\Controllers;
 
+use SDSLabs\Quark\App\Models\Problem;
+use SDSLabs\Quark\App\Models\Competition;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use SDSLabs\Quark\App\Models\Problem;
-use SDSLabs\Quark\App\Models\Competition;
+
 
 class CompetitionProblemController extends Controller
 {
@@ -37,7 +39,7 @@ class CompetitionProblemController extends Controller
 	 */
 	public function show(Competition $competition, $problem_name)
 	{
-		$problem = ProblemController::findByName($problem_name)->where('competition_id', $competition->id)->firstOrFail();
+		$problem = Problem::findByName($problem_name)->where('competition_id', $competition->id)->firstOrFail();
 
 		$problem->load('competition_submissions.user', 'creator');
 

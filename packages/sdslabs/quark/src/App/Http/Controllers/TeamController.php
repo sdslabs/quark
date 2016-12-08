@@ -2,11 +2,13 @@
 
 namespace SDSLabs\Quark\App\Http\Controllers;
 
+use SDSLabs\Quark\App\Models\Team;
+use SDSLabs\Quark\App\Models\Competition;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use SDSLabs\Quark\App\Models\Team;
-use SDSLabs\Quark\App\Models\Competition;
+
 
 class TeamController extends Controller
 {
@@ -14,17 +16,6 @@ class TeamController extends Controller
 	public function __construct()
 	{
 		$this->middleware('auth')->except(['index', 'show']);
-	}
-
-	public static function findByName($name)
-	{
-		return Team::where("name", $name);
-	}
-
-	public static function findByCompetitionId($competition_id)
-	{
-		$user = Auth::user();
-		return $user->teams()->where('competition_id', $competition_id);
 	}
 
 	/**
@@ -68,7 +59,7 @@ class TeamController extends Controller
 		if ($user->isInCompetition($competition->id))
 			abort(422, "You are already participating in this competition");
 
-		if (TeamController::findByName($request->name)->where('competition_id', $competition->id)->count() > 0)
+		if (Team::findByName($request->name)->where('competition_id', $competition->id)->count() > 0)
 			abort(422, "Team name is already taken.");
 
 		$team = new Team($request->all());
@@ -89,7 +80,7 @@ class TeamController extends Controller
 	 */
 	public function show(Competition $competition, $team_name)
 	{
-		$team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 		$team->load('submissions.problem', 'members');
 
 		$user = Auth::user();
@@ -129,13 +120,13 @@ class TeamController extends Controller
 		if ($competition->status === 'Finished')
 			abort(422, "Competition has already ended.");
 
-		$team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
 		if ($team->owner->id !== Auth::user()->id && !Auth::user()->isDeveloper())
 			abort(403, "Only owner can update the team details.");
 
 		if ($request->has('name') &&
-			TeamController::findByName($request->name)
+			Team::findByName($request->name)
 				->where('competition_id', $competition->id)
 				->where('id', '!=', $team->id)->count() > 0)
 					abort(422, "A team with given name already exists.");
@@ -156,7 +147,7 @@ class TeamController extends Controller
 		if($competition->status !== 'Future')
 			abort(422, "The competition has already started.");
 
-		$team = TeamController::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
 
 		if($team->owner->id !== Auth::user()->id && !Auth::user()->isDeveloper())
 			abort(403, "Only owner can delete the team.");

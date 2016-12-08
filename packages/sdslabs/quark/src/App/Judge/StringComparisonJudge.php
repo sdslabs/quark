@@ -7,6 +7,7 @@ use SDSLabs\Quark\App\Models\CompetitionSubmission;
 use SDSLabs\Quark\App\Models\Solution;
 use SDSLabs\Quark\App\Models\User;
 use SDSLabs\Quark\App\Models\Team;
+
 use Illuminate\Support\Facades\Hash;
 
 

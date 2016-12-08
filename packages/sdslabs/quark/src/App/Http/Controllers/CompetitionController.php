@@ -2,10 +2,12 @@
 
 namespace SDSLabs\Quark\App\Http\Controllers;
 
+use SDSLabs\Quark\App\Models\Competition;
+
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use SDSLabs\Quark\App\Models\Competition;
+
 
 class CompetitionController extends Controller
 {
@@ -18,17 +20,6 @@ class CompetitionController extends Controller
 	public function __construct()
 	{
 		$this->middleware('developer')->only(['create', 'store', 'edit', 'destroy']);
-	}
-
-	/**
-	 * Find a competition by given name.
-	 *
-	 * @param string $name
-	 * @return SDSLabs\Quark\App\Models\Competition
-	 */
-	public static function findByName($name)
-	{
-		return Competition::where("name", $name);
 	}
 
 	/**

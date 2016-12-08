@@ -7,7 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class CompetitionSubmission extends Model
 {
-
 	protected $table = 'competition_submissions';
 	protected $fillable = ['submission', 'status'];
 	protected $hidden = ['id', 'submission', 'created_at', 'updated_at', 'team_id', 'problem_id', 'competition_id'];

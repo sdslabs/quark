@@ -7,11 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Problem extends Model
 {
-
 	protected $table = 'problems';
 	protected $fillable = ['name', 'title', 'description', 'practice'];
 	protected $hidden = ['id', 'created_at', 'updated_at', 'deleted_at', 'creator_id', 'uploader_id', 'competition_id'];
 	protected $appends = ['solution'];
+
+	public static function findByName($name)
+	{
+		return Problem::where('name', $name);
+	}
 
 	public function getRouteKeyName()
 	{

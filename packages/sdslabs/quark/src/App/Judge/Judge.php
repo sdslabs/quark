@@ -2,6 +2,7 @@
 
 namespace SDSLabs\Quark\App\Judge;
 
+
 abstract class Judge
 {
 	protected $submission;
