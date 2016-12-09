@@ -18,7 +18,8 @@ class CreateUserTeamMapsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->integer('team_id')->unsigned();
             $table->timestamps();
-            $table->softDeletes()->comment('Will remove the user from team');
+
+            $table->unique(['user_id', 'team_id']);
 
             /* Foreign Keys */
             // $table->foreign('user_id')->references('id')->on('users');

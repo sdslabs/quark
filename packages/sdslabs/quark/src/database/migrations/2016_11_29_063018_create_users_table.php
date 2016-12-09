@@ -18,15 +18,14 @@ class CreateUsersTable extends Migration
             $table->integer('user_id')->unique();
             $table->string('provider', 100);
             $table->binary('credentials');
-            $table->string('username', 256)->unique();
+            $table->string('username', 250)->unique();
             $table->string('fullname', 256);
-            $table->string('email', 256)->unique();
-            $table->string('image', 256);
+            $table->string('email', 250)->unique();
+            $table->string('image', 256)->nullable();
+            $table->string('role', 30)->nullable();
             $table->float('score')->default(0)->comment('Score in practice arena.');
+            $table->timestamp('score_updated_at')->nullable();
             $table->timestamps();
-
-            /* Foreign Keys */
-            // $table->foreign('role_id')->references('id')->on('user_roles');
         });
     }
 

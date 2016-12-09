@@ -4,9 +4,12 @@ namespace SDSLabs\Quark\App\Auth;
 
 require_once __DIR__.'/../../falcon/client/Api.php';
 
-use SDSLabs\Quark\App\Models\User;
-use Illuminate\Contracts\Auth\Guard;
 use SDSLabs\FalconClient\API;
+
+use SDSLabs\Quark\App\Models\User;
+
+use Illuminate\Contracts\Auth\Guard;
+
 
 class FalconGuard implements Guard
 {
@@ -63,18 +66,22 @@ class FalconGuard implements Guard
 			return null;
 		}
 
+
 		$user = User::where('user_id', $result['id'])->first();
 
 		if($user === null)
 		{
 			// New user
-			$result['user_id'] = $result['id'];
-			unset($result['id']);
-			$result['image'] = $result['image_url'];
-			unset($result['image_url']);
-			unset($result['password']);
-			$result['provider'] = 'falcon';
-			$user = User::create($result);
+			$user = new User;
+
+			$user->user_id = $result['id'];
+			$user->provider = 'falcon';
+			$user->credentials = $result['password'];
+			$user->username = $result['username'];
+			$user->fullname = $result['name'];
+			$user->email = $result['email'];
+			$user->image = $result['image_url'];
+
 			$user->save();
 		}
 		else if($user->image != $result['image_url']) {
@@ -119,39 +126,5 @@ class FalconGuard implements Guard
 	public function login()
 	{
 		$this->api->login();
-	}
-
-	public function getUserTeam($competition_title)
-	{
-		if (! is_null($this->team)) {
-			return $this->team;
-		}
-
-		$user = $this->user();
-
-		if(!$user)
-			return false;
-
-		$teams = $user->teams;
-		foreach($teams as $team)
-		{
-			if($team->competition->title == $competition_title)
-			{
-				$this->team = $team;
-				return $this->team;
-			}
-		}
-
-		$this->team = false;
-		return false;
-	}
-
-	public function developer()
-	{
-		$user = $this->user();
-		if($user)
-			return $user->role == 'admin' || $user->role == 'developer';
-
-		return false;
 	}
 }

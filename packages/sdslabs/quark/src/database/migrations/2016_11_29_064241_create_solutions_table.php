@@ -15,15 +15,12 @@ class CreateSolutionsTable extends Migration
     {
         Schema::create('solutions', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('practice_judge_id')->unsigned();
-            $table->integer('competition_judge_id')->unsigned();
-            $table->float('practice_score')->unsigned();
-            $table->float('competition_score')->unsigned();
-            $table->string('solution', 200)->comment("Hash in case of string/integer solution, file path in case of files");
+            $table->integer('problem_id')->unsigned();
+            $table->float('score')->unsigned();
+            $table->string('answer', 200);
 
             /* Foreign Keys */
-            // $table->foreign('practice_judge_id')->references('id')->on('judges');
-            // $table->foreign('competition_judge_id')->references('id')->on('judges');
+            // $table->foreign('problem_id')->references('id')->on('problems');
 
         });
     }

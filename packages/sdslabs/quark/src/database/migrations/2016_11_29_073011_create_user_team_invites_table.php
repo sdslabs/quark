@@ -17,8 +17,8 @@ class CreateUserTeamInvitesTable extends Migration
             $table->increments('id');
             $table->integer('team_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->integer('status')->default(0);
-            $table->string('token', 32);
+            $table->integer('status')->comment("1 => team to user, 2 => user to team, 0 => accepted");
+            $table->string('token', 32)->unique();
             $table->timestamps();
 
             /* Foreign Keys */
