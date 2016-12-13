@@ -1,9 +1,9 @@
 <?php
 
 namespace SDSLabs\Quark\Database\Seeds;
-use DB;
 
 use Illuminate\Database\Seeder;
+use DB;
 
 class DatabaseSeeder extends Seeder
 {

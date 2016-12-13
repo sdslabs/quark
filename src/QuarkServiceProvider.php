@@ -2,52 +2,62 @@
 
 namespace SDSLabs\Quark;
 
+use SDSLabs\Quark\App\Auth\FalconGuard;
+use SDSLabs\Quark\App\Http\Middleware\Authenticate;
+use SDSLabs\Quark\App\Http\Middleware\Developer;
+use SDSLabs\Quark\App\Validators\CustomValidator;
+
 use Illuminate\Support\ServiceProvider;
-use RecursiveIteratorIterator;
-use RecursiveDirectoryIterator;
-use RegexIterator;
-use RecursiveRegexIterator;
+use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+
 
 class QuarkServiceProvider extends ServiceProvider
 {
+
 	/**
 	 * Bootstrap the application services.
 	 *
 	 * @return void
 	 */
-	public function boot()
+	public function boot(Router $router)
 	{
-		$this->loadMigrationsFrom(__DIR__.'/database/migrations');
-		$this->loadRoutesFrom(__DIR__.'/App/Http/routes.php');
+		$this->setupRoutes($router);
+
+		$this->loadMigrationsFrom(__DIR__.'/database/migrations/');
+
+		Auth::extend('falcon', function($app, $name, array $config) {
+			return new FalconGuard;
+		});
+
+		$this->addValidationRules();
 	}
 
-	/**
-	 * Register the application services.
-	 *
-	 * @return void
-	 */
+	public function setupRoutes(Router $router)
+	{
+		$router->middleWare('auth', Authenticate::class);
+		$router->middleWare('developer', Developer::class);
+		$router->middleWare('developer_check', DeveloperCheck::class);
+
+		$router->group([
+			'namespace' => 'SDSLabs\Quark\App\Http\Controllers',
+			'middleware' => 'web'
+		], function($router) {
+			require __DIR__.'/App/Http/routes.php';
+		});
+	}
+
+	public function addValidationRules()
+	{
+		Validator::resolver(function($translator, $data, $rules, $messages = array(), $customAttributes = array()) {
+			return new CustomValidator($translator, $data, $rules, $messages, $customAttributes);
+		});
+	}
+
 	public function register()
 	{
-		$this->register_models();
+		$this->mergeConfigFrom(__DIR__.'/config/auth.php', 'auth');
 	}
 
-	protected function register_models() {
-		$root = __DIR__."/App/Models";
-		$models = $this->fetch_classes($root);
-	}
-
-	protected function fetch_classes($root) {
-		$dir_iter = new RecursiveDirectoryIterator($root);
-		$iter = new RecursiveIteratorIterator($dir_iter);
-		$reg_iter = new RegexIterator($iter,
-			"/^" . str_replace('/', '\/', $root) . "(.+)\.php$/i",
-		   	RecursiveRegexIterator::GET_MATCH);
-
-		$classes = [];
-		foreach ($reg_iter as $path => $matches)  {
-			$classes[] = str_replace("/", "\\", $matches[1]);
-		}
-
-		return $classes;
-	}
 }
