@@ -2,14 +2,10 @@
 
 namespace SDSLabs\Quark\App\Auth;
 
-require_once __DIR__.'/../../falcon/client/Api.php';
-
 use SDSLabs\FalconClient\API;
-
 use SDSLabs\Quark\App\Models\User;
 
 use Illuminate\Contracts\Auth\Guard;
-
 
 class FalconGuard implements Guard
 {
@@ -39,7 +35,7 @@ class FalconGuard implements Guard
 	 */
 	public function __construct()
 	{
-		$this->api = new API;
+		$this->api = new API(config('auth.falcon'));
 	}
 
 	/*
