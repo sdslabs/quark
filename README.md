@@ -17,8 +17,8 @@ This is a Laravel package that provides a code application for building platform
 	},
 	{
 		"type": "vcs",
-		url": "git@github.com:sdslabs/falcon.git",
-		no-api": true
+		"url": "git@github.com:sdslabs/falcon.git",
+		"no-api": true
 	}
 ],
 ```
@@ -31,7 +31,7 @@ to `require` field in `composer.json`
 
 - Run
 
-	$ composer update sdslabs/*
+		$ composer update sdslabs/*
 
 - Add `SDSLabs\Quark\QuarkServiceProvider::class,` under
 `* Package Service Providers...` to `config/app.php`.
@@ -43,7 +43,7 @@ from `database/migrations`.
 `DatabaseSeeder` under `database/seeds`.
 
 - Add following config to `.env.example` and also to `.env`:
-```
+```bash
 FALCON_CLIENT_ID=client_id
 FALCON_CLIENT_SECRET=secret
 FALCON_URL_ACCESS_TOKEN=http://falcon.sdslabs.dev/access_token
@@ -57,11 +57,11 @@ FALCON_ACCOUNTS_URL=http://arceus.sdslabs.dev/
 
 - Run the migrations with:
 
-	$ php artisan migrate
+		$ php artisan migrate
 
 - Run the seeds with:
 
-	$ php artisan db:seed
+		$ php artisan db:seed
 
 - Go outside and do a dance ;)
 
