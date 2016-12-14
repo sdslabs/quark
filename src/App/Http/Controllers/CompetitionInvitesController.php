@@ -14,14 +14,15 @@ use Illuminate\Support\Facades\Auth;
 
 class CompetitionInvitesController extends Controller
 {
-	public function __construct()
+	public function __construct(Invite $invites)
 	{
+		$this->invites = $invites
 		$this->middleware('auth');
 	}
 
 	public function inviteUser(Competition $competition, $team_name , User $user)
 	{
-		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = $competition->teams()->where('name', $team_name)->firstOrFail();
 
 		if ($competition->status === 'Finished')
 			abort(422, "The competition has already ended.");
@@ -35,7 +36,7 @@ class CompetitionInvitesController extends Controller
 		if ($user->isInCompetition($competition->id))
 			abort(422, "User is already participating is this competition.");
 
-		$invites = Invite::where('user_id', $user->id)->where('team_id', $team->id)->get();
+		$invites = $this->invites->where('user_id', $user->id)->where('team_id', $team->id)->get();
 		$invites_sent = $invites->where('status', 1);
 		$invites_received = $invites->where('status', 2);
 
@@ -46,7 +47,7 @@ class CompetitionInvitesController extends Controller
 		{
 			$team->addMember($user);
 			$token = $invites_received[0]->token;
-			Invite::where('token', $token)->update(['status' => 0]);
+			$this->invites->where('token', $token)->update(['status' => 0]);
 			abort(202, "You've accepted the invitation from user!");
 		}
 
@@ -58,7 +59,7 @@ class CompetitionInvitesController extends Controller
 
 	public function joinTeam(Competition $competition, $team_name)
 	{
-		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = $competition->teams()->where('name', $team_name)->firstOrFail();
 
 		if ($competition->status === 'Finished')
 			abort(422, "The competition has already ended");
@@ -71,7 +72,7 @@ class CompetitionInvitesController extends Controller
 		if ($team->members()->count() >= $competition->team_limit)
 			abort(422, "The team is already full");
 
-		$invites = Invite::where('team_id', $team->id)->where('user_id', $user->id)->get();
+		$invites = $this->invites->where('team_id', $team->id)->where('user_id', $user->id)->get();
 		$invites_sent = $invites->where('status', 2);
 		$invites_received = $invites->where('status', 1);
 
@@ -82,7 +83,7 @@ class CompetitionInvitesController extends Controller
 		{
 			$team->addMember($user);
 			$token = $invites_received[0]->token;
-			Invite::where('token', $token)->update(['status' => 0]);
+			$this->invites->where('token', $token)->update(['status' => 0]);
 			abort(202, "You've accepted the invitation from team!");
 		}
 
@@ -100,11 +101,11 @@ class CompetitionInvitesController extends Controller
 
 		$token = $request->token;
 
-		$invite = Invite::where('token', $token)->first();
+		$invite = $this->invites->where('token', $token)->first();
 		if (is_null($invite))
 			return abort(422, "Invalid token!");
 
-		$team = Team::find($invite->team_id);
+		$team = $invite->team;
 
 		$competition = $team->competition;
 
@@ -114,7 +115,7 @@ class CompetitionInvitesController extends Controller
 		if ($team->members()->count() >= $competition->team_limit)
 			abort(422, "The team is already full");
 
-		$user = User::find($invite->user_id);
+		$user = $invite->user;
 
 		if ($invite->status === 0)
 			abort(422, "The invite has already been accepted!");
@@ -150,15 +151,15 @@ class CompetitionInvitesController extends Controller
 
 		$token = $request->token;
 
-		$invite = Invite::where('token', $token)->first();
+		$invite = $this->invites->where('token', $token)->first();
 		if (is_null($invite))
 			abort(404, "Invalid token!");
 
-		$team = Team::find($invite->team_id);
+		$team = $invite->team;
 
 		$competition = $team->competition;
 
-		$user = User::find($invite->user_id);
+		$user = $invite->user;
 
 		if ($invite->status === 0)
 			abort(422, "Invite has been accepted and cannot be cancelled.");
@@ -178,7 +179,7 @@ class CompetitionInvitesController extends Controller
 		while(true)
 		{
 			$token = bin2hex(openssl_random_pseudo_bytes($len / 2));
-			if (Invite::where('token', $token)->count() === 0)
+			if ($this->invites->where('token', $token)->count() === 0)
 				break;
 		}
 

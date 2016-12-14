@@ -41,10 +41,10 @@ class SubmissionController extends Controller
 			time() - $submissions[0]->created_at->timestamp < 30)
 			abort(422, "Please do not bruteforce!");
 
-		$submission = new PracticeSubmission([
+		$submission = app()->make(PracticeSubmission::class, [[
 			'submission' => $request->answer,
 			'status' => 'pending'
-		]);
+		]]);
 
 		$submission->user()->associate($user);
 		$submission->problem()->associate($problem);
@@ -59,7 +59,7 @@ class SubmissionController extends Controller
 		if ($competition->status !== 'Running')
 			abort(404, "Competition is not running!");
 
-		$problem = Problem::findByName($problem_name)->where('competition_id', $competition->id)->firstOrFail();
+		$problem = $competition->problems()->where('name', $problem_name)->firstOrFail();
 
 		$this->validate($request, [
 			'answer' => 'required'
@@ -81,10 +81,10 @@ class SubmissionController extends Controller
 			time() - $submissions[0]->created_at->timestamp < 30)
 			abort(422, "Please do not bruteforce!");
 
-		$submission = new CompetitionSubmission([
+		$submission = app()->make(CompetitionSubmission::class, [[
 			'submission' => $request->answer,
 			'status' => 'pending'
-		]);
+		]]);
 
 		$submission->team()->associate($team);
 		$submission->problem()->associate($problem);

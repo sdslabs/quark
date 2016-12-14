@@ -12,7 +12,6 @@ use Illuminate\Support\Facades\Auth;
 
 class CompetitionProblemController extends Controller
 {
-
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -20,7 +19,7 @@ class CompetitionProblemController extends Controller
 	 */
 	public function index(Competition $competition)
 	{
-		$problems = Problem::where('competition_id', $competition->id)->with('competition_submissions')->get();
+		$problems = $competition->problems()->with('competition_submissions')->get();
 
 		$problems->each(function($item) {
 			$item['submissions'] = $item->competition_submissions->where('status', 'correct')->count();
@@ -39,7 +38,7 @@ class CompetitionProblemController extends Controller
 	 */
 	public function show(Competition $competition, $problem_name)
 	{
-		$problem = Problem::findByName($problem_name)->where('competition_id', $competition->id)->firstOrFail();
+		$problem = $competition->problems()->where('name', $problem_name)->firstOrFail();
 
 		$problem->load('competition_submissions.user', 'creator');
 

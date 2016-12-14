@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Auth;
 class TeamController extends Controller
 {
 
-	public function __construct()
+	public function __construct(Team $teams)
 	{
+		$this->teams = $teams;
 		$this->middleware('auth')->except(['index', 'show']);
 	}
 
@@ -59,10 +60,10 @@ class TeamController extends Controller
 		if ($user->isInCompetition($competition->id))
 			abort(422, "You are already participating in this competition");
 
-		if (Team::findByName($request->name)->where('competition_id', $competition->id)->count() > 0)
+		if ($competition->teams()->where('name', $request->name)->count() > 0)
 			abort(422, "Team name is already taken.");
 
-		$team = new Team($request->all());
+		$team = app()->make(Team::class, [$request->all()]);
 		$team->owner()->associate($user);
 		$saved = $competition->addTeam($team);
 
@@ -80,7 +81,7 @@ class TeamController extends Controller
 	 */
 	public function show(Competition $competition, $team_name)
 	{
-		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = $competition->teams()->where('name', $team_name)->firstOrFail();
 		$team->load('submissions.problem', 'members');
 
 		$user = Auth::user();
@@ -120,14 +121,14 @@ class TeamController extends Controller
 		if ($competition->status === 'Finished')
 			abort(422, "Competition has already ended.");
 
-		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = $competition->teams()->where('name', $team_name)->firstOrFail();
 
 		if ($team->owner->id !== Auth::user()->id && !Auth::user()->isDeveloper())
 			abort(403, "Only owner can update the team details.");
 
 		if ($request->has('name') &&
-			Team::findByName($request->name)
-				->where('competition_id', $competition->id)
+			$competition->teams()
+				->where('name', $request->name)
 				->where('id', '!=', $team->id)->count() > 0)
 					abort(422, "A team with given name already exists.");
 
@@ -147,7 +148,7 @@ class TeamController extends Controller
 		if($competition->status !== 'Future')
 			abort(422, "The competition has already started.");
 
-		$team = Team::findByName($team_name)->where('competition_id', $competition->id)->firstOrFail();
+		$team = $competition->teams()->where('name', $team_name)->firstOrFail();
 
 		if($team->owner->id !== Auth::user()->id && !Auth::user()->isDeveloper())
 			abort(403, "Only owner can delete the team.");

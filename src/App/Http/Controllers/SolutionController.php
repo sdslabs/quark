@@ -14,7 +14,7 @@ class SolutionController extends Controller
 
 	public function store(Request $request, Problem $problem)
 	{
-		$solution = new Solution($request->all());
+		$solution = app()->make(Solution::class, [$request->all()]);
 
 		$solution->problem()->associate($problem);
 

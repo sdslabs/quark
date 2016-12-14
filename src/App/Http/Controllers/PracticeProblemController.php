@@ -11,6 +11,11 @@ use Illuminate\Support\Facades\Auth;
 class PracticeProblemController extends Controller
 {
 
+	public function __construct(Problem $problems)
+	{
+		$this->problems = $problems;
+	}
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -18,7 +23,7 @@ class PracticeProblemController extends Controller
 	 */
 	public function index()
 	{
-		$problems = Problem::where('practice', 1)->with('practice_submissions')->get();
+		$problems = $this->problems->where('practice', 1)->with('practice_submissions')->get();
 
 		$problems->each(function($item) {
 			$item['submissions'] = $item->practice_submissions->where('status', 'correct')->count();

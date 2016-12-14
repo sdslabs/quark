@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Auth;
 class UserController extends Controller
 {
 
-	public function __construct()
+	public function __construct(User $users)
 	{
+		$this->users = $users;
 		$this->middleware('auth')->except(['index', 'show']);
 	}
 
@@ -26,7 +27,7 @@ class UserController extends Controller
 	public function index()
 	{
 		// Return practice leaderboard
-		$users = User::where('score', '>', 0)->orderBy('score', 'desc')->orderBy('score_updated_at', 'asc')->paginate(30);
+		$users = $this->users->where('score', '>', 0)->orderBy('score', 'desc')->orderBy('score_updated_at', 'asc')->paginate(30);
 		return $users;
 	}
 
