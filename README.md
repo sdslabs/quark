@@ -4,9 +4,9 @@ This is a Laravel package that provides a code application for building platform
 
 ## Setup
 
-- Create ans setup a new Laravel app
+- Create and setup a new Laravel app
 
-- Add the repository to the `composer.json`'s `repositories` field:
+- Add the folowwing repositories to the `composer.json`'s `repositories` field:
 ```JSON
 "repositories": [
 	{
@@ -88,3 +88,9 @@ IoC container's `make` method.
 - The above practices makes it easier to swap the underlying classes, i.e. the
 classes used by Quark can be extended by the application and the extended
 classes will be used inside Quarks's classes/
+
+## Working on Quark
+
+- First you need an application. If you don't have one already setup, setup a
+demo application following the above instructions
+- Symlink the `vendor/sdslabs/quark` folder to your local clone of quark.
