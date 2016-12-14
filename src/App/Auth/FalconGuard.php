@@ -33,8 +33,9 @@ class FalconGuard implements Guard
 	 * @param  \Symfony\Component\HttpFoundation\Request  $request
 	 * @return void
 	 */
-	public function __construct()
+	public function __construct(User $user_model)
 	{
+		$this->user_model = $user_model;
 		$this->api = new API(config('auth.falcon'));
 	}
 
@@ -63,12 +64,12 @@ class FalconGuard implements Guard
 		}
 
 
-		$user = User::where('user_id', $result['id'])->first();
+		$user = $this->user_model->where('user_id', $result['id'])->first();
 
 		if($user === null)
 		{
 			// New user
-			$user = new User;
+			$user = app()->make(User::class, []);
 
 			$user->user_id = $result['id'];
 			$user->provider = 'falcon';
