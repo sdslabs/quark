@@ -17,8 +17,9 @@ class CompetitionController extends Controller
 	 *
 	 */
 
-	public function __construct()
+	public function __construct(Competition $comps)
 	{
+		$this->competitions = $comps;
 		$this->middleware('developer')->only(['create', 'store', 'edit', 'destroy']);
 	}
 
@@ -29,7 +30,7 @@ class CompetitionController extends Controller
 	 */
 	public function index()
 	{
-		$competitions = Competition::all()->groupBy('status');
+		$competitions = $this->competitions->all()->groupBy('status');
 		return $competitions;
 	}
 
@@ -62,7 +63,7 @@ class CompetitionController extends Controller
 			'utc' => 'bail|required|accepted'
 		]);
 
-		$comp = new Competition($request->all());
+		$comp = app()->make(Competition::class, [$request->all()]);
 		$comp->save();
 		return $comp;
 	}
