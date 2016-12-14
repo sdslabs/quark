@@ -5,6 +5,7 @@ namespace SDSLabs\Quark\App\Auth;
 use SDSLabs\FalconClient\API;
 use SDSLabs\Quark\App\Models\User;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Contracts\Auth\Guard;
 
 class FalconGuard implements Guard
@@ -69,7 +70,7 @@ class FalconGuard implements Guard
 		if($user === null)
 		{
 			// New user
-			$user = app()->make(User::class, []);
+			$user = App::make(User::class);
 
 			$user->user_id = $result['id'];
 			$user->provider = 'falcon';

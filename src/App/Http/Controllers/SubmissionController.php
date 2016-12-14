@@ -10,6 +10,7 @@ use SDSLabs\Quark\App\Judge\StringComparisonJudge;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -41,7 +42,7 @@ class SubmissionController extends Controller
 			time() - $submissions[0]->created_at->timestamp < 30)
 			abort(422, "Please do not bruteforce!");
 
-		$submission = app()->make(PracticeSubmission::class, [[
+		$submission = App::make(PracticeSubmission::class, [[
 			'submission' => $request->answer,
 			'status' => 'pending'
 		]]);
@@ -81,7 +82,7 @@ class SubmissionController extends Controller
 			time() - $submissions[0]->created_at->timestamp < 30)
 			abort(422, "Please do not bruteforce!");
 
-		$submission = app()->make(CompetitionSubmission::class, [[
+		$submission = App::make(CompetitionSubmission::class, [[
 			'submission' => $request->answer,
 			'status' => 'pending'
 		]]);

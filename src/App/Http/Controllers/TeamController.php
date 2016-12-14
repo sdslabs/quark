@@ -7,6 +7,7 @@ use SDSLabs\Quark\App\Models\Competition;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -60,10 +61,10 @@ class TeamController extends Controller
 		if ($user->isInCompetition($competition->id))
 			abort(422, "You are already participating in this competition");
 
-		if ($competition->teams()->where('name', $request->name)->count() > 0)
+		if ($competition->teams()->where('name', $request->name)->exists())
 			abort(422, "Team name is already taken.");
 
-		$team = app()->make(Team::class, [$request->all()]);
+		$team = App::make(Team::class, [$request->all()]);
 		$team->owner()->associate($user);
 		$saved = $competition->addTeam($team);
 
@@ -129,7 +130,7 @@ class TeamController extends Controller
 		if ($request->has('name') &&
 			$competition->teams()
 				->where('name', $request->name)
-				->where('id', '!=', $team->id)->count() > 0)
+				->where('id', '!=', $team->id)->exists())
 					abort(422, "A team with given name already exists.");
 
 		$team->update($request->all());

@@ -8,6 +8,7 @@ use SDSLabs\Quark\App\Models\User;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 
@@ -50,7 +51,7 @@ class ProblemController extends Controller
 			'answer' => 'required',
 		]);
 
-		$problem = app()->make(Problem::class, [[
+		$problem = App::make(Problem::class, [[
 			"name" => $request->name,
 			"title" => $request->title,
 			"description" => $request->description
@@ -74,7 +75,7 @@ class ProblemController extends Controller
 		$problem->uploader()->associate(Auth::user());
 		$problem->save();
 
-		$solution_controller = new SolutionController;
+		$solution_controller = App::make(SolutionController::class);
 		$solution = $solution_controller->store($request, $problem);
 
 		return $problem;
@@ -131,7 +132,7 @@ class ProblemController extends Controller
 		$problem->uploader()->associate(Auth::user());
 		$problem->save();
 
-		$solution_controller = new SolutionController;
+		$solution_controller = App::make(SolutionController::class);
 		$solution = $solution_controller->update($request, $problem);
 
 		return $problem;
@@ -148,7 +149,7 @@ class ProblemController extends Controller
 		if($problem->hasSubmissions())
 			abort(422, "The problem has some submissions, so it can't be deleted.");
 
-		$solution_controller = new SolutionController;
+		$solution_controller = App::make(SolutionController::class);
 		$solution = $solution_controller->delete($request, $problem);
 
 		$problem->delete();
