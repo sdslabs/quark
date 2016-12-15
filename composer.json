@@ -25,6 +25,7 @@
 	"autoload": {
 		"psr-4": {
 			"SDSLabs\\Quark\\": "src/"
-		}
+		},
+		"classmap": ["src/database/migrations"]
 	}
 }
