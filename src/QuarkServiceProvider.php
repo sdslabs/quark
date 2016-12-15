@@ -6,13 +6,11 @@ use SDSLabs\Quark\App\Auth\FalconGuard;
 use SDSLabs\Quark\App\Http\Middleware\Authenticate;
 use SDSLabs\Quark\App\Http\Middleware\SubstituteBindings;
 use SDSLabs\Quark\App\Http\Middleware\Developer;
-use SDSLabs\Quark\App\Validators\CustomValidator;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Validator;
 
 
 class QuarkServiceProvider extends ServiceProvider
@@ -32,8 +30,6 @@ class QuarkServiceProvider extends ServiceProvider
 		Auth::extend('falcon', function($app, $name, array $config) {
 			return App::make(FalconGuard::class);
 		});
-
-		$this->addValidationRules();
 	}
 
 	public function setupRoutes(Router $router)
@@ -49,13 +45,6 @@ class QuarkServiceProvider extends ServiceProvider
 			'middleware' => 'web'
 		], function($router) {
 			require __DIR__.'/App/Http/routes.php';
-		});
-	}
-
-	public function addValidationRules()
-	{
-		Validator::resolver(function($translator, $data, $rules, $messages = array(), $customAttributes = array()) {
-			return new CustomValidator($translator, $data, $rules, $messages, $customAttributes);
 		});
 	}
 

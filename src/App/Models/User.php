@@ -2,11 +2,11 @@
 
 namespace SDSLabs\Quark\App\Models;
 
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Database\Eloquent\Model;
 
 
-class User extends Model
+class User extends Authenticatable
 {
 	protected $table = 'users';
 	protected $fillable = ['username', 'fullname'];
