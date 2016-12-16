@@ -16,5 +16,5 @@ abstract class Judge
 
 	abstract public function judge();
 
-	abstract protected function handleResult();
+	abstract protected function handleResult($result);
 }
