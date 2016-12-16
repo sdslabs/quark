@@ -16,7 +16,5 @@ abstract class Judge
 
 	abstract public function judge();
 
-	abstract protected function handleCorrectSubmission();
-
-	abstract protected function handleWrongSubmission();
+	abstract protected function handleResult();
 }

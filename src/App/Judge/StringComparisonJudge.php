@@ -28,8 +28,12 @@ class StringComparisonJudge extends Judge
 	public function judge()
 	{
 		$match = Hash::check($this->submitted_answer, $this->answer);
+		return handleResult($result);
+	}
 
-		if ($match)
+	public function handleResult($result)
+	{
+		if ($result)
 			return $this->handleCorrectSubmission();
 
 		else
