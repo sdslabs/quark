@@ -2,6 +2,7 @@
 
 namespace SDSLabs\Quark\App\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 
@@ -25,27 +26,27 @@ class Team extends Model
 
 	public function competition()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\Competition', 'competition_id');
+		return $this->belongsTo(App::make(Competition::class), 'competition_id');
 	}
 
 	public function owner()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\User', 'owner_id');
+		return $this->belongsTo(App::make(User::class), 'owner_id');
 	}
 
 	public function members()
 	{
-		return $this->belongsToMany('SDSLabs\Quark\App\Models\User', 'user_team_maps', 'team_id', 'user_id');
+		return $this->belongsToMany(App::make(User::class), 'user_team_maps', 'team_id', 'user_id');
 	}
 
 	public function submissions()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\CompetitionSubmission');
+		return $this->hasMany(App::make(CompetitionSubmission::class));
 	}
 
 	public function invites()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\Invite');
+		return $this->hasMany(App::make(Invite::class));
 	}
 
 	public function hasMember(User $user)

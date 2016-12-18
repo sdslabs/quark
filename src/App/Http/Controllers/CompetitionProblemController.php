@@ -40,7 +40,7 @@ class CompetitionProblemController extends Controller
 	{
 		$problem = $competition->problems()->where('name', $problem_name)->firstOrFail();
 
-		$problem->load('competition_submissions.user', 'creator');
+		$problem->load('competition_submissions.team', 'creator');
 
 		return $problem;
 	}

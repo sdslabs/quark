@@ -18,7 +18,7 @@ class ProblemController extends Controller
 	public function __construct(Competition $comps, User $users)
 	{
 		$this->competitions = $comps;
-		$this->users = $user;
+		$this->users = $users;
 		$this->middleware('developer');
 	}
 
@@ -144,7 +144,7 @@ class ProblemController extends Controller
 	 * @param  string  $name
 	 * @return \Illuminate\Http\Response
 	 */
-	public function destroy(Problem $problem)
+	public function destroy(Request $request, Problem $problem)
 	{
 		if($problem->hasSubmissions())
 			abort(422, "The problem has some submissions, so it can't be deleted.");

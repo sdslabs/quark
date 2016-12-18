@@ -4,6 +4,7 @@ namespace SDSLabs\Quark\App\Models;
 
 use SDSLabs\Quark\App\Helpers\Leaderboard;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 
@@ -27,17 +28,17 @@ class Competition extends Model
 
 	public function problems()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\Problem');
+		return $this->hasMany(App::make(Problem::class));
 	}
 
 	public function teams()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\Team');
+		return $this->hasMany(App::make(Team::class));
 	}
 
 	public function submissions()
 	{
-		return $this->hasManyThrough('SDSLabs\Quark\App\Models\CompetitionSubmission', 'SDSLabs\Quark\App\Models\Team');
+		return $this->hasManyThrough(App::make(CompetitionSubmission::class), App::make(Team::class));
 	}
 
 	public function leaderboard()

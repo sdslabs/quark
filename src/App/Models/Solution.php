@@ -2,6 +2,7 @@
 
 namespace SDSLabs\Quark\App\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Hash;
 
@@ -15,7 +16,7 @@ class Solution extends Model
 
 	public function problem()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\Problem');
+		return $this->belongsTo(App::make(Problem::class));
 	}
 
 	public function setAnswerAttribute($answer)

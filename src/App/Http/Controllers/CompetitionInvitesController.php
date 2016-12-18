@@ -17,7 +17,7 @@ class CompetitionInvitesController extends Controller
 {
 	public function __construct(Invite $invites)
 	{
-		$this->invites = $invites
+		$this->invites = $invites;
 		$this->middleware('auth');
 	}
 

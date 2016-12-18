@@ -2,6 +2,7 @@
 
 namespace SDSLabs\Quark\App\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -13,12 +14,12 @@ class CompetitionSubmission extends Model
 
 	public function problem()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\Problem', 'problem_id');
+		return $this->belongsTo(App::make(Problem::class), 'problem_id');
 	}
 
 	public function team()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\Team', 'team_id');
+		return $this->belongsTo(App::make(Team::class), 'team_id');
 	}
 
 }

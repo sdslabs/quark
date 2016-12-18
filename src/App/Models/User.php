@@ -2,6 +2,7 @@
 
 namespace SDSLabs\Quark\App\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Support\Facades\DB;
 
@@ -25,27 +26,27 @@ class User extends Authenticatable
 
 	public function submissions()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\PracticeSubmission');
+		return $this->hasMany(App::make(PracticeSubmission::class));
 	}
 
 	public function problems_created()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\Problem', 'creator_id');
+		return $this->hasMany(App::make(Problem::class), 'creator_id');
 	}
 
 	public function problems_uploaded()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\Problem', 'uploader_id');
+		return $this->hasMany(App::make(Problem::class), 'uploader_id');
 	}
 
 	public function teams()
 	{
-		return $this->belongsToMany('SDSLabs\Quark\App\Models\Team', 'user_team_maps', 'user_id', 'team_id');
+		return $this->belongsToMany(App::make(Team::class), 'user_team_maps', 'user_id', 'team_id');
 	}
 
 	public function owned_teams()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\Team', 'owner_id');
+		return $this->hasMany(App::make(Team::class), 'owner_id');
 	}
 
 	public function competitions()
@@ -60,7 +61,7 @@ class User extends Authenticatable
 
 	public function invites()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\Invite');
+		return $this->hasMany(App::make(Invite::class));
 	}
 
 	public function isDeveloper()

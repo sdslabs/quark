@@ -2,6 +2,7 @@
 
 namespace SDSLabs\Quark\App\Models;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Database\Eloquent\Model;
 
 
@@ -24,32 +25,32 @@ class Problem extends Model
 
 	public function competition()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\Competition', 'competition_id');
+		return $this->belongsTo(App::make(Competition::class), 'competition_id');
 	}
 
 	public function solution()
 	{
-		return $this->hasOne('SDSLabs\Quark\App\Models\Solution');
+		return $this->hasOne(App::make(Solution::class));
 	}
 
 	public function creator()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\User', 'creator_id');
+		return $this->belongsTo(App::make(User::class), 'creator_id');
 	}
 
 	public function uploader()
 	{
-		return $this->belongsTo('SDSLabs\Quark\App\Models\User', 'uploader_id');
+		return $this->belongsTo(App::make(User::class), 'uploader_id');
 	}
 
 	public function practice_submissions()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\PracticeSubmission');
+    	return $this->hasMany(App::make(PracticeSubmission::class));
 	}
 
 	public function competition_submissions()
 	{
-		return $this->hasMany('SDSLabs\Quark\App\Models\CompetitionSubmission');
+		return $this->hasMany(App::make(CompetitionSubmission::class));
 	}
 
 	public function hasPracticeSubmissions()
