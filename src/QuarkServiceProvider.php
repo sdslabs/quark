@@ -39,10 +39,10 @@ class QuarkServiceProvider extends ServiceProvider
 		$router->middleWare('auth', Authenticate::class);
 		$router->middleWare('developer', Developer::class);
 		$router->middleWare('developer_check', DeveloperCheck::class);
-
 		$router->group([
 			'namespace' => 'SDSLabs\Quark\App\Http\Controllers',
-			'middleware' => 'web'
+			'middleware' => 'web',
+			'prefix' => 'api'
 		], function($router) {
 			require __DIR__.'/App/Http/routes.php';
 		});
