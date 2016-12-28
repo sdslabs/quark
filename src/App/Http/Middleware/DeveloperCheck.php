@@ -39,11 +39,9 @@ class DeveloperCheck
 
 		if(config('auth.developer_only'))
 		{
-			if (!$this->auth->guard($guard)->user())
-				$this->auth->guard($guard)->login();
-
-			if (!$this->auth->guard($guard)->user()->isDeveloper())
-				abort(404, 'Developers only');
+			return app(Developer::class)->handle($request, function ($request) use ($next) {
+				return $next($request);
+			}, $guard);
 		}
 
 		return $next($request);

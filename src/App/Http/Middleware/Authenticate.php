@@ -36,9 +36,8 @@ class Authenticate
 	 */
 	public function handle($request, Closure $next, $guard = 'falcon')
 	{
-
 		if ($this->auth->guard($guard)->guest()) {
-			return $this->auth->guard($guard)->login();
+			abort(401, "Authentication required");
 		}
 
 		return $next($request);

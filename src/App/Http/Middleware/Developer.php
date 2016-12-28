@@ -36,14 +36,13 @@ class Developer
 	 */
 	public function handle($request, Closure $next, $guard = 'falcon')
 	{
+		return app(Authenticate::class)->handle($request, function ($request) use ($next, $guard) {
 
-		if (!$this->auth->guard($guard)->user())
-			$this->auth->guard($guard)->login();
+			if ($this->auth->guard($guard)->guest() || !$this->auth->guard($guard)->user()->isDeveloper())
+				abort(403, 'Developers Only');
 
-		if (!$this->auth->guard($guard)->user()->isDeveloper())
-			abort(404, 'Developers only');
+			return $next($request);
 
-		return $next($request);
-
+		}, $guard);
 	}
 }

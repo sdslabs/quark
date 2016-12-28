@@ -31,7 +31,7 @@ class CompetitionController extends Controller
 	 */
 	public function index()
 	{
-		$competitions = $this->competitions->all()->groupBy('status');
+		$competitions = $this->competitions->all();
 		return $competitions;
 	}
 
