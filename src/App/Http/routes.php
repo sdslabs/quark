@@ -17,7 +17,9 @@ Route::get('competitions/{competition}/submissions', 'CompetitionController@show
 
 Route::resource('competitions', 'CompetitionController');
 
+Route::get('users/self', 'UserController@showSelf');
 Route::resource('users', 'UserController', ['except' => ['destroy', 'create', 'store']]);
+
 
 Route::post('competitions/{competition}/teams/{team}/invite/{user}', 'CompetitionInvitesController@inviteUser');
 Route::post('competitions/{competition}/teams/{team}/join', 'CompetitionInvitesController@joinTeam');

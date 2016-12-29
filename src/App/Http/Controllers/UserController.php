@@ -40,7 +40,7 @@ class UserController extends Controller
 	 */
 	public function show(User $user)
 	{
-		$user->load('teams', 'submissions.problems', 'problems_created');
+		$user->load('teams', 'submissions.problem', 'problems_created');
 		if(!is_null(Auth::user()))
 		{
 			if ($user->username === Auth::user()->username || Auth::user()->isDeveloper())
@@ -88,6 +88,11 @@ class UserController extends Controller
 		$user->update($request->all());
 
 		return $user;
+	}
+
+	public function showSelf()
+	{
+		return $this->show(Auth::user());
 	}
 
 }
