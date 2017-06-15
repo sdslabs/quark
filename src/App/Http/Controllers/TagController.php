@@ -24,7 +24,22 @@ class TagController extends Controller
 			]]);
 				$tag->save();
 				$tag->problem()->attach($problem_id);
+			}
 		}
 	}
+
+	public function destroy(string $tagname,int  $problem_id){
+		if(Problem::where('id',$problem_id)->exists()){
+			$tag = Tags::where('tagname', $tagname)->first();
+			if($tag){
+				$tag->problem()->detach($problem_id);
+			}
+		}
+	}
+	public function show(string $tagname){
+		$tag = Tags::where('tagname', $tagname)->first();
+		if($tag){
+			return $tag->problem;
+		}
 	}
 }
