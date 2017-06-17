@@ -45,7 +45,7 @@ class PracticeProblemController extends Controller
 		if (!$problem->practice)
 			abort(404, "Problem not found");
 
-		$problem->load('practice_submissions.user', 'creator','tags');
+		$problem->load('practice_submissions.user', 'creator', 'tags');
 
 		return $problem;
 	}

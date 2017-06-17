@@ -12,15 +12,15 @@ use Illuminate\Support\Facades\App;
 
 class TagController extends Controller
 {
-	public function store(string $tagname,int  $problem_id){
-		if(Problem::where('id',$problem_id)->exists()){
+	public function store(string $tagname, int  $problem_id) {
+		if(Problem::where('id',$problem_id)->exists()) {
 			$tag = Tags::where('tagname', $tagname)->first();
-			if($tag){
+			if($tag) {
 				$tag->problem()->attach($problem_id);
 			}
-			else{
-				$tag = App::make(Tags::class,[[
-				"tagname"=>$tagname
+			else {
+				$tag = App::make(Tags::class, [[
+				"tagname" => $tagname
 			]]);
 				$tag->save();
 				$tag->problem()->attach($problem_id);
@@ -28,17 +28,17 @@ class TagController extends Controller
 		}
 	}
 
-	public function destroy(string $tagname,int  $problem_id){
-		if(Problem::where('id',$problem_id)->exists()){
+	public function destroy(string $tagname, int  $problem_id) {
+		if(Problem::where('id',$problem_id)->exists()) {
 			$tag = Tags::where('tagname', $tagname)->first();
-			if($tag){
+			if($tag) {
 				$tag->problem()->detach($problem_id);
 			}
 		}
 	}
-	public function show(string $tagname){
+	public function show(string $tagname) {
 		$tag = Tags::where('tagname', $tagname)->first();
-		if($tag){
+		if($tag) {
 			return $tag->problem;
 		}
 	}
