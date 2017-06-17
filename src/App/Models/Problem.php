@@ -75,7 +75,7 @@ class Problem extends Model
 
 	public function tags()
 	{
-		return $this->belongsToMany(App::make(Tags::class),'problem_tags','problem_id','tag_id');
+		return $this->belongsToMany(App::make(Tags::class), 'problem_tags', 'problem_id', 'tag_id');
 	}
 
 }
