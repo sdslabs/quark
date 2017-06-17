@@ -7,9 +7,9 @@ Route::resource('problems', 'ProblemController', ['except' => 'index', 'show']);
 Route::get('problems', 'PracticeProblemController@index')->name('practice.problems.index');
 Route::get('problems/{problem}', 'PracticeProblemController@show')->name('practice.problems.show');
 Route::post('problems/{problem}/submit', 'SubmissionController@practiceSubmission')->name('practice.problems.submit');
-Route::get('tags/{tagname}/problems/{problem_id}/store', 'TagController@store')->name('problem.tag.store');
-Route::get('tags/{tagname}/problems/{problem_id}/destroy', 'TagController@destroy')->name('problem.tag.destroy');
-Route::get('tags/{tagname}/show', 'TagController@show')->name('problem.tag.show');
+Route::post('tags/{tagname}/problems/{problem}/store', 'TagController@store')->name('problem.tag.store');
+Route::delete('tags/{tagname}/problems/{problem}/destroy', 'TagController@destroy')->name('problem.tag.destroy');
+Route::get('tags/{tagname}/problems', 'TagController@show')->name('problem.tag.show');
 
 // Competition Problem Routes
 Route::get('competitions/{competition}/problems', 'CompetitionProblemController@index')->name('competitions.problems.index');

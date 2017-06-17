@@ -12,7 +12,7 @@ class Tags extends Model
 	protected $fillable = ['tagname'];
 	protected $hidden = ['id', 'created_at', 'updated_at'];
 
-	public function problem() {
+	public function problems() {
 		return $this->belongsToMany(App::make(Problem::class), 'problem_tags', 'tag_id', 'problem_id');
 	}
 
