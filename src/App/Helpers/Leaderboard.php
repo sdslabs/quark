@@ -2,9 +2,7 @@
 
 namespace SDSLabs\Quark\App\Helpers;
 
-use SDSLabs\Quark\App\Models\Competition;
 
-use Illuminate\Support\Facades\Redis;
 
 
 class Leaderboard

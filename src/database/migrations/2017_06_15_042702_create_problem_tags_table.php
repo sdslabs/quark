@@ -14,10 +14,14 @@ class CreateProblemTagsTable extends Migration
     public function up()
     {
 		Schema::create('problem_tags', function (Blueprint $table) {
-			$table->increments('id');
-			$table->integer('problem_id');
-			$table->integer('tag_id');
+			$table->integer('problem_id')->unsigned();;
+			$table->integer('tag_id')->unsigned();;
+			$table->unique(['problem_id', 'tag_id']);
 			$table->timestamps();
+		});
+		Schema::table('problem_tags', function (Blueprint $table) {
+			$table->foreign('tag_id')->references('id')->on('tags')->onDelete('cascade');
+            $table->foreign('problem_id')->references('id')->on('problems')->onDelete('cascade');
 		});
 
     }
@@ -29,6 +33,11 @@ class CreateProblemTagsTable extends Migration
      */
     public function down()
     {
+		Schema::table('problem_tags', function (Blueprint $table) {
+            $table->dropForeign(['tag_id']);
+            $table->dropForeign(['problem_id']);
+        });
 		Schema::dropIfExists('problem_tags');
     }
 }
+

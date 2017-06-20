@@ -12,6 +12,11 @@ class Tags extends Model
 	protected $fillable = ['name'];
 	protected $hidden = ['id', 'created_at', 'updated_at'];
 
+	public function getRouteKeyName()
+	{
+		return 'name';
+	}
+
 	public function problems() {
 		return $this->belongsToMany(App::make(Problem::class), 'problem_tags', 'tag_id', 'problem_id');
 	}
