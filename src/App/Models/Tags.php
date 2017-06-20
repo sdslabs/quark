@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\App;
 class Tags extends Model
 {
 	protected $table = 'tags';
-	protected $fillable = ['tagname'];
+	protected $fillable = ['name'];
 	protected $hidden = ['id', 'created_at', 'updated_at'];
 
 	public function problems() {
