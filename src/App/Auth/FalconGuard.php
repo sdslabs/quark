@@ -74,7 +74,6 @@ class FalconGuard implements Guard
 
 			$user->user_id = $result['id'];
 			$user->provider = 'falcon';
-			$user->credentials = $result['password'];
 			$user->username = $result['username'];
 			$user->fullname = $result['name'];
 			$user->email = $result['email'];

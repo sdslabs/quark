@@ -19,7 +19,6 @@
 			"type": "vcs",
 			"url": "git@github.com:sdslabs/falcon.git",
 			"no-api": true
-
 		}
 	],
 	"autoload": {
