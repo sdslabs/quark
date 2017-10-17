@@ -98,6 +98,7 @@ return [
 		"url_authorize"              => "",
 		"url_access_token"           => env('FALCON_URL_ACCESS_TOKEN'),
 		"url_resource_owner_details" => env('FALCON_URL_RESOURCE_ONWER_DETAILS'),
-		"accounts_url"               => env('FALCON_ACCOUNTS_URL')
+		"accounts_url"               => env('FALCON_ACCOUNTS_URL'),
+		"scopes"                     => explode(',', env('FALCON_SCOPES'))
 	]
 ];
