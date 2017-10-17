@@ -76,12 +76,18 @@ class FalconGuard implements Guard
 			$user->provider = 'falcon';
 			$user->username = $result['username'];
 			$user->fullname = $result['name'];
-			$user->email = $result['email'];
-			$user->image = $result['image_url'];
+
+			if (isset($result['email']) && !empty($result['email'])) {
+				$user->email = $result['email'];
+			}
+
+			if (isset($result['image_url']) && !empty($result['image_url'])) {
+				$user->image = $result['image_url'];
+			}
 
 			$user->save();
 		}
-		else if($user->image != $result['image_url']) {
+		else if(isset($result['image_url']) && !empty($result['image_url']) && $user->image != $result['image_url']) {
 			$user->image = $result['image_url'];
 			$user->save();
 		}
