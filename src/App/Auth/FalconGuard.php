@@ -87,10 +87,6 @@ class FalconGuard implements Guard
 
 			$user->save();
 		}
-		else if(isset($result['image_url']) && !empty($result['image_url']) && $user->image != $result['image_url']) {
-			$user->image = $result['image_url'];
-			$user->save();
-		}
 
 		$this->user = $user;
 
