@@ -11,7 +11,7 @@ class User extends Authenticatable
 {
 	protected $table = 'users';
 	protected $fillable = ['username', 'fullname'];
-	protected $hidden = ['id', 'user_id', 'provider', 'email', 'role', 'credentials', 'created_at', 'updated_at', 'score_updated_at', 'pivot'];
+	protected $hidden = ['id', 'user_id', 'provider', 'email', 'role', 'created_at', 'updated_at', 'score_updated_at', 'pivot'];
 	protected $appends = ['rank'];
 
 	public static function findByUsername($name)

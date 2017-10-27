@@ -24,10 +24,13 @@ Route::get('competitions/{competition}/submissions', 'CompetitionController@show
 Route::resource('competitions', 'CompetitionController');
 
 // Use this route to check login status.
-Route::get('users/self', 'UserController@showSelf')->name('users.self.show');
+Route::get('users/me', 'UserController@showMe')->name('users.me.show');
+
+// Use this route to fetch falcon user details to render the registration page.
+Route::get('users/me/falcon', 'UserController@showFalconMe')->name('users.me.falcon.show');
 
 // User routes
-Route::resource('users', 'UserController', ['except' => ['destroy', 'create', 'store']]);
+Route::resource('users', 'UserController', ['except' => ['destroy', 'create']]);
 
 // Invite routes
 Route::post('competitions/{competition}/teams/{team}/invite/{user}', 'CompetitionInvitesController@inviteUser')->name('invites.send');

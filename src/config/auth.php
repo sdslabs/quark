@@ -95,6 +95,7 @@ return [
 		"client_id"                  => env('FALCON_CLIENT_ID'),
 		"client_secret"              => env('FALCON_CLIENT_SECRET'),
 		"url_authorize"              => "",
+		"redirect_uri"               => "",
 		"url_access_token"           => env('FALCON_URL_ACCESS_TOKEN'),
 		"url_resource_owner_details" => env('FALCON_URL_RESOURCE_ONWER_DETAILS'),
 		"accounts_url"               => env('FALCON_ACCOUNTS_URL'),

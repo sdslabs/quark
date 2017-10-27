@@ -46,9 +46,10 @@ from `database/migrations`.
 ```bash
 FALCON_CLIENT_ID=client_id
 FALCON_CLIENT_SECRET=secret
-FALCON_URL_ACCESS_TOKEN=http://falcon.sdslabs.dev/access_token
-FALCON_URL_RESOURCE_ONWER_DETAILS=http://falcon.sdslabs.dev/users/
-FALCON_ACCOUNTS_URL=http://arceus.sdslabs.dev/
+FALCON_URL_ACCESS_TOKEN=http://falcon.sdslabs.local/access_token
+FALCON_URL_RESOURCE_ONWER_DETAILS=http://falcon.sdslabs.local/users/
+FALCON_ACCOUNTS_URL=http://arceus.sdslabs.local/
+FALCON_SCOPES=email,image_url
 ```
 
 - Update `config/auth.php`:

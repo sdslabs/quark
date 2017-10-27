@@ -3,7 +3,6 @@
 namespace SDSLabs\Quark\App\Http\Controllers;
 
 use SDSLabs\Quark\App\Models\User;
-use SDSLabs\Quark\App\Models\Role;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -17,7 +16,8 @@ class UserController extends Controller
 	public function __construct(User $users)
 	{
 		$this->users = $users;
-		$this->middleware('auth')->except(['index', 'show']);
+		$this->middleware('auth')->except(['index', 'show', 'store']);
+		$this->middleware('falcon_auth')->only(['store', 'showFalconMe']);
 	}
 
 	/**
@@ -30,6 +30,45 @@ class UserController extends Controller
 		// Return practice leaderboard
 		$users = $this->users->where('score', '>', 0)->orderBy('score', 'desc')->orderBy('score_updated_at', 'asc')->paginate(30);
 		return $users;
+	}
+
+	/**
+	 * Store a newly created resource in storage.
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @return \Illuminate\Http\Response
+	 */
+	public function store(Request $request)
+	{
+		if (!is_null(Auth::user())) {
+			abort(409, "Already logged in.");
+		}
+
+		$this->validate($request, [
+			'username' => 'bail|required|alpha_dash|between:3,30|unique:users,username',
+			'fullname' => 'bail|required|regex:/^[\pL\s\-]+$/u|between:3,30',
+			'image' => 'bail|mimes:jpeg,jpg,png,gif|max:5120',
+		]);
+
+		// No idea why it doesn't work!
+		// $user = App::make(User::class, [$request->all()]);
+
+		$user = App::make(User::class);
+		$user->username = $request->username;
+		$user->fullname = $request->fullname;
+		$user->user_id = Auth::falconUser()['id'];
+		$user->email = Auth::falconUser()['email'];
+		$user->provider = 'falcon';
+
+		if ($request->hasFile('image') && $request->file('image')->isValid()) {
+			$image = $request->file('image');
+			$ext = $image->getClientOriginalExtension();
+			$user->image = $image->storeAs("user_profile", $user->username.".".$ext, "public");
+		}
+
+		$user->save();
+
+		return $user;
 	}
 
 	/**
@@ -78,8 +117,9 @@ class UserController extends Controller
 	public function update(Request $request, User $user)
 	{
 		$this->validate($request, [
-			'username' => 'bail|alpha_dash|unique:users,username,'.$user->id.',id',
-			'fullname' => 'alpha'
+			'username' => 'bail|required|alpha_dash|between:3,30|unique:users,username,'.$user->id.',id',
+			'fullname' => 'bail|required|regex:/^[\pL\s\-]+$/u|between:3,30',
+			'image' => 'bail|mimes:jpeg,jpg,png,gif|max:5120',
 		]);
 
 		if ($user->username !== Auth::user()->username && !Auth::user()->isDeveloper())
@@ -87,10 +127,28 @@ class UserController extends Controller
 
 		$user->update($request->all());
 
+		if ($request->hasFile('image') && $request->file('image')->isValid()) {
+			$image = $request->file('image');
+			$ext = $image->getClientOriginalExtension();
+			$user->image = $image->storeAs("user_profile", $user->username.".".$ext, "public");
+		}
+
+		$user->save();
+
 		return $user;
 	}
 
-	public function showSelf()
+	public function showFalconMe() {
+		$falcon_user = Auth::falconUser();
+		return [
+			"username" => $falcon_user->username,
+			"fullname" => $falcon_user->name,
+			"email" => $falcon_user->email,
+			"image" => $falcon_user->image_url,
+		];
+	}
+
+	public function showMe()
 	{
 		return $this->show(Auth::user());
 	}
