@@ -29,14 +29,14 @@ class FalconGuard implements Guard
 	/*
 	 * The User Array returned by FalconClient API
 	 *
-	 * @var \SDSLabs\Falcon\API;
+	 * @array;
 	 */
 	protected $falcon_user;
 
 	/*
 	 * The Quark User obtained by mapping $falcon_user->id to $user->user_id
 	 *
-	 * @var \SDSLabs\Falcon\API;
+	 * @var \SDSLabs\Quark\App\Models\User;
 	 */
 	protected $user;
 
