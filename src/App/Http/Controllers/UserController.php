@@ -109,14 +109,23 @@ class UserController extends Controller
 	public function update(Request $request, User $user)
 	{
 		$this->validate($request, [
-			'username' => 'bail|alpha_dash|unique:users,username,'.$user->id.',id',
-			'fullname' => 'alpha'
+			'username' => 'bail|required|alpha_dash|between:3,30|unique:users,username'.$user->id.',id',
+			'fullname' => 'bail|required|regex:/^[\pL\s\-]+$/u|between:3,30',
+			'image' => 'bail|mimes:jpeg,jpg,png,gif|max:5120',
 		]);
 
 		if ($user->username !== Auth::user()->username && !Auth::user()->isDeveloper())
 			abort(403, "You don't have the permission to update this user.");
 
 		$user->update($request->all());
+
+		if ($request->hasFile('image') && $request->file('image')->isValid()) {
+			$image = $request->file('image');
+			$ext = $image->getClientOriginalExtension();
+			$user->image = $image->storeAs("user_profile", $user->username.".".$ext, "public");
+		}
+
+		$user->save();
 
 		return $user;
 	}
