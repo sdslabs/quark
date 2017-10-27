@@ -26,7 +26,19 @@ class FalconGuard implements Guard
 	 */
 	protected $api;
 
-	protected $team;
+	/*
+	 * The User Array returned by FalconClient API
+	 *
+	 * @var \SDSLabs\Falcon\API;
+	 */
+	protected $falcon_user;
+
+	/*
+	 * The Quark User obtained by mapping $falcon_user->id to $user->user_id
+	 *
+	 * @var \SDSLabs\Falcon\API;
+	 */
+	protected $user;
 
 	/*
 	 * Create a new authentication guard.
@@ -37,7 +49,33 @@ class FalconGuard implements Guard
 	public function __construct(User $user_model)
 	{
 		$this->user_model = $user_model;
+		$this->user = null;
+		$this->falcon_user = null;
 		$this->api = new API(config('auth.falcon'));
+	}
+
+	public function falcon_user() {
+		// We have already retrieved falcon user.
+		// We do not want to fetch the user data on every call.
+		// The method is tremendously slow.
+		if (!is_null($this->falcon_user)) {
+			return $this->falcon_user;
+		}
+
+		// The function falcon_user is called for the first time
+		// Fetch the logged in user details from FalconClient.
+		$result = $this->api->get_logged_in_user();
+
+		// Set non-null falcon_user so that next time the function returns instantly.
+		if ($result === null) {
+			$this->falcon_user = false;
+		}
+		else {
+			$this->falcon_user = $result;
+		}
+
+		return $this->falcon_user;
+
 	}
 
 	/*
@@ -47,50 +85,26 @@ class FalconGuard implements Guard
 	 */
 	public function user()
 	{
-		// If we've already retrieved the user for the current request we can just
-		// return it back immediately. We do not want to fetch the user data on
-		// every call to this method because that would be tremendously slow.
 		if (!is_null($this->user)) {
-			if($this->user)
-				return $this->user;
-
+			if ($this->user !== false) return $this->user;
 			return null;
 		}
 
-		$result = $this->api->get_logged_in_user();
-
-		if($result === null) {
+		if ($this->falcon_user === false) {
 			$this->user = false;
 			return null;
 		}
 
+		$user = $this->user_model->where('user_id', $this->falcon_user['id'])->first();
 
-		$user = $this->user_model->where('user_id', $result['id'])->first();
-
-		if($user === null)
-		{
-			// New user
-			$user = App::make(User::class);
-
-			$user->user_id = $result['id'];
-			$user->provider = 'falcon';
-			$user->username = $result['username'];
-			$user->fullname = $result['name'];
-
-			if (isset($result['email']) && !empty($result['email'])) {
-				$user->email = $result['email'];
-			}
-
-			if (isset($result['image_url']) && !empty($result['image_url'])) {
-				$user->image = $result['image_url'];
-			}
-
-			$user->save();
+		if ($user === null) {
+			$this->user = false;
+			return null;
 		}
 
 		$this->user = $user;
 
-		return $user;
+		return $this->user;
 	}
 
 	/**
