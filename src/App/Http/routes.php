@@ -30,7 +30,7 @@ Route::get('users/me', 'UserController@showMe')->name('users.me.show');
 Route::get('users/me/falcon', 'UserController@showFalconMe')->name('users.me.falcon.show');
 
 // User routes
-Route::resource('users', 'UserController', ['except' => ['destroy', 'create', 'store']]);
+Route::resource('users', 'UserController', ['except' => ['destroy', 'create']]);
 
 // Invite routes
 Route::post('competitions/{competition}/teams/{team}/invite/{user}', 'CompetitionInvitesController@inviteUser')->name('invites.send');

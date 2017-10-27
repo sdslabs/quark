@@ -3,7 +3,6 @@
 namespace SDSLabs\Quark\App\Http\Controllers;
 
 use SDSLabs\Quark\App\Models\User;
-use SDSLabs\Quark\App\Models\Role;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -18,7 +17,7 @@ class UserController extends Controller
 	{
 		$this->users = $users;
 		$this->middleware('auth')->except(['index', 'show', 'store']);
-		$this->middleware('falcon_auth')->only('store', 'showFalconMe');
+		$this->middleware('falcon_auth')->only(['store', 'showFalconMe']);
 	}
 
 	/**
@@ -39,15 +38,24 @@ class UserController extends Controller
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
-	public function store()
+	public function store(Request $request)
 	{
+		if (!is_null(Auth::user())) {
+			abort(409, "Already logged in.");
+		}
+
 		$this->validate($request, [
 			'username' => 'bail|required|alpha_dash|between:3,30|unique:users,username',
 			'fullname' => 'bail|required|regex:/^[\pL\s\-]+$/u|between:3,30',
 			'image' => 'bail|mimes:jpeg,jpg,png,gif|max:5120',
 		]);
 
-		$user = App::make(User::class, [$request->all()]);
+		// No idea why it doesn't work!
+		// $user = App::make(User::class, [$request->all()]);
+
+		$user = App::make(User::class);
+		$user->username = $request->username;
+		$user->fullname = $request->fullname;
 		$user->user_id = Auth::falconUser()['id'];
 		$user->email = Auth::falconUser()['email'];
 		$user->provider = 'falcon';

@@ -4,6 +4,7 @@ namespace SDSLabs\Quark;
 
 use SDSLabs\Quark\App\Auth\FalconGuard;
 use SDSLabs\Quark\App\Http\Middleware\Authenticate;
+use SDSLabs\Quark\App\Http\Middleware\FalconAuthenticate;
 use SDSLabs\Quark\App\Http\Middleware\SubstituteBindings;
 use SDSLabs\Quark\App\Http\Middleware\Developer;
 
@@ -37,7 +38,7 @@ class QuarkServiceProvider extends ServiceProvider
 		$router->prependMiddlewareToGroup('web',SubstituteBindings::class);
 
 		$router->middleWare('auth', Authenticate::class);
-		$router->middleWare('falcon_auth', Authenticate::class);
+		$router->middleWare('falcon_auth', FalconAuthenticate::class);
 		$router->middleWare('developer', Developer::class);
 		$router->middleWare('developer_check', DeveloperCheck::class);
 		$router->group([
