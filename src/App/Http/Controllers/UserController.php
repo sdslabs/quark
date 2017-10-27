@@ -48,8 +48,8 @@ class UserController extends Controller
 		]);
 
 		$user = App::make(User::class, [$request->all()]);
-		$user->user_id = Auth::falcon_user()['id'];
-		$user->email = Auth::falcon_user()['email'];
+		$user->user_id = Auth::falconUser()['id'];
+		$user->email = Auth::falconUser()['email'];
 		$user->provider = 'falcon';
 
 		if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -131,7 +131,7 @@ class UserController extends Controller
 	}
 
 	public function showFalconMe() {
-		$falcon_user = Auth::falcon_user();
+		$falcon_user = Auth::falconUser();
 		return [
 			"username" => $falcon_user->username,
 			"fullname" => $falcon_user->name,

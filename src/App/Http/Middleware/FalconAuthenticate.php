@@ -36,7 +36,7 @@ class FalconAuthenticate
 	 */
 	public function handle($request, Closure $next, $guard = 'falcon')
 	{
-		if (is_null($this->auth->guard($guard)->falcon_user())) {
+		if (is_null($this->auth->guard($guard)->falconUser())) {
 			abort(401, "Authentication required");
 		}
 

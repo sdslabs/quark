@@ -54,7 +54,7 @@ class FalconGuard implements Guard
 		$this->api = new API(config('auth.falcon'));
 	}
 
-	public function falcon_user() {
+	public function falconUser() {
 		// We have already retrieved falcon user.
 		// We do not want to fetch the user data on every call.
 		// The method is tremendously slow.
