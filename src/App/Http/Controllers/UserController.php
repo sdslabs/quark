@@ -117,7 +117,7 @@ class UserController extends Controller
 	public function update(Request $request, User $user)
 	{
 		$this->validate($request, [
-			'username' => 'bail|required|alpha_dash|between:3,30|unique:users,username'.$user->id.',id',
+			'username' => 'bail|required|alpha_dash|between:3,30|unique:users,username,'.$user->id.',id',
 			'fullname' => 'bail|required|regex:/^[\pL\s\-]+$/u|between:3,30',
 			'image' => 'bail|mimes:jpeg,jpg,png,gif|max:5120',
 		]);

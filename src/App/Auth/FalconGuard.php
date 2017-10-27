@@ -94,13 +94,12 @@ class FalconGuard implements Guard
 			if ($this->user !== false) return $this->user;
 			return null;
 		}
-
-		if ($this->falcon_user === false) {
+		if ($this->falconUser() === false) {
 			$this->user = false;
 			return null;
 		}
 
-		$user = $this->user_model->where('user_id', $this->falcon_user['id'])->first();
+		$user = $this->user_model->where('user_id', $this->falconUser()['id'])->first();
 
 		if ($user === null) {
 			$this->user = false;
