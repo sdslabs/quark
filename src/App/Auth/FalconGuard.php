@@ -54,6 +54,11 @@ class FalconGuard implements Guard
 		$this->api = new API(config('auth.falcon'));
 	}
 
+	/*
+	 * Get the currently authenticated falcon user.
+	 *
+	 * @return array
+	 */
 	public function falconUser() {
 		// We have already retrieved falcon user.
 		// We do not want to fetch the user data on every call.
