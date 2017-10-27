@@ -37,6 +37,7 @@ class QuarkServiceProvider extends ServiceProvider
 		$router->prependMiddlewareToGroup('web',SubstituteBindings::class);
 
 		$router->middleWare('auth', Authenticate::class);
+		$router->middleWare('falcon_auth', Authenticate::class);
 		$router->middleWare('developer', Developer::class);
 		$router->middleWare('developer_check', DeveloperCheck::class);
 		$router->group([
