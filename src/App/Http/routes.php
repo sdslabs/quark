@@ -24,7 +24,7 @@ Route::get('competitions/{competition}/submissions', 'CompetitionController@show
 Route::resource('competitions', 'CompetitionController');
 
 // Use this route to check login status.
-Route::get('users/self', 'UserController@showSelf')->name('users.self.show');
+Route::get('users/me', 'UserController@showMe')->name('users.me.show');
 
 // User routes
 Route::resource('users', 'UserController', ['except' => ['destroy', 'create', 'store']]);
