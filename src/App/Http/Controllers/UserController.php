@@ -18,7 +18,7 @@ class UserController extends Controller
 	{
 		$this->users = $users;
 		$this->middleware('auth')->except(['index', 'show', 'store']);
-		$this->middleware('falcon_auth')->only('store');
+		$this->middleware('falcon_auth')->only('store', 'showFalconMe');
 	}
 
 	/**
@@ -128,6 +128,16 @@ class UserController extends Controller
 		$user->save();
 
 		return $user;
+	}
+
+	public function showFalconMe() {
+		$falcon_user = Auth::falcon_user();
+		return [
+			"username" => $falcon_user->username,
+			"fullname" => $falcon_user->name,
+			"email" => $falcon_user->email,
+			"image" => $falcon_user->image_url,
+		];
 	}
 
 	public function showMe()

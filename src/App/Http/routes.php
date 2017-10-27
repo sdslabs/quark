@@ -26,6 +26,9 @@ Route::resource('competitions', 'CompetitionController');
 // Use this route to check login status.
 Route::get('users/me', 'UserController@showMe')->name('users.me.show');
 
+// Use this route to fetch falcon user details to render the registration page.
+Route::get('users/me/falcon', 'UserController@showFalconMe')->name('users.me.falcon.show');
+
 // User routes
 Route::resource('users', 'UserController', ['except' => ['destroy', 'create', 'store']]);
 
