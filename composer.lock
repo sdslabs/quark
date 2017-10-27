@@ -1393,12 +1393,12 @@
             "source": {
                 "type": "git",
                 "url": "git@github.com:sdslabs/falcon.git",
-                "reference": "2e666b75b70c93d5b5a385d033cd4f371be76ea3"
+                "reference": "cae5291349480937a4ef38e6e90fcbeb5b897bc5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sdslabs/falcon/zipball/2e666b75b70c93d5b5a385d033cd4f371be76ea3",
-                "reference": "2e666b75b70c93d5b5a385d033cd4f371be76ea3",
+                "url": "https://api.github.com/repos/sdslabs/falcon/zipball/cae5291349480937a4ef38e6e90fcbeb5b897bc5",
+                "reference": "cae5291349480937a4ef38e6e90fcbeb5b897bc5",
                 "shasum": ""
             },
             "require": {
@@ -1416,7 +1416,7 @@
                     "email": "contact@sdslabs.co.in"
                 }
             ],
-            "time": "2017-10-08 09:27:00"
+            "time": "2017-10-18 06:35:00"
         },
         {
             "name": "swiftmailer/swiftmailer",
