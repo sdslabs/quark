@@ -33,7 +33,7 @@ Route::get('users/me/falcon', 'UserController@showFalconMe')->name('users.me.fal
 Route::resource('users', 'UserController', ['except' => ['destroy', 'create']]);
 
 // Invite routes
-Route::post('competitions/{competition}/teams/{team}/invite/{user}', 'CompetitionInvitesController@inviteUser')->name('invites.send');
+Route::post('competitions/{competition}/invite/{user}', 'CompetitionInvitesController@inviteUser')->name('invites.send');
 Route::post('competitions/{competition}/teams/{team}/join', 'CompetitionInvitesController@joinTeam')->name('invites.join');
 Route::get('/acceptInvite', 'CompetitionInvitesController@acceptInvite')->name('invites.accept');
 Route::get('/cancelInvite', 'CompetitionInvitesController@cancelInvite')->name('invites.cancel');
