@@ -3,6 +3,7 @@
 namespace SDSLabs\Quark\App\Http\Controllers;
 
 use SDSLabs\Quark\App\Models\User;
+use SDSLabs\Quark\App\Models\Competition;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -138,7 +139,8 @@ class UserController extends Controller
 		return $user;
 	}
 
-	public function showFalconMe() {
+	public function showFalconMe()
+	{
 		$falcon_user = Auth::falconUser();
 		return [
 			"username" => $falcon_user['username'],
@@ -153,4 +155,18 @@ class UserController extends Controller
 		return $this->show(Auth::user());
 	}
 
+	public function showCompetitionTeam(Competition $competition)
+	{
+		$teams = Auth::user()->teams();
+		$competition_team = $teams->where('competition_id',$competition->id)->firstOrFail();
+		$competition_team->load('members', 'invites');
+		return $competition_team;
+	}
+
+	public function showInvites(Competition $competition)
+	{
+		$invites = Auth::user()->invites()->join('teams', 'user_team_invites.team_id', '=', 'teams.id');
+		$competition_invites = $invites->where('teams.competition_id',$competition->id)->get();
+		return $competition_invites;
+	}
 }
