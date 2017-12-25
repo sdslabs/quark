@@ -159,7 +159,7 @@ class UserController extends Controller
 	{
 		$teams = Auth::user()->teams();
 		$competition_team = $teams->where('competition_id',$competition->id)->firstOrFail();
-		$competition_team->load('members', 'invites');
+		$competition_team->load('members', 'invites.user', 'owner');
 		return $competition_team;
 	}
 
@@ -167,6 +167,9 @@ class UserController extends Controller
 	{
 		$invites = Auth::user()->invites()->join('teams', 'user_team_invites.team_id', '=', 'teams.id');
 		$competition_invites = $invites->where('teams.competition_id',$competition->id)->get();
+		foreach($competition_invites as &$team) {
+			$team->load('team.owner');
+		}
 		return $competition_invites;
 	}
 }

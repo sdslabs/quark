@@ -23,7 +23,7 @@ class CompetitionInvitesController extends Controller
 
 	public function inviteUser(Competition $competition, User $user)
 	{
-		$team = $user->teams->where('competition_id',$competition->id)->firstOrFail();
+		$team = Auth::user()->teams()->where('competition_id',$competition->id)->firstOrFail();
 		if ($competition->status === 'Finished')
 			abort(422, "The competition has already ended.");
 
