@@ -67,7 +67,11 @@ class Team extends Model
 
 	public function invite(User $user, $token)
 	{
-		return $this->user_invites()->attach($user, ['token' => $token, 'status' => 1]);
+		$invite = App::make(Invite::class);
+		$invite->status = 1;
+		$invite->token = $token;
+		$invite->user()->associate($user);
+		return $this->invites()->save($invite);
 	}
 
 }

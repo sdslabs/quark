@@ -64,7 +64,8 @@ class TeamController extends Controller
 		if ($competition->teams()->where('name', $request->name)->exists())
 			abort(422, "Team name is already taken.");
 
-		$team = App::make(Team::class, [$request->all()]);
+		$team = App::make(Team::class);
+		$team->name = $request->name;
 		$team->owner()->associate($user);
 		$saved = $competition->addTeam($team);
 
