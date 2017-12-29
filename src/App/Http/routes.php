@@ -33,10 +33,10 @@ Route::get('users/me/falcon', 'UserController@showFalconMe')->name('users.me.fal
 Route::resource('users', 'UserController', ['except' => ['destroy', 'create']]);
 
 //User Team Routes
-Route::get('users/me/competitions/{competition}/team', 'UserController@showCompetitionTeam')->name('users.me.competitions.team');
+Route::get('users/me/competitions/{competition}/team', 'UserController@showCompetitionTeam')->name('user.teams.show');
 
 //User Invites Routes
-Route::get('users/me/competitions/{competition}/invites', 'UserController@showInvites')->name('users.me.competitions.invites');
+Route::get('users/me/competitions/{competition}/invites', 'UserController@showInvites')->name('users.invites.show');
 
 // Invite routes
 Route::post('competitions/{competition}/invite/{user}', 'CompetitionInvitesController@inviteUser')->name('invites.send');
