@@ -77,7 +77,11 @@ class User extends Authenticatable
 
 	public function invite(Team $team, $token)
 	{
-		return $this->team_invites()->attach($team, ['token' => $token, 'status'=> 2]);
+		$invite = App::make(Invite::class);
+		$invite->status = 2;
+		$invite->token = $token;
+		$invite->team()->associate($team);
+		return $this->invites()->save($invite);
 	}
 
 }

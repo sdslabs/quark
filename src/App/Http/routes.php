@@ -32,8 +32,14 @@ Route::get('users/me/falcon', 'UserController@showFalconMe')->name('users.me.fal
 // User routes
 Route::resource('users', 'UserController', ['except' => ['destroy', 'create']]);
 
+//User Team Routes
+Route::get('users/me/competitions/{competition}/team', 'UserController@showCompetitionTeam')->name('user.teams.show');
+
+//User Invites Routes
+Route::get('users/me/competitions/{competition}/invites', 'UserController@showInvites')->name('users.invites.show');
+
 // Invite routes
-Route::post('competitions/{competition}/teams/{team}/invite/{user}', 'CompetitionInvitesController@inviteUser')->name('invites.send');
+Route::post('competitions/{competition}/invite/{user}', 'CompetitionInvitesController@inviteUser')->name('invites.send');
 Route::post('competitions/{competition}/teams/{team}/join', 'CompetitionInvitesController@joinTeam')->name('invites.join');
 Route::get('/acceptInvite', 'CompetitionInvitesController@acceptInvite')->name('invites.accept');
 Route::get('/cancelInvite', 'CompetitionInvitesController@cancelInvite')->name('invites.cancel');

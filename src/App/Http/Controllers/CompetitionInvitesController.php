@@ -21,10 +21,9 @@ class CompetitionInvitesController extends Controller
 		$this->middleware('auth');
 	}
 
-	public function inviteUser(Competition $competition, $team_name , User $user)
+	public function inviteUser(Competition $competition, User $user)
 	{
-		$team = $competition->teams()->where('name', $team_name)->firstOrFail();
-
+		$team = Auth::user()->teams()->where('competition_id',$competition->id)->firstOrFail();
 		if ($competition->status === 'Finished')
 			abort(422, "The competition has already ended.");
 

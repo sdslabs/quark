@@ -59,7 +59,6 @@ class DatabaseSeeder extends Seeder
     	DB::table('users')->insert([
             'user_id' => '10001',
             'provider' => 'Facebook',
-            'credentials' => random_bytes(10),
             'username' => 'user1',
             'fullname' => 'User One',
             'email' => 'user1@email.com',
@@ -70,7 +69,6 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'user_id' => '10002',
             'provider' => 'Facebook',
-            'credentials' => random_bytes(10),
             'username' => 'user2',
             'fullname' => 'User Two',
             'email' => 'user2@email.com',
@@ -81,7 +79,6 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'user_id' => '10003',
             'provider' => 'Facebook',
-            'credentials' => random_bytes(10),
             'username' => 'user3',
             'fullname' => 'User Three',
             'email' => 'user3@email.com',
@@ -92,7 +89,6 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'user_id' => '10004',
             'provider' => 'Facebook',
-            'credentials' => random_bytes(10),
             'username' => 'user4',
             'fullname' => 'User Four',
             'email' => 'user4@email.com',
@@ -103,7 +99,6 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'user_id' => '10005',
             'provider' => 'Facebook',
-            'credentials' => random_bytes(10),
             'username' => 'user5',
             'fullname' => 'User Five',
             'email' => 'user5@email.com',
@@ -114,7 +109,6 @@ class DatabaseSeeder extends Seeder
         DB::table('users')->insert([
             'user_id' => '10006',
             'provider' => 'Facebook',
-            'credentials' => random_bytes(10),
             'username' => 'user6',
             'fullname' => 'User Six',
             'email' => 'user6@email.com',
