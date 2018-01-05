@@ -15,14 +15,21 @@ use Illuminate\Support\Facades\Auth;
 
 class CompetitionInvitesController extends Controller
 {
-	public function __construct(Invite $invites)
+	public function __construct(Invite $invites, User $users)
 	{
+		$this->users = $users;
 		$this->invites = $invites;
 		$this->middleware('auth');
 	}
 
-	public function inviteUser(Competition $competition, User $user)
+	public function inviteUser(Competition $competition, $user)
 	{
+		$user = $this->users->where('username',$user)->first();
+
+		if (!$user) {
+			abort(404, "Please enter a valid username");
+		}
+
 		$team = Auth::user()->teams()->where('competition_id',$competition->id)->firstOrFail();
 		if ($competition->status === 'Finished')
 			abort(422, "The competition has already ended.");
