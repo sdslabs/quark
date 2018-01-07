@@ -78,16 +78,14 @@ class UserController extends Controller
 	 * @param  string  $name
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(User $user)
+	public function show(Request $request, User $user)
 	{
-		$user->load('teams', 'submissions.problem', 'problems_created');
 		if(!is_null(Auth::user()))
 		{
 			if ($user->username === Auth::user()->username || Auth::user()->isDeveloper())
 			{
 				$user->makeVisible('email');
-				$user->load('owned_teams', 'invites.team');
-				// TODO: Group by status and hide the status
+				// TODO: Group by status and hide the status in invites
 			}
 
 			if (Auth::user()->isDeveloper())
@@ -150,9 +148,9 @@ class UserController extends Controller
 		];
 	}
 
-	public function showMe()
+	public function showMe(Request $request)
 	{
-		return $this->show(Auth::user());
+		return $this->show($request, Auth::user());
 	}
 
 	public function showCompetitionTeam(Competition $competition)

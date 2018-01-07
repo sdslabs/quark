@@ -51,7 +51,7 @@ class User extends Authenticatable
 
 	public function competitions()
 	{
-		return $this->teams()->with('competition')->get()->pluck('competition');
+		return $this->teams()->with('competition')->get()->pluck('competition.name');
 	}
 
 	public function isInCompetition($competition_id)
