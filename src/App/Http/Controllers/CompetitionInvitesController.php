@@ -66,7 +66,11 @@ class CompetitionInvitesController extends Controller
 
 	public function joinTeam(Competition $competition, $team_name)
 	{
-		$team = $competition->teams()->where('name', $team_name)->firstOrFail();
+		$team = $competition->teams()->where('name', $team_name)->first();
+
+		if (!$team) {
+			abort(404, "Please enter a valid teamname");
+		}
 
 		if ($competition->status === 'Finished')
 			abort(422, "The competition has already ended");
