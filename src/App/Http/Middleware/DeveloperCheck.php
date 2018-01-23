@@ -37,7 +37,7 @@ class DeveloperCheck
 	public function handle($request, Closure $next, $guard = 'falcon')
 	{
 
-		if(config('auth.developer_only'))
+		if(config('auth.environment') === 'testing')
 		{
 			return app(Developer::class)->handle($request, function ($request) use ($next) {
 				return $next($request);

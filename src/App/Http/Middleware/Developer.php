@@ -38,11 +38,26 @@ class Developer
 	{
 		return app(Authenticate::class)->handle($request, function ($request) use ($next, $guard) {
 
-			if ($this->auth->guard($guard)->guest() || !$this->auth->guard($guard)->user()->isDeveloper())
-				abort(403, 'Developers Only');
+			if (!$this->isInOrganization($guard))
+				abort(403, 'Member of Organizations Only');
 
 			return $next($request);
 
 		}, $guard);
+	}
+
+	private function isInOrganization($guard)
+	{
+		$organizations = config('auth.organizations_allowed');
+
+		foreach ($this->auth->guard($guard)->falconUser()["organizations"] as $organization) {
+			if(in_array($organization, $organizations))
+				return true;
+		}
+
+		if (in_array('', $organizations))
+			return true;
+
+		return false;
 	}
 }

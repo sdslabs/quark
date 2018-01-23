@@ -91,6 +91,10 @@ return [
 
 	'developer_only' => env('DEVELOPER_ONLY', false),
 
+	'environment' => env('ENVIRONMENT'),
+
+	'organizations_allowed' => explode(',', env('ORGANIZATIONS_ALLOWED','')),
+
 	'falcon' => [
 		"client_id"                  => env('FALCON_CLIENT_ID'),
 		"client_secret"              => env('FALCON_CLIENT_SECRET'),
