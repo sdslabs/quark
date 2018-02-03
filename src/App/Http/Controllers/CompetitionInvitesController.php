@@ -151,6 +151,16 @@ class CompetitionInvitesController extends Controller
 		$team->addMember($user);
 		$invite->update(['status' => 0]);
 
+		if ($team->members()->count() >= $competition->team_limit){
+			$invites = $this->invites->where('team_id', '=', $team->id)->where(function ($query) {
+				$query->where('status', '=', 1)
+          		->orWhere('status', '=', 1);
+          	})->get();
+
+			foreach ($invites as $invite)
+				$invite->delete();
+		}
+
 		return;
 	}
 
