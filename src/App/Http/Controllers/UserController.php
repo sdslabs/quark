@@ -49,6 +49,7 @@ class UserController extends Controller
 			'username' => 'bail|required|alpha_dash|between:3,30|unique:users,username',
 			'fullname' => 'bail|required|regex:/^[\pL\s\-]+$/u|between:3,30',
 			'image' => 'bail|mimes:jpeg,jpg,png,gif|max:5120',
+			'url' => 'bail|url'
 		]);
 
 		// No idea why it doesn't work!
@@ -65,6 +66,8 @@ class UserController extends Controller
 			$image = $request->file('image');
 			$ext = $image->getClientOriginalExtension();
 			$user->image = $image->storeAs("user_profile", $user->username.".".$ext, "public");
+		} else if ($request->url) {
+			$user->image = $request->url;
 		}
 
 		$user->save();
