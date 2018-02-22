@@ -39,12 +39,33 @@ class DeveloperCheck
 
 		if(config('auth.environment') === 'testing')
 		{
-			return app(Developer::class)->handle($request, function ($request) use ($next) {
+			return app(FalconAuthenticate::class)->handle($request, function ($request) use ($next, $guard) {
+
+				if (!$this->isInOrganization($guard))
+					abort(403, 'Member of Organizations Only');
+
 				return $next($request);
+
 			}, $guard);
 		}
 
 		return $next($request);
 
+	}
+
+
+	private function isInOrganization($guard)
+	{
+		$organizations = config('auth.organizations_allowed');
+
+		foreach ($this->auth->guard($guard)->falconUser()["organizations"] as $organization) {
+			if(in_array($organization, $organizations))
+				return true;
+		}
+
+		if (in_array('', $organizations))
+			return true;
+
+		return false;
 	}
 }
