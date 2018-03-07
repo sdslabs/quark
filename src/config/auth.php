@@ -89,10 +89,6 @@ return [
         ],
     ],
 
-	'developer_only' => env('DEVELOPER_ONLY', false),
-
-	'environment' => env('ENVIRONMENT'),
-
 	'organizations_allowed' => explode(',', env('ORGANIZATIONS_ALLOWED','')),
 
 	'falcon' => [

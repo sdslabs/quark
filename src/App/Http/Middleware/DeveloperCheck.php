@@ -3,6 +3,7 @@
 namespace SDSLabs\Quark\App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\App;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
 
@@ -36,8 +37,7 @@ class DeveloperCheck
 	 */
 	public function handle($request, Closure $next, $guard = 'falcon')
 	{
-
-		if(config('auth.environment') === 'testing')
+		if(App::environment('testing'))
 		{
 			return app(FalconAuthenticate::class)->handle($request, function ($request) use ($next, $guard) {
 
@@ -62,9 +62,6 @@ class DeveloperCheck
 			if(in_array($organization, $organizations))
 				return true;
 		}
-
-		if (in_array('', $organizations))
-			return true;
 
 		return false;
 	}
