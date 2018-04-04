@@ -51,6 +51,7 @@ FALCON_URL_RESOURCE_ONWER_DETAILS=http://falcon.sdslabs.local/users/
 FALCON_ACCOUNTS_URL=http://arceus.sdslabs.local/
 FALCON_SCOPES=email,image_url
 ```
+- `ORGANIZATIONS_ALLOWED` in `.env.example` can be provided in master app's `.env`
 
 - Update `config/auth.php`:
 	- Update the `defaults.guard` to `falcon`

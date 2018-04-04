@@ -49,6 +49,7 @@ class UserController extends Controller
 			'username' => 'bail|required|alpha_dash|between:3,30|unique:users,username',
 			'fullname' => 'bail|required|regex:/^[\pL\s\-]+$/u|between:3,30',
 			'image' => 'bail|mimes:jpeg,jpg,png,gif|max:5120',
+			'image_url' => 'bail|url'
 		]);
 
 		// No idea why it doesn't work!
@@ -65,6 +66,8 @@ class UserController extends Controller
 			$image = $request->file('image');
 			$ext = $image->getClientOriginalExtension();
 			$user->image = $image->storeAs("user_profile", $user->username.".".$ext, "public");
+		} else if ($request->image_url) {
+			$user->image = $request->image_url;
 		}
 
 		$user->save();
@@ -78,16 +81,14 @@ class UserController extends Controller
 	 * @param  string  $name
 	 * @return \Illuminate\Http\Response
 	 */
-	public function show(User $user)
+	public function show(Request $request, User $user)
 	{
-		$user->load('teams', 'submissions.problem', 'problems_created');
 		if(!is_null(Auth::user()))
 		{
 			if ($user->username === Auth::user()->username || Auth::user()->isDeveloper())
 			{
 				$user->makeVisible('email');
-				$user->load('owned_teams', 'invites.team');
-				// TODO: Group by status and hide the status
+				// TODO: Group by status and hide the status in invites
 			}
 
 			if (Auth::user()->isDeveloper())
@@ -150,9 +151,9 @@ class UserController extends Controller
 		];
 	}
 
-	public function showMe()
+	public function showMe(Request $request)
 	{
-		return $this->show(Auth::user());
+		return $this->show($request, Auth::user());
 	}
 
 	public function showCompetitionTeam(Competition $competition)

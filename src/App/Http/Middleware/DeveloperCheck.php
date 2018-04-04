@@ -3,6 +3,7 @@
 namespace SDSLabs\Quark\App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\App;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
 
@@ -36,15 +37,32 @@ class DeveloperCheck
 	 */
 	public function handle($request, Closure $next, $guard = 'falcon')
 	{
-
-		if(config('auth.developer_only'))
+		if(App::environment('testing'))
 		{
-			return app(Developer::class)->handle($request, function ($request) use ($next) {
+			return app(FalconAuthenticate::class)->handle($request, function ($request) use ($next, $guard) {
+
+				if (!$this->isInOrganization($guard))
+					abort(403, 'Member of Organizations Only');
+
 				return $next($request);
+
 			}, $guard);
 		}
 
 		return $next($request);
 
+	}
+
+
+	private function isInOrganization($guard)
+	{
+		$organizations = config('auth.organizations_allowed');
+
+		foreach ($this->auth->guard($guard)->falconUser()["organizations"] as $organization) {
+			if(in_array($organization, $organizations))
+				return true;
+		}
+
+		return false;
 	}
 }

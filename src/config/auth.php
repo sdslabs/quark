@@ -89,7 +89,7 @@ return [
         ],
     ],
 
-	'developer_only' => env('DEVELOPER_ONLY', false),
+	'organizations_allowed' => explode(',', env('ORGANIZATIONS_ALLOWED','')),
 
 	'falcon' => [
 		"client_id"                  => env('FALCON_CLIENT_ID'),

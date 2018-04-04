@@ -27,6 +27,7 @@ class PracticeProblemController extends Controller
 
 		$problems->each(function($item) {
 			$item['submissions'] = $item->practice_submissions->where('status', 'correct')->count();
+			$item->makeVisible('created_at');
 			$item->load('creator');
 			$item->makeHidden('practice_submissions');
 		});
