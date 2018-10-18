@@ -21,7 +21,7 @@ class CompetitionController extends Controller
 	public function __construct(Competition $comps)
 	{
 		$this->competitions = $comps;
-		$this->middleware('developer')->only(['create', 'store', 'edit', 'destroy']);
+		$this->middleware('developer')->only(['create', 'store', 'update', 'edit', 'destroy']);
 	}
 
 	/**
@@ -61,7 +61,7 @@ class CompetitionController extends Controller
 			'team_limit' => 'bail|required|integer',
 			'start_at' => 'bail|required|date',
 			'end_at' => 'bail|required|date|after:start_at',
-			'utc' => 'bail|required|accepted'
+			// 'utc' => 'bail|required|accepted'
 		]);
 
 		$comp = App::make(Competition::class, [$request->all()]);
