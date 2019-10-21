@@ -5,8 +5,6 @@ namespace SDSLabs\Quark\App\Http\Controllers;
 use SDSLabs\Quark\App\Models\Problem;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PracticeProblemController extends Controller
 {
@@ -47,7 +45,7 @@ class PracticeProblemController extends Controller
 		if (!$problem->practice)
 			abort(404, "Problem not found");
 
-		$problem->load('practice_submissions.user', 'creator');
+		$problem->load('practice_submissions.user', 'creator', 'tags');
 
 		return $problem;
 	}

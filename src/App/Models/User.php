@@ -69,6 +69,11 @@ class User extends Authenticatable
 		return ($this->role === "developer");
 	}
 
+	public function isAdmin()
+	{
+		return ($this->role === "admin");
+	}
+
 	public function getRankAttribute()
 	{
 		$rank = DB::select('select count(*) + 1 as rank from users where score > :score1 or (score = :score2 and score_updated_at < :score_updated_at)', ['score1' => $this->score, 'score2' => $this->score, 'score_updated_at' => $this->score_updated_at])[0]->rank;

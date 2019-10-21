@@ -2,12 +2,9 @@
 
 namespace SDSLabs\Quark\App\Http\Controllers;
 
-use SDSLabs\Quark\App\Models\Problem;
 use SDSLabs\Quark\App\Models\Competition;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 
 class CompetitionProblemController extends Controller

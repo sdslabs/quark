@@ -3,13 +3,11 @@
 namespace SDSLabs\Quark\App\Http\Controllers;
 
 use SDSLabs\Quark\App\Models\User;
-use SDSLabs\Quark\App\Models\Team;
 use SDSLabs\Quark\App\Models\Competition;
 use SDSLabs\Quark\App\Models\Invite;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
 

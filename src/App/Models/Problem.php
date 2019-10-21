@@ -73,4 +73,9 @@ class Problem extends Model
 		return $this->solution()->first();
 	}
 
+	public function tags()
+	{
+		return $this->belongsToMany(App::make(Tags::class), 'problem_tags', 'problem_id', 'tag_id');
+	}
+
 }
