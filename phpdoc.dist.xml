@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdoc>
+	<title>Quark</title>
+	<parser>
+		<target>docs/api</target>
+		<encoding>utf8</encoding>
+		<extensions>
+			<extension>php</extension>
+			<extension>php3</extension>
+			<extension>phtml</extension>
+		</extensions>
+		<visibility></visibility>
+	</parser>
+	<transformer>
+		<target>docs/api</target>
+	</transformer>
+	<transformations>
+    	<template name="responsive" />
+	</transformations>
+	<files>
+		<directory>src</directory>
+		<ignore>database/*</ignore>
+	</files>
+</phpdoc>

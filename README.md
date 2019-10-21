@@ -100,6 +100,6 @@ demo application following the above instructions
 ## To generate documentation
 
 - Dowload phpDocumentor.phar
-- Execute `php phpDocumentor.phar -d src -i database/* -t docs/api`
-- To view documentation, Run `cd docs/api && php -S localhost:8123` & Open http://localhost:8123
+- Execute `php phpDocumentor.phar`
+- To view documentation, Run `php -S localhost:8123 -t docs/api/` & Open http://localhost:8123
 
