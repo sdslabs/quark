@@ -6,7 +6,7 @@ This is a Laravel package that provides a code application for building platform
 
 - Create and setup a new Laravel app
 
-- Add the folowwing repositories to the `composer.json`'s `repositories` field:
+- Add the followwing repositories to the `composer.json`'s `repositories` field:
 ```JSON
 "repositories": [
 	{
@@ -96,3 +96,10 @@ classes will be used inside Quarks's classes/
 - First you need an application. If you don't have one already setup, setup a
 demo application following the above instructions
 - Symlink the `vendor/sdslabs/quark` folder to your local clone of quark.
+
+## To generate documentation
+
+- Dowload phpDocumentor.phar
+- Execute `php phpDocumentor.phar -d src -t docs/api`
+- To view documentation, Run `cd docs/api && php -S localhost:8123` & Open http://localhost:8123
+
