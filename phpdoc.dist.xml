@@ -14,11 +14,9 @@
 	<transformer>
 		<target>docs/api</target>
 	</transformer>
-	<transformations>
-    	<template name="responsive" />
-	</transformations>
 	<files>
 		<directory>src</directory>
 		<ignore>database/*</ignore>
+		<ignore>config/*</ignore>
 	</files>
 </phpdoc>

@@ -9,12 +9,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to manage the problems of a competition.  
+ */
 
 class CompetitionProblemController extends Controller
 {
 	/**
-	 * Display a listing of the resource.
-	 *
+	 * Display a listing of problems in a competition.
+	 * @api
+	 * 
+	 * @param  \SDSLabs\Quark\App\Models\Competition  $competition
+	 * 
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Competition $competition)
@@ -31,9 +37,12 @@ class CompetitionProblemController extends Controller
 	}
 
 	/**
-	 * Display the specified resource.
-	 *
-	 * @param  string  $name
+	 * Display the specified problem of a competition.
+	 * @api
+	 * 
+	 * @param  \SDSLabs\Quark\App\Models\Competition  $competition
+	 * @param  string  $problem_name
+	 * 
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Competition $competition, $problem_name)
