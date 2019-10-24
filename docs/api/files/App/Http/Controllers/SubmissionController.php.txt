@@ -13,15 +13,29 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to manage the submissions.  
+ */
 
 class SubmissionController extends Controller
 {
-
+	/**
+	 * Apply the authentication middleware
+	 *
+	 */
 	public function __construct()
 	{
 		$this->middleware('auth');
 	}
 
+	/**
+	 * Handle submissions for a practice problems.
+	 * @api
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  SDSLabs\Quark\App\Models\Problem $problem
+	 * @return \Illuminate\Http\Response
+	 */
 	public function practiceSubmission(Request $request, Problem $problem)
 	{
 		if (!$problem->practice)
@@ -55,6 +69,15 @@ class SubmissionController extends Controller
 		return $judge->judge();
 	}
 
+	/**
+	 * Handle submissions for competitions.
+	 * @api
+	 *
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  SDSLabs\Quark\App\Models\Problem $problem
+	 * @param  string $problem_name
+	 * @return \Illuminate\Http\Response
+	 */
 	public function competitionSubmission(Request $request, Competition $competition, $problem_name)
 	{
 		if ($competition->status !== 'Running')

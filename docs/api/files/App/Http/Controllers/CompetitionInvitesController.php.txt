@@ -12,9 +12,18 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to manage the invites of a competition.  
+ */
 
 class CompetitionInvitesController extends Controller
 {
+
+	/**
+	 * Initialize class member variables and apply authentication middleware
+	 *
+	 */
+
 	public function __construct(Invite $invites, User $users)
 	{
 		$this->users = $users;
@@ -22,6 +31,15 @@ class CompetitionInvitesController extends Controller
 		$this->middleware('auth');
 	}
 
+	/**
+	 * Handle user invitation for a given resource and user
+	 * @api
+	 * 
+	 * @param \SDSLabs\Quark\App\Models\Competition  $competition
+	 * @param string $user
+	 * 
+	 * @return void
+	 */
 	public function inviteUser(Competition $competition, $user)
 	{
 		$user = $this->users->where('username',$user)->first();
@@ -64,6 +82,15 @@ class CompetitionInvitesController extends Controller
 		return;
 	}
 
+	/**
+	 * Handle team joining activity for a resource
+	 * @api
+	 * 
+	 * @param \SDSLabs\Quark\App\Models\Competition  $competition
+	 * @param string $team_name
+	 * 
+	 * @return void
+	 */
 	public function joinTeam(Competition $competition, $team_name)
 	{
 		$team = $competition->teams()->where('name', $team_name)->first();
@@ -104,6 +131,14 @@ class CompetitionInvitesController extends Controller
 		return;
 	}
 
+	/**
+	 * Handle team invite acceptance activity for a resource
+	 * @api
+	 * 
+	 * @param \Illuminate\Http\Request  $request
+	 * 
+	 * @return void
+	 */
 	public function acceptInvite(Request $request)
 	{
 		$this->validate($request, [
@@ -164,6 +199,14 @@ class CompetitionInvitesController extends Controller
 		return;
 	}
 
+	/**
+	 * Handle team invite rejection activity for a resource
+	 * @api
+	 * 
+	 * @param \Illuminate\Http\Request  $request
+	 * 
+	 * @return void
+	 */
 	public function cancelInvite(Request $request)
 	{
 		$this->validate($request, [
@@ -193,6 +236,13 @@ class CompetitionInvitesController extends Controller
 
 	}
 
+	/**
+	 * Handle team invite acceptance activity for a resource
+	 * 
+	 * @param int $len
+	 * 
+	 * @return string
+	 */
 	public function generateToken($len = 32)
 	{
 		$token = "";

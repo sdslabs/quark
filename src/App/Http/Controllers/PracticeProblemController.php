@@ -8,8 +8,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to manage the practice problems.  
+ */
+
 class PracticeProblemController extends Controller
 {
+
+	/**
+	 * Initialize class member variables
+	 *
+	 */
 
 	public function __construct(Problem $problems)
 	{

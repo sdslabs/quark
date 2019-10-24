@@ -10,10 +10,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to manage the submissions.  
+ */
 
 class TeamController extends Controller
 {
-
+	/**
+	 * Initialize class member variables and add authentication middleware to all routes except index and show
+	 */
 	public function __construct(Team $teams)
 	{
 		$this->teams = $teams;
@@ -22,7 +27,9 @@ class TeamController extends Controller
 
 	/**
 	 * Display a listing of the resource.
-	 *
+	 * @api
+	 * 
+	 * @param SDSLabs\Quark\App\Models\Competition $competition
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Competition $competition)
@@ -43,8 +50,10 @@ class TeamController extends Controller
 
 	/**
 	 * Store a newly created resource in storage.
-	 *
+	 * @api
+	 * 
 	 * @param  \Illuminate\Http\Request  $request
+	 * @param SDSLabs\Quark\App\Models\Competition $competition
 	 * @return \Illuminate\Http\Response
 	 */
 	public function store(Request $request, Competition $competition)
@@ -77,8 +86,10 @@ class TeamController extends Controller
 
 	/**
 	 * Display the specified resource.
+	 * @api
 	 *
-	 * @param  int  $id
+	 * @param  SDSLabs\Quark\App\Models\Competition $competition
+	 * @param string $team_name
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Competition $competition, $team_name)
@@ -98,8 +109,10 @@ class TeamController extends Controller
 
 	/**
 	 * Show the form for editing the specified resource.
+	 * @api
 	 *
-	 * @param  int  $id
+	 * @param  SDSLabs\Quark\App\Models\Competition $competition
+	 * @param  SDSLabs\Quark\App\Models\Team $team
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit(Competition $competition, Team $team)
@@ -109,9 +122,11 @@ class TeamController extends Controller
 
 	/**
 	 * Update the specified resource in storage.
+	 * @api
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  int  $id
+	 * @param  SDSLabs\Quark\App\Models\Competition $competition
+	 * @param  string $team_name
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Competition $competition, $team_name)
@@ -141,8 +156,10 @@ class TeamController extends Controller
 
 	/**
 	 * Remove the specified resource from storage.
+	 * @api
 	 *
-	 * @param  int  $id
+	 * @param  SDSLabs\Quark\App\Models\Competition $competition
+	 * @param  string $team_name
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Competition $competition, $team_name)

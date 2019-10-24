@@ -14,7 +14,7 @@ class CompetitionController extends Controller
 {
 
 	/**
-	 * Applied developer Middleware to all routes which require developer access
+	 * Apply developer Middleware to all routes which require developer access
 	 *
 	 */
 

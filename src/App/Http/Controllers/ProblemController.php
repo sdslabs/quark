@@ -11,10 +11,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to manage the competition problems.  
+ */
 
 class ProblemController extends Controller
 {
 
+	/**
+	 * Initialize class member variables
+	 *
+	 */
 	public function __construct(Competition $comps, User $users)
 	{
 		$this->competitions = $comps;
@@ -34,6 +41,7 @@ class ProblemController extends Controller
 
 	/**
 	 * Store a newly created resource in storage.
+	 * @api
 	 *
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
@@ -94,9 +102,10 @@ class ProblemController extends Controller
 
 	/**
 	 * Update the specified resource in storage.
+	 * @api
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  string  $name
+	 * @param  SDSLabs\Quark\App\Models\Problem $problem
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Problem $problem)
@@ -140,8 +149,10 @@ class ProblemController extends Controller
 
 	/**
 	 * Remove the specified resource from storage.
-	 *
-	 * @param  string  $name
+	 * @api
+	 * 
+	 * @param  \Illuminate\Http\Request  $request
+	 * @param  SDSLabs\Quark\App\Models\Problem $problem
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Request $request, Problem $problem)

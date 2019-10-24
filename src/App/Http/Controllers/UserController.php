@@ -13,6 +13,9 @@ use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
+	/**
+	 * Initialize class member variables and apply auth and falcon_auth middlewares to the required routes
+	 */
 
 	public function __construct(User $users)
 	{
@@ -23,6 +26,7 @@ class UserController extends Controller
 
 	/**
 	 * Display a listing of the resource.
+	 * @api
 	 *
 	 * @return \Illuminate\Http\Response
 	 */
@@ -35,7 +39,8 @@ class UserController extends Controller
 
 	/**
 	 * Store a newly created resource in storage.
-	 *
+	 * @api
+	 * 
 	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
@@ -77,8 +82,10 @@ class UserController extends Controller
 
 	/**
 	 * Display the specified resource.
+	 * @api
 	 *
-	 * @param  string  $name
+	 * @param  Illuminate\Http\Request $request
+	 * @param  SDSLabs\Quark\App\Models\User $user
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Request $request, User $user)
@@ -111,9 +118,10 @@ class UserController extends Controller
 
 	/**
 	 * Update the specified resource in storage.
-	 *
+	 * @api
+	 * 
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  string  $name
+	 * @param  SDSLabs\Quark\App\Models\User $user
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, User $user)
@@ -140,6 +148,12 @@ class UserController extends Controller
 		return $user;
 	}
 
+	/**
+	 * Show falcon details of the logged in user
+	 * @api
+	 * 
+	 * @return  \Illuminate\Http\Response
+	 */
 	public function showFalconMe()
 	{
 		$falcon_user = Auth::falconUser();
@@ -151,11 +165,25 @@ class UserController extends Controller
 		];
 	}
 
+	/**
+	 * Show the details of the logged in user
+	 * @api
+	 * 
+	 * @param  \Illuminate\Http\Request $request
+	 * @return \Illuminate\Http\Response
+	 */
 	public function showMe(Request $request)
 	{
 		return $this->show($request, Auth::user());
 	}
 
+	/**
+	 * Show the details of the teams of a competition
+	 * @api
+	 * 
+	 * @param SDSLabs\Quark\App\Models\Competition $competition
+	 * @return \Illuminate\Http\Response
+	 */
 	public function showCompetitionTeam(Competition $competition)
 	{
 		$teams = Auth::user()->teams();
@@ -164,6 +192,13 @@ class UserController extends Controller
 		return $competition_team;
 	}
 
+	/**
+	 * Show the details of invites of a competition
+	 * @api
+	 * 
+	 * @param SDSLabs\Quark\App\Models\Competition $competition
+	 * @return \Illuminate\Http\Response
+	 */
 	public function showInvites(Competition $competition)
 	{
 		$invites = Auth::user()->invites()->join('teams', 'user_team_invites.team_id', '=', 'teams.id');
