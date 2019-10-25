@@ -18,6 +18,8 @@ class TeamController extends Controller
 {
 	/**
 	 * Initialize class member variables and add authentication middleware to all routes except index and show
+	 *
+	 * @param SDSLabs\Quark\App\Models\Team $teams
 	 */
 	public function __construct(Team $teams)
 	{
@@ -40,7 +42,8 @@ class TeamController extends Controller
 
 	/**
 	 * Show the form for creating a new resource.
-	 *
+	 * 
+	 * @param SDSLabs\Quark\App\Models\Competition $competition
 	 * @return \Illuminate\Http\Response
 	 */
 	public function create(Competition $competition)

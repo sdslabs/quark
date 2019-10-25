@@ -18,6 +18,7 @@ class PracticeProblemController extends Controller
 	/**
 	 * Initialize class member variables
 	 *
+	 * @param \SDSLabs\Quark\App\Models\Problem $problems
 	 */
 
 	public function __construct(Problem $problems)
@@ -48,7 +49,7 @@ class PracticeProblemController extends Controller
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  string  $name
+	 * @param \SDSLabs\Quark\App\Models\Problem $problem
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Problem $problem)

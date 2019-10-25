@@ -21,7 +21,9 @@ class CompetitionInvitesController extends Controller
 
 	/**
 	 * Initialize class member variables and apply authentication middleware
-	 *
+	 * 
+	 * @param \SDSLabs\Quark\App\Models\Invite  $invites
+	 * @param \SDSLabs\Quark\App\Models\User  $users
 	 */
 
 	public function __construct(Invite $invites, User $users)

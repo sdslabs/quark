@@ -10,11 +10,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to manage the users.  
+ */
 
 class UserController extends Controller
 {
 	/**
 	 * Initialize class member variables and apply auth and falcon_auth middlewares to the required routes
+	 *
+	 * @param \SDSLabs\Quark\App\Models\User $users
 	 */
 
 	public function __construct(User $users)

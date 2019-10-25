@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Controller to manage the competitions.  
+ */
 
 class CompetitionController extends Controller
 {
@@ -16,6 +19,7 @@ class CompetitionController extends Controller
 	/**
 	 * Apply developer Middleware to all routes which require developer access
 	 *
+	 * @param \SDSLabs\Quark\App\Models\Competition $comps
 	 */
 
 	public function __construct(Competition $comps)
@@ -26,7 +30,9 @@ class CompetitionController extends Controller
 
 	/**
 	 * Display a listing of the resource.
-	 *
+	 * @api
+	 * 
+	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
 	public function index(Request $request)
@@ -72,7 +78,8 @@ class CompetitionController extends Controller
 	/**
 	 * Display the specified resource.
 	 *
-	 * @param  string  $name
+	 * @param \SDSLabs\Quark\App\Models\Competition $competition
+	 * @param  \Illuminate\Http\Request  $request
 	 * @return \Illuminate\Http\Response
 	 */
 	public function show(Competition $competition, Request $request)
@@ -87,7 +94,7 @@ class CompetitionController extends Controller
 	/**
 	 * Show the form for editing the specified resource.
 	 *
-	 * @param  string  $name
+	 * @param \SDSLabs\Quark\App\Models\Competition $competition
 	 * @return \Illuminate\Http\Response
 	 */
 	public function edit(Competition $competition)
@@ -99,7 +106,7 @@ class CompetitionController extends Controller
 	 * Update the specified resource in storage.
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  string  $name
+	 * @param \SDSLabs\Quark\App\Models\Competition $competition
 	 * @return \Illuminate\Http\Response
 	 */
 	public function update(Request $request, Competition $competition)
@@ -119,7 +126,7 @@ class CompetitionController extends Controller
 	/**
 	 * Remove the specified resource from storage.
 	 *
-	 * @param  string  $name
+	 * @param \SDSLabs\Quark\App\Models\Competition $competition
 	 * @return \Illuminate\Http\Response
 	 */
 	public function destroy(Competition $competition)
@@ -132,11 +139,10 @@ class CompetitionController extends Controller
 	}
 
 	/**
-	 * Returns a specified resources of a given competition
+	 * Returns a leaderboard of a given competition
 	 *
 	 * @param \Illuminate\Http\Request  $request
-	 * @param string $name
-	 * @param string $resource (leaderboard, problems, teams, submissions)
+	 * @param \SDSLabs\Quark\App\Models\Competition $competition
 	 * @return \Illuminate\Http\Response
 	 */
 
@@ -146,6 +152,13 @@ class CompetitionController extends Controller
 		return $competition->leaderboard()->paginate($limit);
 	}
 
+	/**
+	 * Returns submissions of a given competition
+	 *
+	 * @param \Illuminate\Http\Request  $request
+	 * @param \SDSLabs\Quark\App\Models\Competition $competition
+	 * @return \Illuminate\Http\Response
+	 */
 	public function showSubmissions(Request $request, Competition $competition)
 	{
 		$limit = $request->has('limit') ? $request->limit : 50;

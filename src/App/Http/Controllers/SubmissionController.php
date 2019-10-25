@@ -74,7 +74,7 @@ class SubmissionController extends Controller
 	 * @api
 	 *
 	 * @param  \Illuminate\Http\Request  $request
-	 * @param  SDSLabs\Quark\App\Models\Problem $problem
+	 * @param  SDSLabs\Quark\App\Models\Competition $competition
 	 * @param  string $problem_name
 	 * @return \Illuminate\Http\Response
 	 */

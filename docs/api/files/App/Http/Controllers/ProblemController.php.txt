@@ -19,8 +19,10 @@ class ProblemController extends Controller
 {
 
 	/**
-	 * Initialize class member variables
+	 * Initialize class member variables.
 	 *
+	 * @param \SDSLabs\Quark\App\Models\Competition $comps
+	 * @param \SDSLabs\Quark\App\Models\User $users
 	 */
 	public function __construct(Competition $comps, User $users)
 	{
