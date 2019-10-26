@@ -96,3 +96,9 @@ classes will be used inside Quarks's classes/
 - First you need an application. If you don't have one already setup, setup a
 demo application following the above instructions
 - Symlink the `vendor/sdslabs/quark` folder to your local clone of quark.
+
+## License
+
+This project is under the MIT license
+
+<p align=center>Created by SDSLabs with :heart:</p>
