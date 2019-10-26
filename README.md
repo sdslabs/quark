@@ -2,6 +2,10 @@
 
 This is a Laravel package that provides a code application for building platforms to host competitions.
 
+## Documentation
+
+The entire documentation is available at: quark.sdslabs.co
+
 ## Setup
 
 - Create and setup a new Laravel app
@@ -66,6 +70,8 @@ FALCON_SCOPES=email,image_url
 		$ php artisan db:seed
 
 - Go outside and do a dance ;)
+
+Note: A sample app is available at [sdslabs/laplace-no-ma](https://github.com/sdslabs/laplace-no-ma)
 
 ## Extending the models in the application
 
