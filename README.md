@@ -4,7 +4,7 @@ This is a Laravel package that provides a code application for building platform
 
 ## Documentation
 
-The entire documentation is available at: quark.sdslabs.co
+The entire documentation is available at: https://quark.sdslabs.co
 
 ## Setup
 
