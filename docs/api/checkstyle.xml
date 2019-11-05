@@ -1,0 +1,136 @@
+<?xml version="1.0"?>
+<checkstyle version="1.3.0">
+  <file name="QuarkServiceProvider.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="17" severity="error" message="No summary for class \SDSLabs\Quark\QuarkServiceProvider" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="25" severity="error" message="Argument $router is missing from the Docblock of boot" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="36" severity="error" message="Argument $router is missing from the Docblock of setupRoutes" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="36" severity="error" message="No summary for method setupRoutes()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="53" severity="error" message="No summary for method register()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="App/Auth/FalconGuard.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="11" severity="error" message="No summary for class \SDSLabs\Quark\App\Auth\FalconGuard" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="49" severity="error" message="Argument $user_model is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="49" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="62" severity="error" message="No summary for method falconUser()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="91" severity="error" message="No summary for method user()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="119" severity="error" message="Argument $credentials is missing from the Docblock of validate" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="20" severity="error" message="No summary for property $request" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="27" severity="error" message="No summary for property $api" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="34" severity="error" message="No summary for property $falcon_user" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="41" severity="error" message="No summary for property $user" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="App/Helpers/Leaderboard.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class \SDSLabs\Quark\App\Helpers\Leaderboard" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="12" severity="error" message="Argument $competition is missing from the Docblock of competitionLeaderboard" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="12" severity="error" message="No summary for method competitionLeaderboard()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="App/Http/Middleware/Authenticate.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="9" severity="error" message="No summary for class \SDSLabs\Quark\App\Http\Middleware\Authenticate" source="phpDocumentor.file.PPC:ERR-50005"/>
+  </file>
+  <file name="App/Http/Middleware/DeveloperCheck.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class \SDSLabs\Quark\App\Http\Middleware\DeveloperCheck" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="57" severity="error" message="Argument $guard is missing from the Docblock of isInOrganization" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="57" severity="error" message="No summary for method isInOrganization()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="App/Http/Middleware/Developer.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="5" severity="error" message="No summary for class \SDSLabs\Quark\App\Http\Middleware\Developer" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="39" severity="error" message="Argument $guard is missing from the Docblock of isInOrganization" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="39" severity="error" message="No summary for method isInOrganization()" source="phpDocumentor.file.PPC:ERR-50008"/>
+  </file>
+  <file name="App/Http/Middleware/FalconAuthenticate.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="9" severity="error" message="No summary for class \SDSLabs\Quark\App\Http\Middleware\FalconAuthenticate" source="phpDocumentor.file.PPC:ERR-50005"/>
+  </file>
+  <file name="App/Http/Middleware/SubstituteBindings.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="10" severity="error" message="No summary for class \SDSLabs\Quark\App\Http\Middleware\SubstituteBindings" source="phpDocumentor.file.PPC:ERR-50005"/>
+  </file>
+  <file name="App/Http/routes.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Http/Controllers/CompetitionProblemController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Http/Controllers/UserController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Http/Controllers/PracticeProblemController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Http/Controllers/CompetitionController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Http/Controllers/ProblemController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Http/Controllers/CompetitionInvitesController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Http/Controllers/TeamController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Http/Controllers/SubmissionController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Http/Controllers/SolutionController.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Judge/Judge.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="6" severity="error" message="No summary for class \SDSLabs\Quark\App\Judge\Judge" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="11" severity="error" message="Argument $answer is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="11" severity="error" message="Argument $submitted_answer is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="11" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="17" severity="error" message="No summary for method judge()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="19" severity="error" message="Argument $result is missing from the Docblock of handleResult" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="19" severity="error" message="No summary for method handleResult()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="8" severity="error" message="No summary for property $submission" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="9" severity="error" message="No summary for property $answer" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="App/Judge/StringComparisonJudge.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+    <error line="14" severity="error" message="No summary for class \SDSLabs\Quark\App\Judge\StringComparisonJudge" source="phpDocumentor.file.PPC:ERR-50005"/>
+    <error line="20" severity="error" message="Argument $solution is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="20" severity="error" message="Argument $submission is missing from the Docblock of __construct" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="20" severity="error" message="No summary for method __construct()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="28" severity="error" message="No summary for method judge()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="34" severity="error" message="Argument $result is missing from the Docblock of handleResult" source="phpDocumentor.file.PPC:ERR-50015"/>
+    <error line="34" severity="error" message="No summary for method handleResult()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="43" severity="error" message="No summary for method handleCorrectSubmission()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="56" severity="error" message="No summary for method handleWrongSubmission()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="63" severity="error" message="No summary for method updateUserScore()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="72" severity="error" message="No summary for method updateTeamScore()" source="phpDocumentor.file.PPC:ERR-50008"/>
+    <error line="16" severity="error" message="No summary for property $solution" source="phpDocumentor.file.PPC:ERR-50007"/>
+    <error line="18" severity="error" message="No summary for property $submission" source="phpDocumentor.file.PPC:ERR-50007"/>
+  </file>
+  <file name="App/Models/User.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Models/Invite.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Models/CompetitionSubmission.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Models/Problem.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Models/Solution.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Models/Team.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Models/PracticeSubmission.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+  <file name="App/Models/Competition.php">
+    <error line="0" severity="error" message="No summary was found for this file" source="phpDocumentor.file.PPC:ERR-50000"/>
+  </file>
+</checkstyle>

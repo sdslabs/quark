@@ -11,6 +11,9 @@
 		</extensions>
 		<visibility></visibility>
 	</parser>
+	<transformations>
+        <template name="responsive-twig"/>
+    </transformations>
 	<transformer>
 		<target>docs/api</target>
 	</transformer>
