@@ -61,7 +61,6 @@ class CompetitionController extends Controller
 			'team_limit' => 'bail|required|integer',
 			'start_at' => 'bail|required|date',
 			'end_at' => 'bail|required|date|after:start_at',
-			// 'utc' => 'bail|required|accepted'
 		]);
 
 		$comp = App::make(Competition::class, [$request->all()]);
@@ -109,7 +108,6 @@ class CompetitionController extends Controller
 			'team_limit' => 'integer',
 			'start_at' => 'date',
 			'end_at' => 'bail|date|after:start_at',
-			'utc' => 'bail|required_with:start_at,end_at|accepted'
 		]);
 
 		$competition->update($request->all());
