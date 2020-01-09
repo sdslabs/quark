@@ -147,7 +147,7 @@ class CompetitionController extends Controller
 	public function showSubmissions(Request $request, Competition $competition)
 	{
 		$limit = $request->has('limit') ? $request->limit : 50;
-		return $competition->submissions()->paginate($limit);
+		return $competition->submissions()->orderBy('score', 'desc')->paginate($limit);
 	}
 
 }
