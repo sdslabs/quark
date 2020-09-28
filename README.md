@@ -71,8 +71,6 @@ FALCON_SCOPES=email,image_url
 
 - Go outside and do a dance ;)
 
-Note: A sample app is available at [sdslabs/laplace-no-ma](https://github.com/sdslabs/laplace-no-ma)
-
 ## Extending the models in the application
 
 To extend any of the default models, first create the new model.
@@ -103,8 +101,18 @@ classes will be used inside Quarks's classes/
 demo application following the above instructions
 - Symlink the `vendor/sdslabs/quark` folder to your local clone of quark.
 
+## How can I contribute?
+
+Read [here](CONTRIBUTING.md) to know our contribution guidelines. Ping us at chat.sdslabs.co to get guidance. You can start with setting up Quark on your machine and try solving a few bugs listed here: https://github.com/sdslabs/quark/issues
+You can also have a look at the sample app [sdslabs/laplace-no-ma](https://github.com/sdslabs/laplace-no-ma) that uses Quark.
+
 ## License
 
 This project is under the MIT license
+
+## Community Support
+
+<img src="https://avatars1.githubusercontent.com/u/3220138?v=3&s=120" align="right" />
+If you are interested in talking to the SDSLabs team, you can find us on our <a href="https://discord.gg/psEZWvY">SDSLabs Open Source Discord Server</a>. Feel free to drop by and say hello. You'll find us posting about upcoming features and beta releases, answering technical support questions, and contemplating world peace.
 
 <p align=center>Created by SDSLabs with :heart:</p>
