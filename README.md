@@ -110,4 +110,9 @@ You can also have a look at the sample app [sdslabs/laplace-no-ma](https://githu
 
 This project is under the MIT license
 
+## Community Support
+
+<img src="https://avatars1.githubusercontent.com/u/3220138?v=3&s=120" align="right" />
+If you are interested in talking to the SDSLabs team, you can find us on our <a href="https://discord.gg/psEZWvY">SDSLabs Open Source Discord Server</a>. Feel free to drop by and say hello. You'll find us posting about upcoming features and beta releases, answering technical support questions, and contemplating world peace.
+
 <p align=center>Created by SDSLabs with :heart:</p>
