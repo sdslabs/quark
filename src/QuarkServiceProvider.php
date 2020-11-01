@@ -7,16 +7,14 @@ use SDSLabs\Quark\App\Http\Middleware\Authenticate;
 use SDSLabs\Quark\App\Http\Middleware\FalconAuthenticate;
 use SDSLabs\Quark\App\Http\Middleware\SubstituteBindings;
 use SDSLabs\Quark\App\Http\Middleware\Developer;
-
+use SDSLabs\Quark\App\Http\Middleware\OrganizationMiddleware;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 
-
 class QuarkServiceProvider extends ServiceProvider
 {
-
 	/**
 	 * Bootstrap the application services.
 	 *
@@ -40,7 +38,7 @@ class QuarkServiceProvider extends ServiceProvider
 		$router->middleWare('auth', Authenticate::class);
 		$router->middleWare('falcon_auth', FalconAuthenticate::class);
 		$router->middleWare('developer', Developer::class);
-		$router->middleWare('developer_check', DeveloperCheck::class);
+		$router->middleWare('organization_middleware', OrganizationMiddleware::class);
 		$router->group([
 			'namespace' => 'SDSLabs\Quark\App\Http\Controllers',
 			'middleware' => 'web',
