@@ -6,8 +6,7 @@ use Closure;
 use Illuminate\Support\Facades\App;
 use Illuminate\Contracts\Auth\Factory as Auth;
 
-
-class DeveloperCheck
+class OrganizationMiddleware
 {
 	/**
 	 * The authentication guard factory instance.
